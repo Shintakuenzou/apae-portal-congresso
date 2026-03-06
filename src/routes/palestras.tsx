@@ -29,6 +29,10 @@ function PalestrasPage() {
   const { vinculo } = useVinculo();
   const { formatedDataEvento } = useEvents();
 
+  console.log("atividades", atividades);
+  console.log("vinculo", vinculo);
+  console.log("formatedDataEvento", formatedDataEvento);
+
   const eventoDatas = useMemo(() => {
     if (!formatedDataEvento || formatedDataEvento.length === 0) return [];
 
