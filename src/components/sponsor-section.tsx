@@ -17,11 +17,7 @@ export function SponsorsSection() {
   // const [selected, setSelected] = useState<Sponsor | null>(null);
   const { formatedDataLote } = useLotes();
 
-  const id_lote = formatedDataLote ? formatedDataLote[formatedDataLote.length - 1].fields.id_evento : undefined;
-
-  if (!id_lote) {
-    return null;
-  }
+  const id_lote = formatedDataLote ? formatedDataLote[formatedDataLote.length - 1].fields.id_evento : "";
 
   const { data: sponsorsData } = useQuery({
     queryKey: ["sponsors", id_lote],
@@ -83,6 +79,8 @@ export function SponsorsSection() {
   const openLink = useCallback((link: string) => {
     window.open(link, "_blank");
   }, []);
+
+  if (!id_lote) return null;
 
   return (
     <section className="relative bg-background border-b border-border overflow-hidden" aria-label="Patrocinadores Oficiais">

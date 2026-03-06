@@ -24,7 +24,7 @@ function RouteComponent() {
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const { formatedDataLote } = useLotes();
   const [eventoSelecionado, setEventoSelecionado] = useState<LoteFields | null>();
-  const id_lote = formatedDataLote && formatedDataLote.length > 0 ? formatedDataLote[formatedDataLote.length - 1].fields.documentId : undefined;
+  const id_lote = formatedDataLote && formatedDataLote.length > 0 ? formatedDataLote[formatedDataLote.length - 1].fields.documentId : "";
   const { atividades } = useAtividade(id_lote);
   const { vinculo } = useVinculo();
 
