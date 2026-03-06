@@ -87,19 +87,19 @@ function RouteComponent() {
           constraintType: "MUST",
         },
         {
-          fieldName: "titulo",
+          fieldName: "title",
           initialValue: "congresso nacional das apaes",
           finalValue: "congresso nacional das apaes",
           constraintType: "MUST",
         },
         {
-          fieldName: "preco",
+          fieldName: "unit_price",
           initialValue: "200",
           finalValue: "200",
           constraintType: "MUST",
         },
         {
-          fieldName: "ref_id",
+          fieldName: "external_reference",
           initialValue: "1",
           finalValue: "1",
           constraintType: "MUST",
