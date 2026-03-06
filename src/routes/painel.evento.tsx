@@ -34,12 +34,19 @@ function RouteComponent() {
     if (!formatedDataEvento || formatedDataEvento.length === 0) return [];
 
     const evento = formatedDataEvento[0];
-    const dates = eachDayOfInterval({
-      start: parseISO(`${evento.fields.data_inicio}`),
-      end: parseISO(`${evento.fields.data_fim}`),
-    });
 
-    return dates;
+    // ✅ Isso está faltando no seu código
+    if (!evento.fields.data_inicio || !evento.fields.data_fim) return [];
+
+    try {
+      const dates = eachDayOfInterval({
+        start: parseISO(`${evento.fields.data_inicio}`),
+        end: parseISO(`${evento.fields.data_fim}`),
+      });
+      return dates;
+    } catch {
+      return [];
+    }
   }, [formatedDataEvento]);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(() => {
