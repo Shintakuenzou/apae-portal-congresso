@@ -85,21 +85,21 @@ function RouteComponent() {
           initialValue: "desenvolvedor3@apaebrasil.org.br",
           finalValue: "desenvolvedor3@apaebrasil.org.br",
           constraintType: "MUST",
-        },
-        {
-          fieldName: "title",
+          },
+          {
+          fieldName: "titulo",
           initialValue: "congresso nacional das apaes",
           finalValue: "congresso nacional das apaes",
           constraintType: "MUST",
         },
         {
-          fieldName: "unit_price",
+          fieldName: "preco",
           initialValue: "200",
           finalValue: "200",
           constraintType: "MUST",
         },
         {
-          fieldName: "external_reference",
+          fieldName: "ref_id",
           initialValue: "1",
           finalValue: "1",
           constraintType: "MUST",

@@ -20,34 +20,36 @@ interface FetchDatasetProps {
   constraints?: DatasetConstraint[];
 }
 
+const CONSTRAINT_TYPE_MAP: Record<string, number> = {
+  MUST: 1,
+  SHOULD: 2,
+  MUST_NOT: 3,
+};
+
 export async function fetchDataset<T = DatasetRecord>({ datasetId, offset, limit, constraints = [] }: FetchDatasetProps): Promise<{ items: T[]; hasNext: boolean }> {
   try {
     const base = "/dataset/api/v2/dataset-handle/search";
     const params = new URLSearchParams();
 
-    // datasetId
     params.set("datasetId", datasetId);
 
-    // paginação
     if (offset != null && limit != null) {
       params.set("offset", String(offset));
       params.set("limit", String(limit));
     }
 
-    // constraints
-    constraints.forEach((c) => {
-      const type = c.constraintType ?? "MUST";
+    // ✅ Formato correto para o Fluig v2
+    constraints.forEach((c, index) => {
+      const typeNum = CONSTRAINT_TYPE_MAP[c.constraintType ?? "MUST"];
       const finalVal = c.finalValue ?? c.initialValue;
 
-      params.append("constraintsField", c.fieldName);
-      params.append("constraintsInitialValue", String(c.initialValue));
-      params.append("constraintsFinalValue", String(finalVal));
-      params.append("constraintsType", type);
+      params.append(`constraint[${index}].fieldName`, c.fieldName);
+      params.append(`constraint[${index}].initialValue`, String(c.initialValue));
+      params.append(`constraint[${index}].finalValue`, String(finalVal));
+      params.append(`constraint[${index}].type`, String(typeNum));
     });
 
-    const query = params.toString();
-    const url = `${base}?${query}`;
-    // console.log(url, query);
+    const url = `${base}?${params.toString()}`;
 
     const response = await axiosApi.get<DatasetResponse<T>>(url);
 
