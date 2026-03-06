@@ -16,7 +16,6 @@ export const Route = createFileRoute("/")({
 
 function App() {
   const { formatedDataEvento, isLoading } = useEvents();
-  console.log(formatedDataEvento);
 
   if (isLoading) {
     return <LoadingScreen />;
