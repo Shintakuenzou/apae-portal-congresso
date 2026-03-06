@@ -47,7 +47,8 @@ export async function handleGetFormParticipant({ documentId, queryParams }: Send
   }
 
   try {
-    const fluigPath = `/ecm-forms/api/v2/cardindex/${documentId}/cards?filter=id_evento eq ${queryParams}`;
+    const baseUrl = `/ecm-forms/api/v2/cardindex/${documentId}/cards`;
+    const fluigPath = queryParams ? `${baseUrl}?limit=1000&filter=id_evento eq ${queryParams}` : baseUrl;
     const url = import.meta.env.DEV ? fluigPath : `?endpoint=${encodeURIComponent(fluigPath)}&method=GET`;
 
     const response = await axiosApi.get<FluigCardsResponse>(url);
