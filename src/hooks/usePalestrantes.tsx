@@ -20,6 +20,7 @@ export function usePalestrantes(event_id?: string) {
         datasetId: "cadPalestranteCN",
         constraints,
       }),
+    enabled: !!event_id,
   });
 
   return { palestrantes };
