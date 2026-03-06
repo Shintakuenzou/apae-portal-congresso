@@ -75,7 +75,7 @@ function RouteComponent() {
   }, [atividadeComPalestrantes]);
 
   async function handlePayment() {
-    console.log("handlePayment");
+    console.log("handlePayment: ", handlePayment);
 
     const response = await fetchDataset({
       datasetId: "pagCN",
