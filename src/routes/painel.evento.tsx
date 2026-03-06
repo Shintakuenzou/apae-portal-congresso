@@ -14,7 +14,6 @@ import { Badge } from "@/components/ui/badge";
 import { ptBR } from "date-fns/locale";
 import { SwitchChoiceCard } from "@/components/switch-choice-event-card";
 import { SkeletonCard } from "@/components/skelton-card";
-import { useQuery } from "@tanstack/react-query";
 import { fetchDataset } from "@/services/fetch-dataset";
 
 export const Route = createFileRoute("/painel/evento")({

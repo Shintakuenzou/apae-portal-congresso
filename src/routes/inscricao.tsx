@@ -21,8 +21,6 @@ import axios from "axios";
 import { fetchCep } from "@/services/cep";
 import { formatCEP } from "@/utils/format-cep";
 import { toast } from "sonner";
-
-import { SecurityService } from "@/services/crypto-service";
 import { format } from "date-fns";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
