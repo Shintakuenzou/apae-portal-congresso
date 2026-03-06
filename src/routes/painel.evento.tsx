@@ -93,6 +93,12 @@ function RouteComponent() {
           constraintType: "MUST",
         },
         {
+          fieldName: "preco",
+          initialValue: 200,
+          finalValue: 200,
+          constraintType: "MUST",
+        },
+        {
           fieldName: "ref_id",
           initialValue: "PEDIDO-1",
           finalValue: "PEDIDO-1",
