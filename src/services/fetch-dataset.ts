@@ -20,11 +20,11 @@ interface FetchDatasetProps {
   constraints?: DatasetConstraint[];
 }
 
-const CONSTRAINT_TYPE_MAP: Record<string, number> = {
-  MUST: 1,
-  SHOULD: 2,
-  MUST_NOT: 3,
-};
+// const CONSTRAINT_TYPE_MAP: Record<string, number> = {
+//   MUST: 1,
+//   SHOULD: 2,
+//   MUST_NOT: 3,
+// };
 
 export async function fetchDataset<T = DatasetRecord>({ datasetId, offset, limit, constraints = [] }: FetchDatasetProps): Promise<{ items: T[]; hasNext: boolean }> {
   try {
