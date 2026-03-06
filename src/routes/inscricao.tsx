@@ -19,10 +19,10 @@ import { fetchDataset } from "@/services/fetch-dataset";
 import type { AxiosError } from "axios";
 import axios from "axios";
 import { fetchCep } from "@/services/cep";
-import { formatCEO } from "@/utils/cep";
+import { formatCEP } from "@/utils/format-cep";
 import { toast } from "sonner";
-import { Toaster } from "@/components/ui/sonner";
-import { SecurityService } from "@/services/ryptoService";
+
+import { SecurityService } from "@/services/crypto-service";
 import { format } from "date-fns";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -126,15 +126,11 @@ function InscricaoPage() {
     enabled: !!watch("uf"),
   });
 
-  console.log(apaes);
-
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
-    console.log("Dados enviados:", data);
 
     try {
       const senhaCriptografada = SecurityService.encryptForTransport(data.senha);
-      console.log(senhaCriptografada);
 
       const response = await handlePostFormParticipant({
         documentId: import.meta.env.VITE_FORM_PARTICIPANTE as string,
@@ -163,13 +159,11 @@ function InscricaoPage() {
           { fieldId: "tamanho_camiseta", value: data.tamanho_camiseta || "" },
         ],
       });
-      console.log(response);
 
       if (response && response.values.length > 0) {
         setSubmitted(true);
       }
     } catch (error) {
-      console.log(error);
     } finally {
       setIsSubmitting(false);
     }
@@ -266,7 +260,6 @@ function InscricaoPage() {
   async function handleBlurCPF(event: React.FocusEvent<HTMLInputElement>) {
     try {
       const response = await handleCheckExistingParticipant(event.target.value);
-      console.log(response);
 
       if (response && response?.items && response.items[0]) {
         toast.warning("CPF já cadastrado!", { position: "bottom-right", duration: 4000 });
@@ -284,7 +277,6 @@ function InscricaoPage() {
 
   return (
     <main className="min-h-screen bg-background">
-      <Toaster richColors />
       <Header />
 
       <section className="pt-32 pb-20">
@@ -487,7 +479,7 @@ function InscricaoPage() {
                             placeholder="00000-000"
                             maxLength={9}
                             {...field}
-                            onChange={(e) => field.onChange(formatCEO(e.target.value))}
+                            onChange={(e) => field.onChange(formatCEP(e.target.value))}
                             onBlur={(e) => handlePopulateAddressFromCep(e.target.value)}
                             className="h-11"
                           />

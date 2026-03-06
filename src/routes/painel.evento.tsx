@@ -22,9 +22,9 @@ export const Route = createFileRoute("/painel/evento")({
 function RouteComponent() {
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const { formatedDataLote } = useLotes();
-  const id_lote = formatedDataLote ? formatedDataLote[formatedDataLote.length - 1].cardId : "";
   const [eventoSelecionado, setEventoSelecionado] = useState<LoteFields | null>();
-  const { atividades } = useAtividade(id_lote.toString());
+  const id_lote = formatedDataLote ? formatedDataLote[formatedDataLote.length - 1].fields.documentId : "";
+  const { atividades } = useAtividade(id_lote);
   const { vinculo } = useVinculo();
 
   const { formatedDataEvento } = useEvents();
@@ -72,8 +72,6 @@ function RouteComponent() {
 
     return [...new Set(atividadeComPalestrantes.map((atividade) => atividade.eixo))];
   }, [atividadeComPalestrantes]);
-
-  console.log("selectedDate: ", selectedDate, eventoDatas.length);
 
   return (
     <div className="space-y-6 col-span-4 lg:col-span-3">

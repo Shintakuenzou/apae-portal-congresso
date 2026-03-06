@@ -1,0 +1,43 @@
+export const tamanhosCamisa = ["PP", "P", "M", "G", "GG", "XG", "XGG"];
+
+export const estados = [
+  "AC",
+  "AL",
+  "AP",
+  "AM",
+  "BA",
+  "CE",
+  "DF",
+  "ES",
+  "GO",
+  "MA",
+  "MT",
+  "MS",
+  "MG",
+  "PA",
+  "PB",
+  "PR",
+  "PE",
+  "PI",
+  "RJ",
+  "RN",
+  "RS",
+  "RO",
+  "RR",
+  "SC",
+  "SP",
+  "SE",
+  "TO",
+];
+
+export const escolaridades = [
+  { value: "fundamental-incompleto", label: "Fundamental Incompleto" },
+  { value: "fundamental-completo", label: "Fundamental Completo" },
+  { value: "medio-incompleto", label: "Médio Incompleto" },
+  { value: "medio-completo", label: "Médio Completo" },
+  { value: "superior-incompleto", label: "Superior Incompleto" },
+  { value: "superior-completo", label: "Superior Completo" },
+  { value: "pos-graduacao", label: "Pós-graduação" },
+  { value: "mestrado", label: "Mestrado" },
+  { value: "doutorado", label: "Doutorado" },
+];

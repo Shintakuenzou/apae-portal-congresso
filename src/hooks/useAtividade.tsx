@@ -20,6 +20,7 @@ export function useAtividade(id_lote?: string) {
     queryFn: async () =>
       fetchDataset<ActivityFields>({
         datasetId: "cadAtividadeCN",
+        constraints: constraint,
       }),
   });
 

@@ -20,7 +20,7 @@ export function SponsorsSection() {
   const id_lote = formatedDataLote ? formatedDataLote[formatedDataLote.length - 1].fields.id_evento : "";
 
   const { data: sponsorsData } = useQuery({
-    queryKey: ["sponsors"],
+    queryKey: ["sponsors", id_lote],
     queryFn: () =>
       fetchDataset({
         datasetId: "ds_buscaParceirosVinculados_CN",
@@ -33,6 +33,8 @@ export function SponsorsSection() {
           },
         ],
       }),
+
+    enabled: !!id_lote,
   });
 
   console.log(sponsorsData);
