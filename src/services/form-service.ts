@@ -19,23 +19,20 @@ export const parseAtividadeCard = (card: Parameters<typeof parseFluigEntity>[0])
 export { parseFluigCard } from "./fluig-parser";
 
 // ── CRUD de Cards do Fluig ───────────────────────────────────────
-
+// form-service.ts — remove a lógica de proxy, usa só o fluigPath
 export async function handlePostFormParticipant({ documentId, values }: SendFormData): Promise<FluigPostResponse> {
   if (!documentId || documentId === "undefined") {
     throw new Error("documentId é obrigatório e não pode ser undefined");
   }
 
   try {
+    // ✅ Sempre o path puro — o interceptor cuida do proxy em produção
     const fluigPath = `/ecm-forms/api/v2/cardindex/${documentId}/cards`;
-    const url = import.meta.env.DEV ? fluigPath : `?endpoint=${encodeURIComponent(fluigPath)}&method=POST`;
-
-    const response = await axiosApi.post<FluigPostResponse>(url, { values });
+    const response = await axiosApi.post<FluigPostResponse>(fluigPath, { values });
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      console.error("Erro ao enviar dados do formulário:", axiosError.response?.data || axiosError.message);
-      throw axiosError;
+      throw error as AxiosError;
     }
     throw error;
   }
@@ -48,16 +45,14 @@ export async function handleGetFormParticipant({ documentId, queryParams }: Send
 
   try {
     const baseUrl = `/ecm-forms/api/v2/cardindex/${documentId}/cards`;
-    const fluigPath = queryParams ? `${baseUrl}?limit=1000&filter=id_evento eq ${queryParams}` : baseUrl;
-    const url = import.meta.env.DEV ? fluigPath : `?endpoint=${encodeURIComponent(fluigPath)}&method=GET`;
-
-    const response = await axiosApi.get<FluigCardsResponse>(url);
+    // ✅ Path puro com query string embutida — o interceptor preserva
+    const fluigPath = queryParams ? `${baseUrl}?filter=id_evento eq ${queryParams}` : baseUrl;
+    const response = await axiosApi.get<FluigCardsResponse>(fluigPath);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       const status = error.response?.status;
       const errorData = error.response?.data;
-
       switch (status) {
         case 404:
           throw new Error(`Documento ${documentId} não encontrado`);
@@ -65,9 +60,9 @@ export async function handleGetFormParticipant({ documentId, queryParams }: Send
           throw new Error(`Sem permissão para acessar o documento ${documentId}`);
         case 500:
           if (errorData?.code === "java.lang.NullPointerException") {
-            throw new Error(`Erro ao processar documento ${documentId}. O documento pode estar corrompido ou sem dados obrigatórios.`);
+            throw new Error(`Documento ${documentId} corrompido ou sem dados obrigatórios`);
           }
-          throw new Error(`Erro interno no servidor ao buscar documento ${documentId}. Tente novamente em alguns instantes.`);
+          throw new Error(`Erro interno ao buscar documento ${documentId}`);
         default:
           throw new Error(`Erro ao buscar documento: ${error.message}`);
       }
@@ -80,22 +75,19 @@ export async function handleUpdateFormParticipant({ documentId, cardId, values }
   if (!documentId || documentId === "undefined") {
     throw new Error("documentId é obrigatório e não pode ser undefined");
   }
-
   if (!cardId || cardId === "undefined") {
     throw new Error("cardId é obrigatório e não pode ser undefined");
   }
 
   try {
+    // ✅ Path puro — interceptor cuida do proxy
     const fluigPath = `/ecm-forms/api/v2/cardindex/${documentId}/cards/${cardId}`;
-    const url = import.meta.env.DEV ? fluigPath : `?endpoint=${encodeURIComponent(fluigPath)}&method=PUT`;
-
-    const response = await axiosApi.put<FluigPostResponse>(url, { values });
+    const response = await axiosApi.put<FluigPostResponse>(fluigPath, { values });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const status = error.response?.status;
       const errorData = error.response?.data;
-
       switch (status) {
         case 404:
           throw new Error(`Documento ${documentId} não encontrado`);
@@ -103,9 +95,9 @@ export async function handleUpdateFormParticipant({ documentId, cardId, values }
           throw new Error(`Sem permissão para acessar o documento ${documentId}`);
         case 500:
           if (errorData?.code === "java.lang.NullPointerException") {
-            throw new Error(`Erro ao processar documento ${documentId}. O documento pode estar corrompido ou sem dados obrigatórios.`);
+            throw new Error(`Documento ${documentId} corrompido ou sem dados obrigatórios`);
           }
-          throw new Error(`Erro interno no servidor ao buscar documento ${documentId}. Tente novamente em alguns instantes.`);
+          throw new Error(`Erro interno ao buscar documento ${documentId}`);
         default:
           throw new Error(`Erro ao buscar documento: ${error.message}`);
       }

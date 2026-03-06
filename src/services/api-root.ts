@@ -59,46 +59,33 @@ axiosApi.interceptors.request.use(
     const method = config.method ? config.method.toUpperCase() : "GET";
     const url = config.url || "";
 
-    console.log("📤 Requisição:", {
-      method,
-      url,
-      isDev: import.meta.env.DEV,
-      baseURL: config.baseURL,
-      mode: import.meta.env.DEV ? "DEV (Vite Proxy)" : "PROD (proxy.php)",
-    });
-
-    // ✅ Em PROD, o proxy.php cuida do OAuth
     if (!import.meta.env.DEV) {
-      console.log("📡 Usando proxy.php (produção) - sem OAuth no client");
+      // ✅ Evita duplo encoding — só reescreve se ainda não for URL de proxy
+      if (!url.startsWith("?endpoint=") && !url.startsWith("/proxy.php")) {
+        const [path, existingQS] = url.split("?");
+        let proxyUrl = `/proxy.php?endpoint=${encodeURIComponent(path)}&method=${method}`;
+        if (existingQS) proxyUrl += `&${existingQS}`;
+        config.url = proxyUrl;
+      }
+
+      // ✅ POST/PUT precisam manter o method real — não converte para GET
+      // O proxy lê o ?method=POST e usa como CURLOPT_CUSTOMREQUEST
+      config.method = "get"; // axios usa GET para enviar, method real vai no param
       return config;
     }
 
-    // ✅ Em DEV, aplica OAuth para chamadas à API do Fluig via Vite Proxy
-    // Constrói URL completa para OAuth (o Vite Proxy vai redirecionar)
+    // DEV — OAuth direto
     const oauthURL = `${FLUIG_BASE_URL}${url}`;
-
-    console.log("🔐 Calculando OAuth para:", oauthURL);
-
     try {
       const authorizationHeader = await getAuthorizationHeaders(oauthURL, method);
-
-      config.headers = {
-        ...(config.headers || {}),
-        ...authorizationHeader,
-      } as AxiosRequestHeaders;
-
-      console.log("✅ OAuth headers aplicados");
+      config.headers = { ...(config.headers || {}), ...authorizationHeader } as AxiosRequestHeaders;
     } catch (error) {
-      console.error("❌ Erro ao gerar cabeçalhos OAuth 1.0a:", error);
       return Promise.reject(new Error("Falha na autenticação OAuth 1.0a."));
     }
 
     return config;
   },
-  (error) => {
-    console.error("❌ Erro no interceptor de requisição:", error);
-    return Promise.reject(error);
-  },
+  (error) => Promise.reject(error),
 );
 
 // Interceptor de resposta
