@@ -7,7 +7,7 @@ export function useLotes() {
     queryFn: async () => handleGetFormParticipant({ documentId: import.meta.env.VITE_FORM_LOTES as string }),
   });
 
-  const formatedDataLote = evento?.items.map(parseLoteCard);
+  const formatedDataLote = evento?.items?.map(parseLoteCard);
 
   return { formatedDataLote };
 }

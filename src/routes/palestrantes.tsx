@@ -20,7 +20,7 @@ function PalestrantesPage() {
   console.log("palestrantes: ", palestrantes);
 
   const categoriaPalestrante = useMemo(() => {
-    if (!palestrantes?.items.length) return [];
+    if (!palestrantes?.items?.length) return [];
 
     return [...new Set(palestrantes.items.map((palestrante) => palestrante.eixo))];
   }, [palestrantes]);

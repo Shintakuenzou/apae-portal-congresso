@@ -7,7 +7,7 @@ export function useEvents() {
     queryFn: async () => handleGetFormParticipant({ documentId: import.meta.env.VITE_FORM_EVENTO as string }),
   });
 
-  const formatedDataEvento = evento?.items.map(parseEventoCard);
+  const formatedDataEvento = evento?.items?.map(parseEventoCard);
 
   return { formatedDataEvento, isLoading };
 }
