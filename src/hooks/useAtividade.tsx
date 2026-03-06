@@ -15,14 +15,13 @@ export function useAtividade(id_lote?: string) {
   }
 
   const { data: atividades } = useQuery({
-    queryKey: ["evento_atividade", id_lote],
+    queryKey: ["evento_atividade"],
 
     queryFn: async () =>
       fetchDataset<ActivityFields>({
         datasetId: "cadAtividadeCN",
         constraints: constraint,
       }),
-    enabled: !!id_lote,
   });
 
   return { atividades };

@@ -152,7 +152,7 @@ function PalestrasPage() {
                         <div className="lg:w-48 flex-shrink-0 bg-muted p-6 flex flex-col justify-center">
                           <div className="flex items-center gap-2 text-secondary font-semibold mb-1">
                             <Clock className="h-4 w-4" />
-                            <span>{format(`${selectedDate}`, "dd/MM/yyyy")}</span>
+                            <span>{format(`${selectedDate || atividade.data_inicio}`, "dd/MM/yyyy")}</span>
                           </div>
                           <Badge variant="outline" className="w-fit mt-2 border-secondary/50 text-secondary">
                             {atividade.eixo}

@@ -11,6 +11,7 @@ import { usePalestrantes } from "@/hooks/usePalestrantes";
 
 export function SpeakersSection() {
   const { palestrantes } = usePalestrantes();
+  console.log("palestrantes: ", palestrantes);
 
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
 
@@ -33,7 +34,10 @@ export function SpeakersSection() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {palestrantes?.items?.map((speaker, index) => (
-            <Card key={index} className="group border-border hover:border-primary/30 hover:shadow-lg transition-all duration-300 overflow-hidden hover:scale-105 cursor-pointer bg-zinc-100/10">
+            <Card
+              key={index}
+              className="group border-border hover:border-primary/30 hover:shadow-lg transition-all duration-300 overflow-hidden hover:scale-105 cursor-pointer bg-zinc-100/10"
+            >
               <CardContent className="p-5 flex flex-col items-center text-center gap-3 h-full" onClick={() => setSelectedImage(index)}>
                 <div className="w-40 h-40 rounded-full overflow-hidden ring-4 ring-primary/10 shadow-md shrink-0">
                   <img src={speaker.url_foto || "/placeholder.svg"} alt={speaker.nome} className="w-full h-full object-cover" />
