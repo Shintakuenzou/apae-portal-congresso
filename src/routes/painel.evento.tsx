@@ -94,8 +94,8 @@ function RouteComponent() {
         },
         {
           fieldName: "preco",
-          initialValue: 200,
-          finalValue: 200,
+          initialValue: "200",
+          finalValue: "200",
           constraintType: "MUST",
         },
         {
