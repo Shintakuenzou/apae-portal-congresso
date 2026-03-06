@@ -14,7 +14,8 @@ import { Badge } from "@/components/ui/badge";
 import { ptBR } from "date-fns/locale";
 import { SwitchChoiceCard } from "@/components/switch-choice-event-card";
 import { SkeletonCard } from "@/components/skelton-card";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { useQuery } from "@tanstack/react-query";
+import { fetchDataset } from "@/services/fetch-dataset";
 
 export const Route = createFileRoute("/painel/evento")({
   component: RouteComponent,
@@ -73,6 +74,32 @@ function RouteComponent() {
 
     return [...new Set(atividadeComPalestrantes.map((atividade) => atividade.eixo))];
   }, [atividadeComPalestrantes]);
+
+  async function handlePayment() {
+    await fetchDataset({
+      datasetId: "pagCN",
+      constraints: [
+        {
+          fieldName: "email",
+          initialValue: "desenvolvedor3@apaebrasil.org.br",
+          finalValue: "desenvolvedor3@apaebrasil.org.br",
+          constraintType: "MUST",
+        },
+        {
+          fieldName: "titulo",
+          initialValue: "congresso nacional das apaes",
+          finalValue: "congresso nacional das apaes",
+          constraintType: "MUST",
+        },
+        {
+          fieldName: "ref_id",
+          initialValue: "PEDIDO-1",
+          finalValue: "PEDIDO-1",
+          constraintType: "MUST",
+        },
+      ],
+    });
+  }
 
   return (
     <div className="space-y-6 col-span-4 lg:col-span-3">
@@ -170,17 +197,10 @@ function RouteComponent() {
                   <p className="text-3xl font-bold text-secondary">{eventoSelecionado?.preco}</p>
                   <p className="text-sm text-muted-foreground">{eventoSelecionado?.quantidade} vagas disponiveis</p>
                 </div>
-
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button size="lg" className="w-full sm:w-auto">
-                      <ShoppingCart className="h-5 w-5 mr-2" />
-                      Comprar Ingresso
-                    </Button>
-                  </DialogTrigger>
-
-                  <DialogContent></DialogContent>
-                </Dialog>
+                <Button size="lg" className="w-full sm:w-auto" onClick={handlePayment}>
+                  <ShoppingCart className="h-5 w-5 mr-2" />
+                  Comprar Ingresso
+                </Button>
               </div>
             </CardContent>
           </Card>
