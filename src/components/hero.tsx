@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/auth-context";
-import type { EventoCard } from "@/services/form-service";
+import type { EventoFields, FluigEntity } from "@/types";
 import { formatThreeDayRangeSimple } from "@/utils/formatThreeDayRange";
 import { Link } from "@tanstack/react-router";
 
 import { Calendar, MapPin, ArrowRight, Users, Mic2, Building } from "lucide-react";
 
 export interface HeroProps {
-  formatedDataEvento: EventoCard[] | undefined;
+  formatedDataEvento: FluigEntity<EventoFields>[] | undefined;
 }
 
 export function Hero({ formatedDataEvento }: HeroProps) {

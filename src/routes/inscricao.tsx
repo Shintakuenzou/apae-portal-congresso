@@ -130,8 +130,6 @@ function InscricaoPage() {
     setIsSubmitting(true);
 
     try {
-      const senhaCriptografada = SecurityService.encryptForTransport(data.senha);
-
       const response = await handlePostFormParticipant({
         documentId: import.meta.env.VITE_FORM_PARTICIPANTE as string,
         values: [
