@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { ptBR } from "date-fns/locale";
 import { SwitchChoiceCard } from "@/components/switch-choice-event-card";
 import { SkeletonCard } from "@/components/skelton-card";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/painel/evento")({
   component: RouteComponent,
@@ -169,10 +170,17 @@ function RouteComponent() {
                   <p className="text-3xl font-bold text-secondary">{eventoSelecionado?.preco}</p>
                   <p className="text-sm text-muted-foreground">{eventoSelecionado?.quantidade} vagas disponiveis</p>
                 </div>
-                <Button size="lg" className="w-full sm:w-auto">
-                  <ShoppingCart className="h-5 w-5 mr-2" />
-                  Comprar Ingresso
-                </Button>
+
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button size="lg" className="w-full sm:w-auto">
+                      <ShoppingCart className="h-5 w-5 mr-2" />
+                      Comprar Ingresso
+                    </Button>
+                  </DialogTrigger>
+
+                  <DialogContent></DialogContent>
+                </Dialog>
               </div>
             </CardContent>
           </Card>
