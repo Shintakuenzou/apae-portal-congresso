@@ -17,7 +17,7 @@ export function SponsorsSection() {
   // const [selected, setSelected] = useState<Sponsor | null>(null);
   const { formatedDataLote } = useLotes();
 
-  const id_lote = formatedDataLote ? formatedDataLote[formatedDataLote.length - 1].fields.id_evento : "";
+  const id_lote = formatedDataLote && formatedDataLote.length > 0 ? formatedDataLote[formatedDataLote.length - 1].fields.id_evento : "";
 
   const { data: sponsorsData } = useQuery({
     queryKey: ["sponsors", id_lote],
