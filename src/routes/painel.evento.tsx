@@ -53,7 +53,7 @@ function RouteComponent() {
   const atividadeComPalestrantes = useMemo(() => {
     if (!atividades?.items || !vinculo?.items) return [];
 
-    return atividades?.items.map((atividade) => ({ ...atividade, palestrantes: vinculo.items.filter((v) => v.id_atividade === atividade.documentid) }));
+    return atividades?.items?.map((atividade) => ({ ...atividade, palestrantes: vinculo.items.filter((v) => v.id_atividade === atividade.documentid) }));
   }, [atividades, vinculo]);
 
   const atividadesFiltradas = useMemo(() => {
@@ -69,9 +69,9 @@ function RouteComponent() {
   }, [atividadeComPalestrantes, selectedDate, selectedCategory]);
 
   const atividadeCategorias = useMemo(() => {
-    if (!atividadeComPalestrantes.length) return [];
+    if (!atividadeComPalestrantes?.length) return [];
 
-    return [...new Set(atividadeComPalestrantes.map((atividade) => atividade.eixo))];
+    return [...new Set(atividadeComPalestrantes?.map((atividade) => atividade.eixo))];
   }, [atividadeComPalestrantes]);
 
   async function handlePayment() {
