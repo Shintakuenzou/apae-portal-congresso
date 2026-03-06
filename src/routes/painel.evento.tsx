@@ -100,8 +100,8 @@ function RouteComponent() {
         },
         {
           fieldName: "ref_id",
-          initialValue: "PEDIDO-1",
-          finalValue: "PEDIDO-1",
+          initialValue: "1",
+          finalValue: "1",
           constraintType: "MUST",
         },
       ],
