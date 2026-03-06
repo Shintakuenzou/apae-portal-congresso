@@ -75,39 +75,30 @@ function RouteComponent() {
   }, [atividadeComPalestrantes]);
 
   async function handlePayment() {
-    console.log("handlePayment: ", handlePayment);
+    // ✅ Monta a query string exatamente como o Fluig espera
+    const constraints = [
+      { fieldName: "email", initialValue: "desenvolvedor3@apaebrasil.org.br" },
+      { fieldName: "titulo", initialValue: "congresso nacional das apaes" },
+      { fieldName: "preco", initialValue: String("200") },
+      { fieldName: "ref_id", initialValue: String("1") },
+    ];
 
-    const response = await fetchDataset({
-      datasetId: "pagCN",
-      constraints: [
-        {
-          fieldName: "email",
-          initialValue: "desenvolvedor3@apaebrasil.org.br",
-          finalValue: "desenvolvedor3@apaebrasil.org.br",
-          constraintType: "MUST",
-          },
-          {
-          fieldName: "titulo",
-          initialValue: "congresso nacional das apaes",
-          finalValue: "congresso nacional das apaes",
-          constraintType: "MUST",
-        },
-        {
-          fieldName: "preco",
-          initialValue: "200",
-          finalValue: "200",
-          constraintType: "MUST",
-        },
-        {
-          fieldName: "ref_id",
-          initialValue: "1",
-          finalValue: "1",
-          constraintType: "MUST",
-        },
-      ],
+    const params = new URLSearchParams();
+    params.append("datasetId", "pagCN");
+
+    constraints.forEach((c, i) => {
+      params.append(`constraints[${i}].fieldName`, c.fieldName);
+      params.append(`constraints[${i}].initialValue`, c.initialValue);
+      params.append(`constraints[${i}].finalValue`, c.initialValue);
+      params.append(`constraints[${i}].type`, "MUST"); // ⚠️ "type" não "constraintType"
     });
 
-    console.log("response payment: ", response);
+    console.log("Query enviada:", params.toString());
+
+    const response = await fetch(`https://firebrick-kingfisher-525619.hostingersite.com/proxy.php?${params.toString()}`);
+
+    const data = await response.json();
+    console.log("response payment:", data);
   }
 
   return (
