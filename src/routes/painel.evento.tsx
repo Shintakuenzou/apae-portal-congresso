@@ -13,8 +13,7 @@ import { useEvents } from "@/hooks/useEvents";
 import { Badge } from "@/components/ui/badge";
 import { ptBR } from "date-fns/locale";
 import { SwitchChoiceCard } from "@/components/switch-choice-event-card";
-import { SkeletonCard } from "@/components/skelton-card";
-import { fetchDataset } from "@/services/fetch-dataset";
+import { SkeletonCard } from "@/components/skelton-card"; 
 
 export const Route = createFileRoute("/painel/evento")({
   component: RouteComponent,
