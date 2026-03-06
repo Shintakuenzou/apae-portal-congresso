@@ -20,30 +20,36 @@ interface FetchDatasetProps {
   constraints?: DatasetConstraint[];
 }
 
-// const CONSTRAINT_TYPE_MAP: Record<string, number> = {
-//   MUST: 1,
-//   SHOULD: 2,
-//   MUST_NOT: 3,
-// };
-
 export async function fetchDataset<T = DatasetRecord>({ datasetId, offset, limit, constraints = [] }: FetchDatasetProps): Promise<{ items: T[]; hasNext: boolean }> {
   try {
-    const url = "/dataset/api/v2/dataset-handle/search";
+    const base = "/dataset/api/v2/dataset-handle/search";
+    const params = new URLSearchParams();
 
-    const body: Record<string, unknown> = {
-      datasetId,
-      constraints: constraints.map((c) => ({
-        fieldName: c.fieldName,
-        initialValue: String(c.initialValue),
-        finalValue: String(c.finalValue ?? c.initialValue),
-        type: { MUST: 1, SHOULD: 2, MUST_NOT: 3 }[c.constraintType ?? "MUST"],
-      })),
-    };
+    // datasetId
+    params.set("datasetId", datasetId);
 
-    if (offset != null) body.offset = offset;
-    if (limit != null) body.limit = limit;
+    // paginação
+    if (offset != null && limit != null) {
+      params.set("offset", String(offset));
+      params.set("limit", String(limit));
+    }
 
-    const response = await axiosApi.post<DatasetResponse<T>>(url, body);
+    // constraints
+    constraints.forEach((c) => {
+      const type = c.constraintType ?? "MUST";
+      const finalVal = c.finalValue ?? c.initialValue;
+
+      params.append("constraintsField", c.fieldName);
+      params.append("constraintsInitialValue", String(c.initialValue));
+      params.append("constraintsFinalValue", String(finalVal));
+      params.append("constraintsType", type);
+    });
+
+    const query = params.toString();
+    const url = `${base}?${query}`;
+    // console.log(url, query);
+
+    const response = await axiosApi.get<DatasetResponse<T>>(url);
 
     return {
       items: response.data.values ?? [],
