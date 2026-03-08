@@ -14,9 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { ptBR } from "date-fns/locale";
 import { SwitchChoiceCard } from "@/components/switch-choice-event-card";
 import { SkeletonCard } from "@/components/skelton-card";
-// import { fetchDataset } from "@/services/fetch-dataset";
-import { axiosApi } from "@/services/api-root";
-import type { DatasetRecord } from "@/services/fetch-dataset";
+import { fetchDataset } from "@/services/fetch-dataset";
 
 export const Route = createFileRoute("/painel/evento")({
   component: RouteComponent,
@@ -26,7 +24,7 @@ function RouteComponent() {
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const { formatedDataLote } = useLotes();
   const [eventoSelecionado, setEventoSelecionado] = useState<LoteFields | null>();
-  const id_lote = formatedDataLote && formatedDataLote.length > 0 ? formatedDataLote[formatedDataLote.length - 1].fields.documentId : "";
+  const id_lote = formatedDataLote && formatedDataLote.length > 0 ? formatedDataLote[formatedDataLote.length - 1].fields.documentId : undefined;
   const { atividades } = useAtividade(id_lote);
   const { vinculo } = useVinculo();
 
@@ -83,75 +81,33 @@ function RouteComponent() {
     return [...new Set(atividadeComPalestrantes?.map((atividade) => atividade.eixo))];
   }, [atividadeComPalestrantes]);
 
-  // async function handlePayment() {
-  //   console.log("handlePayment: ");
-
-  //   const response = await fetchDataset({
-  //     datasetId: "pagCN",
-  //     constraints: [
-  //       {
-  //         fieldName: "email",
-  //         initialValue: "desenvolvedor3@apaebrasil.org.br",
-  //         finalValue: "desenvolvedor3@apaebrasil.org.br",
-  //         constraintType: "MUST",
-  //       },
-  //       {
-  //         fieldName: "titulo",
-  //         initialValue: "congresso nacional das apaes",
-  //         finalValue: "congresso nacional das apaes",
-  //         constraintType: "MUST",
-  //       },
-  //       {
-  //         fieldName: "preco",
-  //         initialValue: "200",
-  //         finalValue: "200",
-  //         constraintType: "MUST",
-  //       },
-  //       {
-  //         fieldName: "ref_id",
-  //         initialValue: "1",
-  //         finalValue: "1",
-  //         constraintType: "MUST",
-  //       },
-  //     ],
-  //   });
-
-  //   console.log("response payment: ", response.items);
-  // }
-
   async function handlePayment() {
-    const items = await fetchDatasetPost("pagCN", [
-      { fieldName: "email", initialValue: "desenvolvedor3@apaebrasil.org.br" },
-      { fieldName: "titulo", initialValue: "congresso nacional das apaes" },
-      { fieldName: "preco", initialValue: "200" },
-      { fieldName: "ref_id", initialValue: "1" },
-    ]);
+    const payload = JSON.stringify({
+      email: "desenvolvedor3@apaebrasil.org.br",
+      titulo: "congresso nacional das apaes",
+      preco: "200",
+      ref_id: "1",
+    });
 
-    console.log("response payment:", items);
-  }
+    const response = await fetchDataset({
+      datasetId: "pagCN",
+      constraints: [
+        {
+          fieldName: "ref_id",
+          initialValue: payload,
+          finalValue: payload,
+          constraintType: "MUST",
+        },
+      ],
+    });
 
-  async function fetchDatasetPost<T = DatasetRecord>(datasetId: string, constraints: { fieldName: string; initialValue: string; finalValue?: string }[]): Promise<T[]> {
-    try {
-      // ✅ Sem /proxy.php pois o axiosApi já tem na baseURL
-      const url = `?endpoint=${encodeURIComponent("/api/public/ecm/dataset/loadDataset")}&method=POST`;
+    console.log("response payment:", response.items);
 
-      const body = {
-        datasetId,
-        fields: null,
-        sortFields: null,
-        constraints: constraints.map((c) => ({
-          fieldName: c.fieldName,
-          initialValue: String(c.initialValue),
-          finalValue: String(c.finalValue ?? c.initialValue),
-          type: 1,
-        })),
-      };
-
-      const response = await axiosApi.post(url, body);
-      return response.data.values ?? [];
-    } catch (error) {
-      console.error("Erro fetchDatasetPost:", error);
-      return [];
+    const item = response.items[0] as any;
+    if (item?.status === "SUCCESS") {
+      window.location.href = item.init_point; // redireciona para o Mercado Pago
+    } else {
+      console.error("Erro no pagamento:", item?.message);
     }
   }
 
