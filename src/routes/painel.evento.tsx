@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { ptBR } from "date-fns/locale";
 import { SwitchChoiceCard } from "@/components/switch-choice-event-card";
 import { SkeletonCard } from "@/components/skelton-card";
-import { fetchDataset } from "@/services/fetch-dataset";
+// import { fetchDataset } from "@/services/fetch-dataset";
 import { axiosApi } from "@/services/api-root";
 
 export const Route = createFileRoute("/painel/evento")({
