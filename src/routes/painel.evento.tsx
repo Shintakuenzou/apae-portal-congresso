@@ -16,6 +16,7 @@ import { SwitchChoiceCard } from "@/components/switch-choice-event-card";
 import { SkeletonCard } from "@/components/skelton-card";
 // import { fetchDataset } from "@/services/fetch-dataset";
 import { axiosApi } from "@/services/api-root";
+import type { DatasetRecord } from "@/services/fetch-dataset";
 
 export const Route = createFileRoute("/painel/evento")({
   component: RouteComponent,
@@ -119,20 +120,39 @@ function RouteComponent() {
   // }
 
   async function handlePayment() {
-    const body = {
-      datasetId: "pagCN",
-      fields: null,
-      sortFields: null,
-      constraints: [
-        { fieldName: "email", initialValue: "desenvolvedor3@apaebrasil.org.br", finalValue: "desenvolvedor3@apaebrasil.org.br", type: 1 },
-        { fieldName: "titulo", initialValue: "congresso nacional das apaes", finalValue: "congresso nacional das apaes", type: 1 },
-        { fieldName: "preco", initialValue: "200", finalValue: "200", type: 1 },
-        { fieldName: "ref_id", initialValue: "1", finalValue: "1", type: 1 },
-      ],
-    };
+    const items = await fetchDatasetPost("pagCN", [
+      { fieldName: "email", initialValue: "desenvolvedor3@apaebrasil.org.br" },
+      { fieldName: "titulo", initialValue: "congresso nacional das apaes" },
+      { fieldName: "preco", initialValue: "200" },
+      { fieldName: "ref_id", initialValue: "1" },
+    ]);
 
-    const response = await axiosApi.post("/api/public/ecm/dataset/loadDataset", body);
-    console.log("response payment:", response.data.values);
+    console.log("response payment:", items);
+  }
+
+  async function fetchDatasetPost<T = DatasetRecord>(datasetId: string, constraints: { fieldName: string; initialValue: string; finalValue?: string }[]): Promise<T[]> {
+    try {
+      // ✅ Sem /proxy.php pois o axiosApi já tem na baseURL
+      const url = `?endpoint=${encodeURIComponent("/api/public/ecm/dataset/loadDataset")}&method=POST`;
+
+      const body = {
+        datasetId,
+        fields: null,
+        sortFields: null,
+        constraints: constraints.map((c) => ({
+          fieldName: c.fieldName,
+          initialValue: String(c.initialValue),
+          finalValue: String(c.finalValue ?? c.initialValue),
+          type: 1,
+        })),
+      };
+
+      const response = await axiosApi.post(url, body);
+      return response.data.values ?? [];
+    } catch (error) {
+      console.error("Erro fetchDatasetPost:", error);
+      return [];
+    }
   }
 
   return (
