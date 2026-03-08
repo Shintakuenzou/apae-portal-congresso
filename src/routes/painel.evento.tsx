@@ -15,6 +15,7 @@ import { ptBR } from "date-fns/locale";
 import { SwitchChoiceCard } from "@/components/switch-choice-event-card";
 import { SkeletonCard } from "@/components/skelton-card";
 import { fetchDataset } from "@/services/fetch-dataset";
+import { axiosApi } from "@/services/api-root";
 
 export const Route = createFileRoute("/painel/evento")({
   component: RouteComponent,
@@ -81,40 +82,57 @@ function RouteComponent() {
     return [...new Set(atividadeComPalestrantes?.map((atividade) => atividade.eixo))];
   }, [atividadeComPalestrantes]);
 
+  // async function handlePayment() {
+  //   console.log("handlePayment: ");
+
+  //   const response = await fetchDataset({
+  //     datasetId: "pagCN",
+  //     constraints: [
+  //       {
+  //         fieldName: "email",
+  //         initialValue: "desenvolvedor3@apaebrasil.org.br",
+  //         finalValue: "desenvolvedor3@apaebrasil.org.br",
+  //         constraintType: "MUST",
+  //       },
+  //       {
+  //         fieldName: "titulo",
+  //         initialValue: "congresso nacional das apaes",
+  //         finalValue: "congresso nacional das apaes",
+  //         constraintType: "MUST",
+  //       },
+  //       {
+  //         fieldName: "preco",
+  //         initialValue: "200",
+  //         finalValue: "200",
+  //         constraintType: "MUST",
+  //       },
+  //       {
+  //         fieldName: "ref_id",
+  //         initialValue: "1",
+  //         finalValue: "1",
+  //         constraintType: "MUST",
+  //       },
+  //     ],
+  //   });
+
+  //   console.log("response payment: ", response.items);
+  // }
+
   async function handlePayment() {
-    console.log("handlePayment: ");
-
-    const response = await fetchDataset({
+    const body = {
       datasetId: "pagCN",
+      fields: null,
+      sortFields: null,
       constraints: [
-        {
-          fieldName: "email",
-          initialValue: "desenvolvedor3@apaebrasil.org.br",
-          finalValue: "desenvolvedor3@apaebrasil.org.br",
-          constraintType: "MUST",
-        },
-        {
-          fieldName: "titulo",
-          initialValue: "congresso nacional das apaes",
-          finalValue: "congresso nacional das apaes",
-          constraintType: "MUST",
-        },
-        {
-          fieldName: "preco",
-          initialValue: "200",
-          finalValue: "200",
-          constraintType: "MUST",
-        },
-        {
-          fieldName: "ref_id",
-          initialValue: "1",
-          finalValue: "1",
-          constraintType: "MUST",
-        },
+        { fieldName: "email", initialValue: "desenvolvedor3@apaebrasil.org.br", finalValue: "desenvolvedor3@apaebrasil.org.br", type: 1 },
+        { fieldName: "titulo", initialValue: "congresso nacional das apaes", finalValue: "congresso nacional das apaes", type: 1 },
+        { fieldName: "preco", initialValue: "200", finalValue: "200", type: 1 },
+        { fieldName: "ref_id", initialValue: "1", finalValue: "1", type: 1 },
       ],
-    });
+    };
 
-    console.log("response payment: ", response.items);
+    const response = await axiosApi.post("/api/public/ecm/dataset/loadDataset", body);
+    console.log("response payment:", response.data.values);
   }
 
   return (
