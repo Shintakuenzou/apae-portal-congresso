@@ -15,7 +15,6 @@ const mockPagamento = {
 };
 function RouteComponent() {
   const { user } = useAuth();
-  console.log("ingressso: ", user);
 
   return (
     <>

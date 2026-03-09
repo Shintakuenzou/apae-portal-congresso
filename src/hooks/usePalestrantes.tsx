@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 
 export function usePalestrantes(event_id?: string) {
   const constraints: DatasetConstraint[] = [];
-  console.log("event_id: ", event_id);
 
   if (event_id) {
     constraints.push({

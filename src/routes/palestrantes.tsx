@@ -17,15 +17,12 @@ function PalestrantesPage() {
   const { palestrantes } = usePalestrantes();
 
   const [selectedCategory, setSelectedCategory] = useState("Todos");
-  console.log("palestrantes: ", palestrantes);
 
   const categoriaPalestrante = useMemo(() => {
     if (!palestrantes?.items?.length) return [];
 
     return [...new Set(palestrantes.items.map((palestrante) => palestrante.eixo))];
   }, [palestrantes]);
-
-  console.log(categoriaPalestrante);
 
   const filtrarPalestrantes = useMemo(() => {
     if (selectedCategory === "Todos") return palestrantes?.items;

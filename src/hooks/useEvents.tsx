@@ -6,11 +6,8 @@ export function useEvents() {
     queryKey: ["evento_congresso"],
     queryFn: async () => handleGetFormParticipant({ documentId: import.meta.env.VITE_FORM_EVENTO as string }),
   });
-  console.log(import.meta.env.VITE_FORM_EVENTO);
 
-  console.log("evento: ", evento);
   const formatedDataEvento = evento?.items?.map(parseEventoCard);
-  console.log("formatedDataEvento: ", formatedDataEvento);
 
   return { formatedDataEvento, isLoading };
 }

@@ -47,7 +47,6 @@ export async function fetchDataset<T = DatasetRecord>({ datasetId, offset, limit
 
     const query = params.toString();
     const url = `${base}?${query}`;
-    // console.log(url, query);
 
     const response = await axiosApi.get<DatasetResponse<T>>(url);
 

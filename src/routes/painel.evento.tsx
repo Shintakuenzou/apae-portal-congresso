@@ -103,8 +103,6 @@ function RouteComponent() {
       ],
     });
 
-    console.log("response payment:", response.items);
-
     const item = response.items[0] as any;
 
     if (item?.status === "SUCCESS") {

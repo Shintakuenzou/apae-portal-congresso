@@ -11,7 +11,6 @@ import { usePalestrantes } from "@/hooks/usePalestrantes";
 
 export function SpeakersSection() {
   const { palestrantes } = usePalestrantes();
-  console.log("palestrantes: ", palestrantes);
 
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
 

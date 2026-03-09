@@ -249,7 +249,6 @@ function InscricaoPage() {
       }
     } catch (error: unknown) {
       toast.warning("CPF nao encontrado no sistema.");
-      console.log("Error ao buscar dados pelo CPF: ", error);
     }
   };
 

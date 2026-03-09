@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { handlePostFormParticipant } from "@/services/form-service";
+import { toast } from "sonner";
 
 interface RegistrationFormFieldsProps {
   onSuccess: () => void;
@@ -30,11 +31,7 @@ export function RegistrationFormFields({ onSuccess }: RegistrationFormFieldsProp
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    console.log("Dados enviados:", formData);
-
     try {
-      console.log("to entrando");
-
       await handlePostFormParticipant({
         documentId: import.meta.env.VITE_FORM_PARTICIPANTE as string,
         values: [
@@ -51,9 +48,7 @@ export function RegistrationFormFields({ onSuccess }: RegistrationFormFieldsProp
       // Trigger success state
       onSuccess();
     } catch (error) {
-      console.log(error);
-    } finally {
-      console.log("to saindo");
+      toast.error("Erro ao realizar inscrição");
     }
   }
 

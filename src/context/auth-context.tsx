@@ -68,7 +68,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (response.items && response.items.length > 0) {
         const userData = response.items[0];
-        console.log("userData: ", userData);
 
         if (response.items[0]["senha"] == password) {
           const user: User = {

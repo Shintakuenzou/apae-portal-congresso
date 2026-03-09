@@ -91,11 +91,6 @@ axiosApi.interceptors.request.use(
 // Interceptor de resposta
 axiosApi.interceptors.response.use(
   (response) => {
-    console.log("✅ Response:", {
-      status: response.status,
-      url: response.config.url,
-      method: response.config.method,
-    });
     return response;
   },
   (error) => {

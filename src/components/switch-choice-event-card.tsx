@@ -24,8 +24,6 @@ interface SwitchChoiceCardProps {
 }
 
 export function SwitchChoiceCard({ titulo, descricao, eixo, hora_inicio, palestrantes, documentId, hora_fim, eventoDatas }: SwitchChoiceCardProps) {
-  console.log("eventoDatas: ", eventoDatas);
-
   return (
     <FieldGroup className="w-full">
       <FieldLabel htmlFor={documentId}>
