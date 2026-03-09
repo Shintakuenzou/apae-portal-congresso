@@ -1,5 +1,5 @@
 import { Calendar, MapPin, QrCode } from "lucide-react";
-import LogoApae from "../../../public/logo-transparente.png";
+import LogoApae from "/public/logo-transparente.png";
 import { Separator } from "@/components/ui/separator";
 
 interface TicketCardProps {

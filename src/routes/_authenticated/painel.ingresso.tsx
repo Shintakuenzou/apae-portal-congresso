@@ -4,7 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { TicketCard } from "@/components/painel/ticket-card";
 import { PendingTicket } from "@/components/painel/pending-ticket";
 
-export const Route = createFileRoute("/painel/ingresso")({
+export const Route = createFileRoute("/_authenticated/painel/ingresso")({
   component: RouteComponent,
 });
 

@@ -14,16 +14,17 @@ import { Route as RecuperarSenhaRouteImport } from './routes/recuperar-senha'
 import { Route as QuemSomosRouteImport } from './routes/quem-somos'
 import { Route as PalestrasRouteImport } from './routes/palestras'
 import { Route as PalestrantesRouteImport } from './routes/palestrantes'
-import { Route as PainelRouteImport } from './routes/painel'
 import { Route as NotFoundRouteImport } from './routes/not-found'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as InscricaoRouteImport } from './routes/inscricao'
 import { Route as GaleriaRouteImport } from './routes/galeria'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as PainelIngressoRouteImport } from './routes/painel.ingresso'
-import { Route as PainelHistoricoRouteImport } from './routes/painel.historico'
-import { Route as PainelEventoRouteImport } from './routes/painel.evento'
-import { Route as PainelDataRouteImport } from './routes/painel.data'
+import { Route as AuthenticatedPainelRouteImport } from './routes/_authenticated/painel'
+import { Route as AuthenticatedPainelIngressoRouteImport } from './routes/_authenticated/painel.ingresso'
+import { Route as AuthenticatedPainelHistoricoRouteImport } from './routes/_authenticated/painel.historico'
+import { Route as AuthenticatedPainelEventoRouteImport } from './routes/_authenticated/painel.evento'
+import { Route as AuthenticatedPainelDataRouteImport } from './routes/_authenticated/painel.data'
 
 const SubTrabalhoRoute = SubTrabalhoRouteImport.update({
   id: '/sub-trabalho',
@@ -50,11 +51,6 @@ const PalestrantesRoute = PalestrantesRouteImport.update({
   path: '/palestrantes',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PainelRoute = PainelRouteImport.update({
-  id: '/painel',
-  path: '/painel',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const NotFoundRoute = NotFoundRouteImport.update({
   id: '/not-found',
   path: '/not-found',
@@ -75,30 +71,42 @@ const GaleriaRoute = GaleriaRouteImport.update({
   path: '/galeria',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PainelIngressoRoute = PainelIngressoRouteImport.update({
-  id: '/ingresso',
-  path: '/ingresso',
-  getParentRoute: () => PainelRoute,
+const AuthenticatedPainelRoute = AuthenticatedPainelRouteImport.update({
+  id: '/painel',
+  path: '/painel',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const PainelHistoricoRoute = PainelHistoricoRouteImport.update({
-  id: '/historico',
-  path: '/historico',
-  getParentRoute: () => PainelRoute,
-} as any)
-const PainelEventoRoute = PainelEventoRouteImport.update({
-  id: '/evento',
-  path: '/evento',
-  getParentRoute: () => PainelRoute,
-} as any)
-const PainelDataRoute = PainelDataRouteImport.update({
+const AuthenticatedPainelIngressoRoute =
+  AuthenticatedPainelIngressoRouteImport.update({
+    id: '/ingresso',
+    path: '/ingresso',
+    getParentRoute: () => AuthenticatedPainelRoute,
+  } as any)
+const AuthenticatedPainelHistoricoRoute =
+  AuthenticatedPainelHistoricoRouteImport.update({
+    id: '/historico',
+    path: '/historico',
+    getParentRoute: () => AuthenticatedPainelRoute,
+  } as any)
+const AuthenticatedPainelEventoRoute =
+  AuthenticatedPainelEventoRouteImport.update({
+    id: '/evento',
+    path: '/evento',
+    getParentRoute: () => AuthenticatedPainelRoute,
+  } as any)
+const AuthenticatedPainelDataRoute = AuthenticatedPainelDataRouteImport.update({
   id: '/data',
   path: '/data',
-  getParentRoute: () => PainelRoute,
+  getParentRoute: () => AuthenticatedPainelRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -107,16 +115,16 @@ export interface FileRoutesByFullPath {
   '/inscricao': typeof InscricaoRoute
   '/login': typeof LoginRoute
   '/not-found': typeof NotFoundRoute
-  '/painel': typeof PainelRouteWithChildren
   '/palestrantes': typeof PalestrantesRoute
   '/palestras': typeof PalestrasRoute
   '/quem-somos': typeof QuemSomosRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/sub-trabalho': typeof SubTrabalhoRoute
-  '/painel/data': typeof PainelDataRoute
-  '/painel/evento': typeof PainelEventoRoute
-  '/painel/historico': typeof PainelHistoricoRoute
-  '/painel/ingresso': typeof PainelIngressoRoute
+  '/painel': typeof AuthenticatedPainelRouteWithChildren
+  '/painel/data': typeof AuthenticatedPainelDataRoute
+  '/painel/evento': typeof AuthenticatedPainelEventoRoute
+  '/painel/historico': typeof AuthenticatedPainelHistoricoRoute
+  '/painel/ingresso': typeof AuthenticatedPainelIngressoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -124,34 +132,35 @@ export interface FileRoutesByTo {
   '/inscricao': typeof InscricaoRoute
   '/login': typeof LoginRoute
   '/not-found': typeof NotFoundRoute
-  '/painel': typeof PainelRouteWithChildren
   '/palestrantes': typeof PalestrantesRoute
   '/palestras': typeof PalestrasRoute
   '/quem-somos': typeof QuemSomosRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/sub-trabalho': typeof SubTrabalhoRoute
-  '/painel/data': typeof PainelDataRoute
-  '/painel/evento': typeof PainelEventoRoute
-  '/painel/historico': typeof PainelHistoricoRoute
-  '/painel/ingresso': typeof PainelIngressoRoute
+  '/painel': typeof AuthenticatedPainelRouteWithChildren
+  '/painel/data': typeof AuthenticatedPainelDataRoute
+  '/painel/evento': typeof AuthenticatedPainelEventoRoute
+  '/painel/historico': typeof AuthenticatedPainelHistoricoRoute
+  '/painel/ingresso': typeof AuthenticatedPainelIngressoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/galeria': typeof GaleriaRoute
   '/inscricao': typeof InscricaoRoute
   '/login': typeof LoginRoute
   '/not-found': typeof NotFoundRoute
-  '/painel': typeof PainelRouteWithChildren
   '/palestrantes': typeof PalestrantesRoute
   '/palestras': typeof PalestrasRoute
   '/quem-somos': typeof QuemSomosRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/sub-trabalho': typeof SubTrabalhoRoute
-  '/painel/data': typeof PainelDataRoute
-  '/painel/evento': typeof PainelEventoRoute
-  '/painel/historico': typeof PainelHistoricoRoute
-  '/painel/ingresso': typeof PainelIngressoRoute
+  '/_authenticated/painel': typeof AuthenticatedPainelRouteWithChildren
+  '/_authenticated/painel/data': typeof AuthenticatedPainelDataRoute
+  '/_authenticated/painel/evento': typeof AuthenticatedPainelEventoRoute
+  '/_authenticated/painel/historico': typeof AuthenticatedPainelHistoricoRoute
+  '/_authenticated/painel/ingresso': typeof AuthenticatedPainelIngressoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -161,12 +170,12 @@ export interface FileRouteTypes {
     | '/inscricao'
     | '/login'
     | '/not-found'
-    | '/painel'
     | '/palestrantes'
     | '/palestras'
     | '/quem-somos'
     | '/recuperar-senha'
     | '/sub-trabalho'
+    | '/painel'
     | '/painel/data'
     | '/painel/evento'
     | '/painel/historico'
@@ -178,12 +187,12 @@ export interface FileRouteTypes {
     | '/inscricao'
     | '/login'
     | '/not-found'
-    | '/painel'
     | '/palestrantes'
     | '/palestras'
     | '/quem-somos'
     | '/recuperar-senha'
     | '/sub-trabalho'
+    | '/painel'
     | '/painel/data'
     | '/painel/evento'
     | '/painel/historico'
@@ -191,29 +200,30 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/galeria'
     | '/inscricao'
     | '/login'
     | '/not-found'
-    | '/painel'
     | '/palestrantes'
     | '/palestras'
     | '/quem-somos'
     | '/recuperar-senha'
     | '/sub-trabalho'
-    | '/painel/data'
-    | '/painel/evento'
-    | '/painel/historico'
-    | '/painel/ingresso'
+    | '/_authenticated/painel'
+    | '/_authenticated/painel/data'
+    | '/_authenticated/painel/evento'
+    | '/_authenticated/painel/historico'
+    | '/_authenticated/painel/ingresso'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   GaleriaRoute: typeof GaleriaRoute
   InscricaoRoute: typeof InscricaoRoute
   LoginRoute: typeof LoginRoute
   NotFoundRoute: typeof NotFoundRoute
-  PainelRoute: typeof PainelRouteWithChildren
   PalestrantesRoute: typeof PalestrantesRoute
   PalestrasRoute: typeof PalestrasRoute
   QuemSomosRoute: typeof QuemSomosRoute
@@ -258,13 +268,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PalestrantesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/painel': {
-      id: '/painel'
-      path: '/painel'
-      fullPath: '/painel'
-      preLoaderRoute: typeof PainelRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/not-found': {
       id: '/not-found'
       path: '/not-found'
@@ -293,6 +296,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GaleriaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -300,61 +310,80 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/painel/ingresso': {
-      id: '/painel/ingresso'
+    '/_authenticated/painel': {
+      id: '/_authenticated/painel'
+      path: '/painel'
+      fullPath: '/painel'
+      preLoaderRoute: typeof AuthenticatedPainelRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/painel/ingresso': {
+      id: '/_authenticated/painel/ingresso'
       path: '/ingresso'
       fullPath: '/painel/ingresso'
-      preLoaderRoute: typeof PainelIngressoRouteImport
-      parentRoute: typeof PainelRoute
+      preLoaderRoute: typeof AuthenticatedPainelIngressoRouteImport
+      parentRoute: typeof AuthenticatedPainelRoute
     }
-    '/painel/historico': {
-      id: '/painel/historico'
+    '/_authenticated/painel/historico': {
+      id: '/_authenticated/painel/historico'
       path: '/historico'
       fullPath: '/painel/historico'
-      preLoaderRoute: typeof PainelHistoricoRouteImport
-      parentRoute: typeof PainelRoute
+      preLoaderRoute: typeof AuthenticatedPainelHistoricoRouteImport
+      parentRoute: typeof AuthenticatedPainelRoute
     }
-    '/painel/evento': {
-      id: '/painel/evento'
+    '/_authenticated/painel/evento': {
+      id: '/_authenticated/painel/evento'
       path: '/evento'
       fullPath: '/painel/evento'
-      preLoaderRoute: typeof PainelEventoRouteImport
-      parentRoute: typeof PainelRoute
+      preLoaderRoute: typeof AuthenticatedPainelEventoRouteImport
+      parentRoute: typeof AuthenticatedPainelRoute
     }
-    '/painel/data': {
-      id: '/painel/data'
+    '/_authenticated/painel/data': {
+      id: '/_authenticated/painel/data'
       path: '/data'
       fullPath: '/painel/data'
-      preLoaderRoute: typeof PainelDataRouteImport
-      parentRoute: typeof PainelRoute
+      preLoaderRoute: typeof AuthenticatedPainelDataRouteImport
+      parentRoute: typeof AuthenticatedPainelRoute
     }
   }
 }
 
-interface PainelRouteChildren {
-  PainelDataRoute: typeof PainelDataRoute
-  PainelEventoRoute: typeof PainelEventoRoute
-  PainelHistoricoRoute: typeof PainelHistoricoRoute
-  PainelIngressoRoute: typeof PainelIngressoRoute
+interface AuthenticatedPainelRouteChildren {
+  AuthenticatedPainelDataRoute: typeof AuthenticatedPainelDataRoute
+  AuthenticatedPainelEventoRoute: typeof AuthenticatedPainelEventoRoute
+  AuthenticatedPainelHistoricoRoute: typeof AuthenticatedPainelHistoricoRoute
+  AuthenticatedPainelIngressoRoute: typeof AuthenticatedPainelIngressoRoute
 }
 
-const PainelRouteChildren: PainelRouteChildren = {
-  PainelDataRoute: PainelDataRoute,
-  PainelEventoRoute: PainelEventoRoute,
-  PainelHistoricoRoute: PainelHistoricoRoute,
-  PainelIngressoRoute: PainelIngressoRoute,
+const AuthenticatedPainelRouteChildren: AuthenticatedPainelRouteChildren = {
+  AuthenticatedPainelDataRoute: AuthenticatedPainelDataRoute,
+  AuthenticatedPainelEventoRoute: AuthenticatedPainelEventoRoute,
+  AuthenticatedPainelHistoricoRoute: AuthenticatedPainelHistoricoRoute,
+  AuthenticatedPainelIngressoRoute: AuthenticatedPainelIngressoRoute,
 }
 
-const PainelRouteWithChildren =
-  PainelRoute._addFileChildren(PainelRouteChildren)
+const AuthenticatedPainelRouteWithChildren =
+  AuthenticatedPainelRoute._addFileChildren(AuthenticatedPainelRouteChildren)
+
+interface AuthenticatedRouteChildren {
+  AuthenticatedPainelRoute: typeof AuthenticatedPainelRouteWithChildren
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedPainelRoute: AuthenticatedPainelRouteWithChildren,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   GaleriaRoute: GaleriaRoute,
   InscricaoRoute: InscricaoRoute,
   LoginRoute: LoginRoute,
   NotFoundRoute: NotFoundRoute,
-  PainelRoute: PainelRouteWithChildren,
   PalestrantesRoute: PalestrantesRoute,
   PalestrasRoute: PalestrasRoute,
   QuemSomosRoute: QuemSomosRoute,

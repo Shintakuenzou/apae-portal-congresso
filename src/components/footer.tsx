@@ -1,6 +1,6 @@
 import { Mail, Phone, MapPin, ExternalLink } from "lucide-react";
 import { DynamicIcon, type IconName } from "lucide-react/dynamic";
-import LogoApae from "../../public/logo-transparente.png";
+import LogoApae from "/public/logo-transparente.png";
 import { Link } from "@tanstack/react-router";
 import { useEvents } from "@/hooks/useEvents";
 import { formatThreeDayRangeSimple } from "@/utils/formatThreeDayRange";

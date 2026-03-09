@@ -10,7 +10,7 @@ import { LoadingScreen } from "@/components/loading";
 import { AvailableEvents } from "@/components/painel/evento/available-events";
 import { EventDetails } from "@/components/painel/evento/event-details";
 
-export const Route = createFileRoute("/painel/evento")({
+export const Route = createFileRoute("/_authenticated/painel/evento")({
   component: RouteComponent,
   pendingComponent: LoadingScreen,
   loader: async () => {

@@ -16,6 +16,7 @@ interface ImportMetaEnv {
   readonly VITE_DATASET_ATIVIDADE?: string;
   readonly VITE_DATASET_VINCULO_PALESTRA_ATIVIDADE?: string;
   readonly VITE_DATASET_EVENTO?: string;
+  readonly VITE_DATASET_PARTICIPANTE?: string;
 }
 interface ImportMeta {
   readonly env: ImportMetaEnv;

@@ -2,10 +2,10 @@ import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { User, Ticket, LogOut, History, ShoppingCart } from "lucide-react";
-import LogoApae from "/logo-transparente.png";
+import LogoApae from "/public/logo-transparente.png";
 import { useAuth } from "@/context/auth-context";
 
-export const Route = createFileRoute("/painel")({
+export const Route = createFileRoute("/_authenticated/painel")({
   beforeLoad: ({ context, location }) => {
     if (!context.auth.isAuthenticated) {
       throw redirect({

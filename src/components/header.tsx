@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { Menu, X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import LogoApae from "../../public/logo-transparente.png";
+import LogoApae from "/public/logo-transparente.png";
 
 import { HeaderNav } from "./header-nav";
 import { HeaderActions } from "./header-actions";

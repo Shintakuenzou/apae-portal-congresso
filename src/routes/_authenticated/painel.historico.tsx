@@ -5,7 +5,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { OrderCard } from "@/components/painel/historico/order-card";
 
-export const Route = createFileRoute("/painel/historico")({
+export const Route = createFileRoute("/_authenticated/painel/historico")({
   component: RouteComponent,
 });
 

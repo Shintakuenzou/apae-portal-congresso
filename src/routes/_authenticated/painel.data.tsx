@@ -9,7 +9,7 @@ import { Pencil, X, Save } from "lucide-react";
 import { useState } from "react";
 import { PersonalDataSection, ContactDataSection, AddressDataSection, AdditionalInfoSection } from "@/components/painel/data/form-sections";
 
-export const Route = createFileRoute("/painel/data")({
+export const Route = createFileRoute("/_authenticated/painel/data")({
   component: RouteComponent,
 });
 

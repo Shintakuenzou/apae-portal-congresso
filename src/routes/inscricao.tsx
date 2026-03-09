@@ -25,6 +25,7 @@ import { format } from "date-fns";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useQuery } from "@tanstack/react-query";
+import { sha256 } from "@/utils/hash-pass";
 
 export const Route = createFileRoute("/inscricao")({
   component: InscricaoPage,
@@ -127,13 +128,15 @@ function InscricaoPage() {
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
 
+    const hshPs = await sha256(data.senha);
+
     try {
       const response = await handlePostFormParticipant({
         documentId: import.meta.env.VITE_FORM_PARTICIPANTE as string,
         values: [
           { fieldId: "criado_em", value: data.criado_em },
           { fieldId: "cpf", value: data.cpf.replace(/\D/g, "") },
-          { fieldId: "senha", value: data.senha },
+          { fieldId: "senha", value: hshPs },
           { fieldId: "nome", value: data.nome },
           { fieldId: "sobrenome", value: data.sobrenome },
           { fieldId: "email", value: data.email },
