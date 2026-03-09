@@ -70,7 +70,7 @@ axiosApi.interceptors.request.use(
 
       // ✅ POST/PUT precisam manter o method real — não converte para GET
       // O proxy lê o ?method=POST e usa como CURLOPT_CUSTOMREQUEST
-      config.method = "get"; // axios usa GET para enviar, method real vai no param
+
       return config;
     }
 

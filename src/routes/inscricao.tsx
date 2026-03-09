@@ -163,6 +163,8 @@ function InscricaoPage() {
         setSubmitted(true);
       }
     } catch (error) {
+      console.error("Error submitting form data:", error);
+      toast.error("Erro ao enviar formulário");
     } finally {
       setIsSubmitting(false);
     }
