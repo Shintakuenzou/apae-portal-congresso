@@ -1,10 +1,11 @@
+// src/routes/__root.tsx
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
-import { AuthContext } from "@/context/auth-context";
+import { type AuthContextType } from "@/types/auth-context-type";
 
 interface RouterContext {
-  auth: typeof AuthContext;
+  auth: AuthContextType;
 }
 
 const queryClient = new QueryClient();
