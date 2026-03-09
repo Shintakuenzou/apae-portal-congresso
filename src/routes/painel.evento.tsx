@@ -15,12 +15,14 @@ import { ptBR } from "date-fns/locale";
 import { SwitchChoiceCard } from "@/components/switch-choice-event-card";
 import { SkeletonCard } from "@/components/skelton-card";
 import { fetchDataset } from "@/services/fetch-dataset";
+import { useAuth } from "@/context/auth-context";
 
 export const Route = createFileRoute("/painel/evento")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const { user } = useAuth();
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const { formatedDataLote } = useLotes();
   const [eventoSelecionado, setEventoSelecionado] = useState<LoteFields | null>();
@@ -83,10 +85,10 @@ function RouteComponent() {
 
   async function handlePayment() {
     const payload = JSON.stringify({
-      email: "desenvolvedor3@apaebrasil.org.br",
-      titulo: "congresso nacional das apaes",
-      preco: "200",
-      ref_id: "1",
+      email: user?.email,
+      titulo: eventoSelecionado?.nome,
+      preco: eventoSelecionado?.preco,
+      ref_id: eventoSelecionado?.documentId,
     });
 
     const response = await fetchDataset({
@@ -104,8 +106,9 @@ function RouteComponent() {
     console.log("response payment:", response.items);
 
     const item = response.items[0] as any;
+
     if (item?.status === "SUCCESS") {
-      window.location.href = item.init_point; // redireciona para o Mercado Pago
+      window.open(item.init_point, "_blank");
     } else {
       console.error("Erro no pagamento:", item?.message);
     }
