@@ -4,7 +4,7 @@ import type { User } from "@/types/user";
 import { sha256 } from "@/utils/hash-pass";
 import { createContext, useContext, useState, type ReactNode } from "react";
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
