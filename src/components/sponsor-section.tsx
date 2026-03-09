@@ -81,9 +81,9 @@ export function SponsorsSection() {
   if (!id_lote) return null;
 
   return (
-    <section className="relative bg-background border-b border-border overflow-hidden" aria-label="Patrocinadores Oficiais">
+    <section className="relative bg-violet-950 border-b border-border overflow-hidden" aria-label="Patrocinadores Oficiais">
       {/* Faixa de destaque superior */}
-      <div className="h-1.5 w-full bg-gradient-to-r from-secondary via-primary to-secondary" />
+      <div className="h-1.5 w-full bg-gradient-to-r from-transparent via-violet-400 to-transparent" />
 
       {/* Fundo pontilhado sutil */}
       <div
@@ -100,7 +100,7 @@ export function SponsorsSection() {
         <div className="flex items-center gap-4 mb-10">
           <div className="h-px flex-1 bg-border" aria-hidden="true" />
           <div className="text-center shrink-0">
-            <h2 className="text-xl font-bold text-foreground">Parceiros</h2>
+            <h2 className="text-xl font-bold text-white">Parceiros</h2>
           </div>
           <div className="h-px flex-1 bg-border" aria-hidden="true" />
         </div>
@@ -125,34 +125,34 @@ export function SponsorsSection() {
                   aria-label={`Ver detalhes de ${sponsor.nome}`}
                   onClick={() => openLink(sponsor.link_acesso as string)}
                   className={`
-                    flex flex-col items-center gap-2
+                    flex flex-col items-center gap-2 bg-white
                     rounded-2xl px-6 py-5 cursor-pointer select-none
                     transition-all duration-200 border
                     hover:scale-105 hover:shadow-lg active:scale-95
-                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-950 focus-visible:ring-offset-2
                     border-border shadow-sm 
                   `}
                   style={{ minWidth: 180 }}
                 >
                   <img src={sponsor.url_foto as string} alt={sponsor.nome as string} className="w-32 h-32 object-contain rounded-2xl" />
 
-                  <p className={`text-sm font-bold text-center leading-tight `}>{sponsor.nome}</p>
-                  <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-sky-900 text-white`}>{sponsor.tipo}</span>
+                  <p className={`text-sm font-bold text-center leading-tight text-violet-950`}>{sponsor.nome}</p>
+                  <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-violet-950 text-white`}>{sponsor.tipo}</span>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <p aria-hidden="true" className="text-center text-xs text-muted-foreground/40 mt-6 flex items-center justify-center gap-2">
-          <span className="text-primary/30">✦</span>
+        <p aria-hidden="true" className="text-center text-xs text-violet-950/40 mt-6 flex items-center justify-center gap-2">
+          <span className="text-violet-950/30">✦</span>
           Confira nossos parceiros
-          <span className="text-primary/30">✦</span>
+          <span className="text-violet-950/30">✦</span>
         </p>
       </div>
 
       {/* Faixa inferior */}
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-border to-transparent" />
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-violet-950 to-transparent" />
 
       {/* ── Radix Dialog Modal ──
         Benefícios vs implementação manual:
@@ -242,7 +242,7 @@ export function SponsorsSection() {
                 <ExternalLink className="w-4 h-4" aria-hidden="true" />
               </a>
 
-              <Dialog.Close className="w-full py-2.5 rounded-2xl text-sm font-semibold text-muted-foreground hover:bg-black/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+              <Dialog.Close className="w-full py-2.5 rounded-2xl text-sm font-semibold text-muted-foreground hover:bg-black/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-600">
                 Fechar
               </Dialog.Close>
             </div>

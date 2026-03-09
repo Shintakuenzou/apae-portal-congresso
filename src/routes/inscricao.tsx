@@ -171,8 +171,8 @@ function InscricaoPage() {
         <Header />
         <section className="pt-32 pb-24 min-h-[80vh] flex items-center">
           <div className="mx-auto max-w-lg px-4 sm:px-6 lg:px-8 text-center">
-            <div className="w-20 h-20 bg-secondary rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="h-10 w-10 text-secondary-foreground" />
+            <div className="w-20 h-20 bg-violet-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="h-10 w-10 text-white" />
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">Inscricao Realizada!</h1>
 
@@ -286,8 +286,8 @@ function InscricaoPage() {
             <Card className="border-border shadow-sm">
               <CardContent className="p-6 sm:p-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <User className="h-5 w-5 text-primary" />
+                  <div className="w-10 h-10 rounded-full bg-violet-600/10 flex items-center justify-center">
+                    <User className="h-5 w-5 text-violet-600" />
                   </div>
                   <div>
                     <h2 className="font-semibold text-lg text-foreground">Dados Pessoais</h2>
@@ -389,8 +389,8 @@ function InscricaoPage() {
             <Card className="border-border shadow-sm">
               <CardContent className="p-6 sm:p-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Mail className="h-5 w-5 text-primary" />
+                  <div className="w-10 h-10 rounded-full bg-violet-600/10 flex items-center justify-center">
+                    <Mail className="h-5 w-5 text-violet-600" />
                   </div>
                   <div>
                     <h2 className="font-semibold text-lg text-foreground">Informações de Contato</h2>
@@ -452,8 +452,8 @@ function InscricaoPage() {
             <Card className="border-border shadow-sm">
               <CardContent className="p-6 sm:p-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <MapPinned className="h-5 w-5 text-primary" />
+                  <div className="w-10 h-10 rounded-full bg-violet-600/10 flex items-center justify-center">
+                    <MapPinned className="h-5 w-5 text-violet-600" />
                   </div>
                   <div>
                     <h2 className="font-semibold text-lg text-foreground">Localizacao</h2>
@@ -520,8 +520,8 @@ function InscricaoPage() {
             <Card className="border-border shadow-sm">
               <CardContent className="p-6 sm:p-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Briefcase className="h-5 w-5 text-primary" />
+                  <div className="w-10 h-10 rounded-full bg-violet-600/10 flex items-center justify-center">
+                    <Briefcase className="h-5 w-5 text-violet-600" />
                   </div>
                   <div>
                     <h2 className="font-semibold text-lg text-foreground">Informações Profissionais</h2>
@@ -591,8 +591,8 @@ function InscricaoPage() {
             <Card className="border-border shadow-sm">
               <CardContent className="p-6 sm:p-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Heart className="h-5 w-5 text-primary" />
+                  <div className="w-10 h-10 rounded-full bg-violet-600/10 flex items-center justify-center">
+                    <Heart className="h-5 w-5 text-violet-600" />
                   </div>
                   <div>
                     <h2 className="font-semibold text-lg text-foreground">Acessibilidade</h2>
@@ -716,8 +716,8 @@ function InscricaoPage() {
             <Card className="border-border shadow-sm">
               <CardContent className="p-6 sm:p-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Lock className="h-5 w-5 text-primary" />
+                  <div className="w-10 h-10 rounded-full bg-violet-600/10 flex items-center justify-center">
+                    <Lock className="h-5 w-5 text-violet-600" />
                   </div>
                   <div>
                     <h2 className="font-semibold text-lg text-foreground">Senha de Acesso</h2>
@@ -743,7 +743,7 @@ function InscricaoPage() {
                 type="submit"
                 size="lg"
                 disabled={isSubmitting}
-                className="w-full md:w-auto min-w-[300px] h-12 text-base font-semibold bg-secondary hover:bg-secondary/90 text-secondary-foreground cursor-pointer"
+                className="w-full md:w-auto min-w-[300px] h-12 text-base font-semibold bg-violet-600 hover:bg-violet-600/90 text-white cursor-pointer"
               >
                 {isSubmitting ? (
                   <>

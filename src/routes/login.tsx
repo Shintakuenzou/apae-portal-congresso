@@ -80,16 +80,16 @@ function LoginPage() {
       {/* Lado esquerdo - Imagem de fundo */}
       <div className="hidden lg:flex lg:w-1/2 xl:w-3/5 relative">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${BgLogin})` }} />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary/60" />
-        <div className="relative z-10 flex flex-col justify-between p-12 text-primary-foreground">
-          <Link to="/" className="inline-flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground transition-colors w-fit">
+        <div className="absolute inset-0 bg-gradient-to-r from-violet-950/80 to-violet-950/60" />
+        <div className="relative z-10 flex flex-col justify-between p-12 text-white">
+          <Link to="/" className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors w-fit">
             <ArrowLeft className="h-4 w-4" />
             <span className="text-sm font-medium">Voltar ao site</span>
           </Link>
 
           <div className="space-y-6">
             <h2 className="text-4xl xl:text-5xl font-bold leading-tight text-balance">Juntos pela inclusão e transformação social</h2>
-            <p className="text-lg text-primary-foreground/90 max-w-md">
+            <p className="text-lg text-white/90 max-w-md">
               A APAE atua há mais de 60 anos promovendo a inclusão de pessoas com deficiência intelectual e múltipla, transformando vidas e construindo uma sociedade mais justa.
             </p>
           </div>
@@ -97,17 +97,17 @@ function LoginPage() {
           <div className="flex items-center gap-8">
             <div>
               <p className="text-3xl font-bold">2.200+</p>
-              <p className="text-sm text-primary-foreground/80">APAEs no Brasil</p>
+              <p className="text-sm text-white/80">APAEs no Brasil</p>
             </div>
-            <div className="w-px h-12 bg-primary-foreground/30" />
+            <div className="w-px h-12 bg-white/30" />
             <div>
               <p className="text-3xl font-bold">250 mil+</p>
-              <p className="text-sm text-primary-foreground/80">Pessoas atendidas</p>
+              <p className="text-sm text-white/80">Pessoas atendidas</p>
             </div>
-            <div className="w-px h-12 bg-primary-foreground/30" />
+            <div className="w-px h-12 bg-white/30" />
             <div>
               <p className="text-3xl font-bold">60+</p>
-              <p className="text-sm text-primary-foreground/80">Anos de história</p>
+              <p className="text-sm text-white/80">Anos de história</p>
             </div>
           </div>
         </div>
@@ -125,7 +125,7 @@ function LoginPage() {
         <main className="flex-1 flex items-center justify-center p-6 lg:p-12">
           <div className="w-full max-w-md space-y-8">
             <div className="text-center space-y-3">
-              <div className="inline-flex lg:hidden items-center justify-center w-16 h-16 rounded-2xl bg-primary text-primary-foreground font-bold text-xl shadow-lg">APAE</div>
+              <div className="inline-flex lg:hidden items-center justify-center w-16 h-16 rounded-2xl bg-violet-600 text-white font-bold text-xl shadow-lg">APAE</div>
               <div>
                 <h1 className="text-2xl font-bold text-foreground">Acesse sua conta</h1>
                 <p className="text-muted-foreground mt-1">Congresso Nacional APAE Brasil 2026</p>
@@ -147,7 +147,7 @@ function LoginPage() {
                       <Label htmlFor="password" className="text-sm font-medium">
                         Senha
                       </Label>
-                      <Link to="/recuperar-senha" className="text-sm text-secondary hover:text-secondary/80 font-medium transition-colors">
+                      <Link to="/recuperar-senha" className="text-sm text-violet-600 hover:text-violet-600/80 font-medium transition-colors">
                         Esqueceu a senha?
                       </Link>
                     </div>
@@ -172,7 +172,7 @@ function LoginPage() {
                     </div>
                   </div>
 
-                  <Button type="submit" className="w-full h-12 text-base font-semibold bg-primary hover:bg-primary/90 cursor-pointer" disabled={isLoading}>
+                  <Button type="submit" className="w-full h-12 text-base font-semibold bg-violet-600 hover:bg-violet-600/90 text-white cursor-pointer" disabled={isLoading}>
                     {isLoading ? (
                       <span className="flex items-center gap-2">
                         <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -206,7 +206,7 @@ function LoginPage() {
                 <Link to="/inscricao">
                   <Button
                     variant="outline"
-                    className="w-full h-12 text-base font-semibold border-2 hover:bg-secondary/10 hover:border-secondary hover:text-secondary bg-transparent cursor-pointer"
+                    className="w-full h-12 text-base font-semibold border-2 hover:bg-violet-600/10 hover:border-violet-600 hover:text-violet-600 bg-transparent cursor-pointer"
                   >
                     Faça inscrição
                   </Button>

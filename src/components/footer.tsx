@@ -18,7 +18,7 @@ function FooterCard({ children, className = "" }: { children: React.ReactNode; c
 }
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
-  return <p className="text-xs font-semibold uppercase tracking-widest text-secondary/80 text-center">{children}</p>;
+  return <p className="text-xs font-semibold uppercase tracking-widest text-amber-400 text-center">{children}</p>;
 }
 
 /* ─── Footer ─────────────────────────────────────────────────────── */
@@ -26,7 +26,7 @@ export function Footer() {
   const { formatedDataEvento } = useEvents();
 
   return (
-    <footer className="bg-foreground text-background">
+    <footer className="bg-violet-950 text-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14">
         {/* ── Grade principal ── */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -53,7 +53,7 @@ export function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="w-9 h-9 rounded-xl bg-background/10 hover:bg-secondary hover:text-secondary-foreground flex items-center justify-center transition-all duration-200 hover:scale-105"
+                    className="w-9 h-9 rounded-xl bg-white/10 hover:bg-amber-400 hover:text-violet-950 flex items-center justify-center transition-all duration-200 hover:scale-105"
                   >
                     <DynamicIcon name={social.icon as IconName} className="h-4 w-4" />
                   </Link>
@@ -70,12 +70,12 @@ export function Footer() {
               {/* E-mail */}
               <li>
                 <div className="flex items-center gap-2 mb-1">
-                  <Mail className="h-4 w-4 text-secondary flex-shrink-0" />
-                  <span className="text-xs text-background/50 uppercase tracking-wide font-medium">E-mail</span>
+                  <Mail className="h-4 w-4 text-amber-400" />
+                  <span className="text-xs text-white/50 uppercase tracking-wide font-medium">E-mail</span>
                 </div>
                 <a
                   href="mailto:fenapaes@apaebrasil.org.br"
-                  className="text-sm hover:text-secondary transition-colors underline underline-offset-2 decoration-background/20 hover:decoration-secondary pl-6"
+                  className="text-sm hover:text-amber-400 transition-colors underline underline-offset-2 decoration-white/20 hover:decoration-amber-400 pl-6"
                 >
                   fenapaes@apaebrasil.org.br
                 </a>
@@ -84,10 +84,10 @@ export function Footer() {
               {/* Telefone */}
               <li className="border-t border-background/10 pt-4">
                 <div className="flex items-center gap-2 mb-1">
-                  <Phone className="h-4 w-4 text-secondary flex-shrink-0" />
-                  <span className="text-xs text-background/50 uppercase tracking-wide font-medium">Telefone</span>
+                  <Phone className="h-4 w-4 text-amber-400" />
+                  <span className="text-xs text-white/50 uppercase tracking-wide font-medium">Telefone</span>
                 </div>
-                <a href="tel:+556132249922" className="text-sm hover:text-secondary transition-colors pl-6">
+                <a href="tel:+556132249922" className="text-sm hover:text-amber-400 transition-colors pl-6">
                   (61) 3224-9922
                 </a>
               </li>
@@ -122,7 +122,7 @@ export function Footer() {
 
                     {/* Cidade/Estado */}
                     <div className="flex items-center gap-1.5 text-background/60 text-xs">
-                      <MapPin className="h-3.5 w-3.5 flex-shrink-0" />
+                      <MapPin className="h-3.5 w-3.5" />
                       <span>
                         {item.fields.cidade} — {item.fields.estado}
                       </span>
@@ -131,7 +131,7 @@ export function Footer() {
                     {/* Data */}
                     <div className="border-t border-background/10 pt-3">
                       <p className="text-xs text-background/50 mb-0.5 uppercase tracking-wide font-medium">Data</p>
-                      <p className="text-sm font-semibold text-secondary">{formatThreeDayRangeSimple(item.fields.data_inicio, item.fields.data_fim)}</p>
+                      <p className="text-sm font-semibold text-amber-400">{formatThreeDayRangeSimple(item.fields.data_inicio, item.fields.data_fim)}</p>
                     </div>
                   </div>
                 ))}
@@ -143,7 +143,7 @@ export function Footer() {
         </div>
 
         {/* ── Rodapé inferior ── */}
-        <div className="mt-10 pt-6 border-t border-background/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-background/40">
+        <div className="mt-10 pt-6 border-t border-background/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-amber-200">
           <p>© {new Date().getFullYear()} Federação Nacional das APAEs. Todos os direitos reservados.</p>
           <p className="flex items-center gap-1">
             Desenvolvido pela Equipe de TI da Apae Brasil

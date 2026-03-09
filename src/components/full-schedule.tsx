@@ -169,7 +169,7 @@ export function FullSchedule() {
               key={day.id}
               variant={selectedDay === day.id ? "default" : "outline"}
               onClick={() => setSelectedDay(day.id)}
-              className={selectedDay === day.id ? "bg-primary text-primary-foreground" : ""}
+              className={selectedDay === day.id ? "bg-violet-600 text-white" : ""}
             >
               <span className="hidden sm:inline">{day.label}</span>
               <span className="sm:hidden">{day.shortLabel}</span>
@@ -179,11 +179,11 @@ export function FullSchedule() {
 
         <div className="space-y-4">
           {schedule[selectedDay].map((event, index) => (
-            <Card key={index} className="bg-card border-border hover:border-primary/30 transition-colors">
+            <Card key={index} className="bg-card border-border hover:border-violet-600/30 transition-colors">
               <CardContent className="p-6">
                 <div className="flex flex-col md:flex-row md:items-center gap-4">
-                  <div className="md:w-32 flex-shrink-0">
-                    <div className="flex items-center gap-2 text-primary font-semibold">
+                  <div className="md:w-32 shrink-0">
+                    <div className="flex items-center gap-2 text-violet-600 font-semibold">
                       <Clock className="h-4 w-4" />
                       <span className="text-sm">{event.time}</span>
                     </div>
@@ -192,7 +192,7 @@ export function FullSchedule() {
                   <div className="flex-1">
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <Badge variant="outline" className="mb-2 text-xs border-secondary text-secondary">
+                        <Badge variant="outline" className="mb-2 text-xs border-violet-600 text-violet-600">
                           {event.category}
                         </Badge>
                         <h3 className="text-lg font-semibold text-foreground">{event.title}</h3>

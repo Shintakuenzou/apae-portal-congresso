@@ -1,6 +1,5 @@
 // src/contexts/auth-context.tsx
 import { fetchDataset } from "@/services/fetch-dataset";
-import { useNavigate } from "@tanstack/react-router";
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 
 export interface User {
@@ -35,7 +34,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -107,7 +105,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
-    navigate({ to: "/login" });
   };
 
   const updateUser = (updatedData: Partial<User>) => {

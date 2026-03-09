@@ -46,7 +46,7 @@ export function About() {
           <div className="grid sm:grid-cols-2 gap-6">
             {features.map((feature, index) => (
               <div key={index} className="bg-card p-6 rounded-lg border border-border">
-                <feature.icon className="h-10 w-10 text-secondary mb-4" />
+                <feature.icon className="h-10 w-10 text-violet-600 mb-4" />
                 <h3 className="text-lg font-semibold text-foreground mb-2">{feature.title}</h3>
                 <p className="text-sm text-muted-foreground">{feature.description}</p>
               </div>

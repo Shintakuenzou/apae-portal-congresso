@@ -83,11 +83,11 @@ function QuemSomosPage() {
       <Header />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-16 bg-primary">
+      <section className="pt-32 pb-16 bg-violet-950">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl">
-            <h1 className="text-4xl sm:text-5xl font-bold text-primary-foreground mb-6 text-balance">Quem Somos</h1>
-            <p className="text-lg text-primary-foreground/90 leading-relaxed">
+            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6 text-balance">Quem Somos</h1>
+            <p className="text-lg text-white/90 leading-relaxed">
               A Federação Nacional das Apaes, ou Apae Brasil, é a maior rede de defesa e garantia de direitos das pessoas com deficiência intelectual e deficiência múltipla da
               América Latina.
             </p>
@@ -101,8 +101,8 @@ function QuemSomosPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map((stat, index) => (
               <div key={index} className="text-center py-4">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-secondary/10 rounded-xl mb-3">
-                  <stat.icon className="h-6 w-6 text-secondary" />
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-violet-600/10 rounded-xl mb-3">
+                  <stat.icon className="h-6 w-6 text-violet-600" />
                 </div>
                 <div className="text-2xl sm:text-3xl font-bold text-foreground">{stat.value}</div>
                 <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
@@ -230,10 +230,10 @@ function QuemSomosPage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {fundamentos.map((item, index) => (
-              <Card key={index} className="border-border hover:border-secondary/30 transition-colors">
+              <Card key={index} className="border-border hover:border-violet-600/30 transition-colors">
                 <CardContent className="p-6">
                   <div className="w-full flex items-center justify-center">
-                    <DynamicIcon name={item.icon} className="h-6 w-6 text-secondary bg-secondary/10 rounded-lg mb-4" />
+                    <DynamicIcon name={item.icon} className="h-6 w-6 text-violet-600 bg-violet-600/10 rounded-lg mb-4" />
                   </div>
                   <h3 className="text-base font-semibold text-foreground mb-3 text-center">{item.title}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed text-justify">{item.description}</p>
@@ -291,14 +291,14 @@ function QuemSomosPage() {
                     <div
                       className={`inline-block bg-card border border-border rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow ${index % 2 === 0 ? "md:mr-0" : "md:ml-0"}`}
                     >
-                      <span className="inline-block text-sm font-bold text-secondary mb-1">{item.year}</span>
+                      <span className="inline-block text-sm font-bold text-violet-600 mb-1">{item.year}</span>
                       <h3 className="text-base font-semibold text-foreground mb-1">{item.title}</h3>
                       <p className="text-sm text-muted-foreground">{item.description}</p>
                     </div>
                   </div>
 
                   {/* Ponto central */}
-                  <div className="absolute left-4 md:left-1/2 -translate-x-1/2 w-3 h-3 bg-secondary rounded-full border-2 border-background shadow z-10 mt-6" />
+                  <div className="absolute left-4 md:left-1/2 -translate-x-1/2 w-3 h-3 bg-violet-600 rounded-full border-2 border-background shadow z-10 mt-6" />
 
                   {/* Linha horizontal conectando ao ponto */}
                   <div className={`hidden md:block absolute top-7 w-8 h-0.5 bg-border ${index % 2 === 0 ? "left-1/2 ml-1.5" : "right-1/2 mr-1.5"}`} />
@@ -313,14 +313,14 @@ function QuemSomosPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-primary">
+      <section className="py-16 bg-violet-950">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-primary-foreground mb-4">Faça Parte Dessa História</h2>
-          <p className="text-primary-foreground/80 mb-8 leading-relaxed">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">Faça Parte Dessa História</h2>
+          <p className="text-white/80 mb-8 leading-relaxed">
             O Congresso Nacional APAE Brasil 2026 constitui o principal evento do movimento apaeano, congregando profissionais, familiares, pesquisadores e pessoas com deficiência
             de todo o país.
           </p>
-          <Button asChild size="lg" className="bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold">
+          <Button asChild size="lg" className="bg-amber-400 hover:bg-amber-400/90 text-violet-950 font-semibold hover:text-violet-950 border-none">
             <Link to={isAuthenticated ? "/painel" : "/login"}>Inscreva-se Agora</Link>
           </Button>
         </div>

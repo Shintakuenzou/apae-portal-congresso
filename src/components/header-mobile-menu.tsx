@@ -11,7 +11,7 @@ export function HeaderMobileMenu({ isOpen, onClose }: HeaderMobileMenuProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="md:hidden bg-primary border-t border-primary-foreground/10 shadow-xl">
+    <div className="md:hidden bg-violet-950 border-t border-violet-600/10 shadow-xl">
       <div className="px-4 py-6 space-y-2">
         {navItems.map((item) => {
           return (
@@ -32,10 +32,10 @@ export function HeaderMobileMenu({ isOpen, onClose }: HeaderMobileMenuProps) {
           );
         })}
         <div className="pt-4">
-          <Button asChild size="lg" className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold">
-            <a href="/inscricao" onClick={onClose}>
+          <Button asChild size="lg" className="w-full bg-violet-700 hover:bg-violet-700/90 text-white font-semibold">
+            <Link to="/inscricao" onClick={onClose}>
               Inscreva-se
-            </a>
+            </Link>
           </Button>
         </div>
       </div>

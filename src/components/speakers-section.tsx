@@ -1,6 +1,6 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Briefcase, Building2, GraduationCap, Mail } from "lucide-react";
+import { ArrowRight, Building2, Mail, X, Award } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Badge } from "./ui/badge";
@@ -19,11 +19,11 @@ export function SpeakersSection() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
           <div>
-            <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium bg-primary/10 text-primary mb-4">Palestrantes</span>
+            <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium bg-violet-950 text-white mb-4">Palestrantes</span>
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4 text-balance">Conheça Nossos Palestrantes</h2>
             <p className="text-muted-foreground max-w-xl">Profissionais renomados que compartilharão conhecimento e experiências sobre inclusão e deficiência.</p>
           </div>
-          <Button variant="outline" className="self-start md:self-auto group bg-transparent" asChild>
+          <Button variant="outline" className="self-start md:self-auto group bg-transparent hover:bg-transparent" asChild>
             <Link to="/palestrantes">
               Ver Todos
               <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -35,11 +35,16 @@ export function SpeakersSection() {
           {palestrantes?.items?.map((speaker, index) => (
             <Card
               key={index}
-              className="group border-border hover:border-primary/30 hover:shadow-lg transition-all duration-300 overflow-hidden hover:scale-105 cursor-pointer bg-zinc-100/10"
+              className="group border-border hover:border-violet-600/30 hover:shadow-lg transition-all duration-300 overflow-hidden hover:scale-105 cursor-pointer bg-zinc-100/10"
+              onClick={() => setSelectedImage(index)}
             >
-              <CardContent className="p-5 flex flex-col items-center text-center gap-3 h-full" onClick={() => setSelectedImage(index)}>
-                <div className="w-40 h-40 rounded-full overflow-hidden ring-4 ring-primary/10 shadow-md shrink-0">
-                  <img src={speaker.url_foto || "/placeholder.svg"} alt={speaker.nome} className="w-full h-full object-cover" />
+              <div className="flex flex-col items-center p-6 text-center h-full">
+                <div className="w-40 h-40 rounded-full overflow-hidden ring-4 ring-violet-600/10 shadow-md shrink-0">
+                  <img
+                    src={speaker.url_foto || "/placeholder.svg"}
+                    alt={speaker.nome}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
                 </div>
 
                 {/* Informações */}
@@ -51,7 +56,7 @@ export function SpeakersSection() {
                 <Badge variant="secondary" className="text-[10px] mt-auto">
                   Palestrante
                 </Badge>
-              </CardContent>
+              </div>
             </Card>
           ))}
         </div>
@@ -59,21 +64,27 @@ export function SpeakersSection() {
 
       <Dialog open={selectedImage !== null} onOpenChange={() => setSelectedImage(null)}>
         {selectedImage !== null && palestrantes && (
-          <DialogContent className="!max-w-3xl overflow-hidden p-0 gap-0 [&>button]:hidden">
-            {/* Header com imagem e info básica */}
-            <div className="relative bg-gradient-to-br from-primary/10 via-primary/5 to-background p-6 pb-4">
+          <DialogContent className="max-w-3xl! overflow-hidden p-0 gap-0 [&>button]:hidden">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-4 right-4 z-10 text-muted-foreground hover:bg-black/5 rounded-full bg-white/50 backdrop-blur-sm"
+              onClick={() => setSelectedImage(null)}
+            >
+              <X className="w-5 h-5" />
+            </Button>
+
+            <div className="relative bg-linear-to-br from-violet-600/10 via-violet-600/5 to-background p-6 pb-4">
               <div className="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
                 {/* Avatar */}
-                <div className="relative shrink-0">
-                  <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden ring-4 ring-background shadow-xl">
-                    <img
-                      src={palestrantes.items[selectedImage as number].url_foto || "/placeholder.svg?height=400&width=400"}
-                      alt={palestrantes.items[selectedImage as number].nome}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground rounded-full p-2 shadow-lg">
-                    <GraduationCap className="w-4 h-4" />
+                <div className="relative w-32 h-32 shrink-0">
+                  <img
+                    src={palestrantes.items[selectedImage as number].url_foto || "/placeholder.svg?height=400&width=400"}
+                    alt={palestrantes.items[selectedImage as number].nome}
+                    className="w-full h-full object-cover rounded-2xl shadow-xl ring-4 ring-background"
+                  />
+                  <div className="absolute -bottom-2 -right-2 bg-violet-600 text-white rounded-full p-2 shadow-lg">
+                    <Award className="w-5 h-5" />
                   </div>
                 </div>
 
@@ -86,12 +97,12 @@ export function SpeakersSection() {
 
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-2 justify-center sm:justify-start text-muted-foreground">
-                      <Building2 className="w-4 h-4 text-primary" />
+                      <Building2 className="w-4 h-4 text-violet-600" />
                       <span className="text-sm font-medium">{palestrantes.items[selectedImage as number].empresa_faculdade}</span>
                     </div>
-                    <div className="flex items-center gap-2 justify-center sm:justify-start text-muted-foreground">
-                      <Mail className="w-4 h-4 text-primary" />
-                      <a href={`mailto:${palestrantes.items[selectedImage as number].email}`} className="text-sm hover:text-primary transition-colors">
+                    <div className="flex items-center gap-3 text-muted-foreground">
+                      <Mail className="w-4 h-4 text-violet-600" />
+                      <a href={`mailto:${palestrantes.items[selectedImage as number].email}`} className="text-sm hover:text-violet-600 transition-colors">
                         {palestrantes.items[selectedImage as number].email}
                       </a>
                     </div>
@@ -110,7 +121,7 @@ export function SpeakersSection() {
             <ScrollArea className="max-h-[50vh]">
               <div className="p-6 space-y-4">
                 <div className="flex items-center gap-2 text-foreground">
-                  <Briefcase className="w-5 h-5 text-primary" />
+                  <Building2 className="w-5 h-5 text-violet-600" />
                   <h3 className="font-semibold text-lg">Formação & Experiência</h3>
                 </div>
 

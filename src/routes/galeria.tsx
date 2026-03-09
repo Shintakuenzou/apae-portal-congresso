@@ -57,7 +57,7 @@ function Galery() {
       <section className="pt-24 pb-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl">
-            <p className="text-sm font-medium text-primary mb-2">Galeria</p>
+            <p className="text-sm font-medium text-violet-600 mb-2">Galeria</p>
             <h1 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">
               Momentos que
               <br />

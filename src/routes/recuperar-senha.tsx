@@ -58,19 +58,17 @@ function RedefinirSenhaPage() {
   return (
     <div className="min-h-screen flex">
       {/* Lado esquerdo - Visual */}
-      <div className="hidden lg:flex lg:w-1/2 xl:w-3/5 relative bg-primary">
+      <div className="hidden lg:flex lg:w-1/2 xl:w-3/5 relative bg-violet-950">
         <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: `url(${BgLogin})` }} />
-        <div className="relative z-10 flex flex-col justify-between p-12 text-primary-foreground">
-          <Link to="/login" className="inline-flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground transition-colors w-fit">
+        <div className="relative z-10 flex flex-col justify-between p-12 text-white">
+          <Link to="/login" className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors w-fit">
             <ArrowLeft className="h-4 w-4" />
             <span className="text-sm font-medium">Voltar ao login</span>
           </Link>
 
           <div className="space-y-6">
             <h2 className="text-4xl xl:text-5xl font-bold leading-tight text-balance">Recupere seu acesso de forma segura</h2>
-            <p className="text-lg text-primary-foreground/90 max-w-md">
-              Enviaremos um link para o email cadastrado. Siga as instrucoes para criar uma nova senha e voltar a acessar sua conta.
-            </p>
+            <p className="text-lg text-white/90 max-w-md">Enviaremos um link para o email cadastrado. Siga as instrucoes para criar uma nova senha e voltar a acessar sua conta.</p>
           </div>
 
           <div className="flex items-center gap-6">
@@ -80,7 +78,7 @@ function RedefinirSenhaPage() {
               </div>
               <div>
                 <p className="font-medium">Suporte</p>
-                <p className="text-sm text-primary-foreground/80">suport.ti@apaebrasil.org.br</p>
+                <p className="text-sm text-white/80">suport.ti@apaebrasil.org.br</p>
               </div>
             </div>
           </div>
@@ -104,7 +102,7 @@ function RedefinirSenhaPage() {
             {step === "email" && (
               <>
                 <div className="text-center space-y-3">
-                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary/10 text-primary">
+                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-violet-600/10 text-violet-600">
                     <Mail className="h-7 w-7" />
                   </div>
                   <div>
@@ -137,7 +135,7 @@ function RedefinirSenhaPage() {
                     <Input id="email" type="email" placeholder="seu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required className="h-12" />
                   </div>
 
-                  <Button type="submit" className="w-full h-12 bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold" disabled={isLoading}>
+                  <Button type="submit" className="w-full h-12 bg-violet-600 hover:bg-violet-600/90 text-white font-semibold" disabled={isLoading}>
                     {isLoading ? (
                       <span className="flex items-center gap-2">
                         <span className="h-4 w-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
@@ -151,7 +149,7 @@ function RedefinirSenhaPage() {
 
                 <p className="text-center text-sm text-muted-foreground">
                   Lembrou a senha?{" "}
-                  <Link to="/login" className="text-secondary font-medium hover:underline">
+                  <Link to="/login" className="text-violet-600 font-medium hover:underline">
                     Voltar ao login
                   </Link>
                 </p>
@@ -161,7 +159,7 @@ function RedefinirSenhaPage() {
             {/* Step 2: Email enviado */}
             {step === "sent" && (
               <div className="text-center space-y-6">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary/10 text-secondary">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-violet-600/10 text-violet-600">
                   <CheckCircle2 className="h-8 w-8" />
                 </div>
                 <div className="space-y-2">
@@ -176,7 +174,7 @@ function RedefinirSenhaPage() {
                 </div>
 
                 <div className="space-y-3">
-                  <Button onClick={() => setStep("reset")} className="w-full h-12 bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold">
+                  <Button onClick={() => setStep("reset")} className="w-full h-12 bg-violet-600 hover:bg-violet-600/90 text-white font-semibold">
                     Ja tenho o codigo
                   </Button>
                   <Button variant="outline" onClick={() => setStep("email")} className="w-full h-12">
@@ -185,7 +183,7 @@ function RedefinirSenhaPage() {
                 </div>
 
                 <p className="text-center text-sm text-muted-foreground">
-                  <Link to="/login" className="text-secondary font-medium hover:underline">
+                  <Link to="/login" className="text-violet-600 font-medium hover:underline">
                     Voltar ao login
                   </Link>
                 </p>
@@ -196,7 +194,7 @@ function RedefinirSenhaPage() {
             {step === "reset" && (
               <>
                 <div className="text-center space-y-3">
-                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary/10 text-primary">
+                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-violet-600/10 text-violet-600">
                     <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
@@ -250,7 +248,7 @@ function RedefinirSenhaPage() {
                     />
                   </div>
 
-                  <Button type="submit" className="w-full h-12 bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold" disabled={isLoading}>
+                  <Button type="submit" className="w-full h-12 bg-violet-600 hover:bg-violet-600/90 text-white font-semibold" disabled={isLoading}>
                     {isLoading ? (
                       <span className="flex items-center gap-2">
                         <span className="h-4 w-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
@@ -263,7 +261,7 @@ function RedefinirSenhaPage() {
                 </form>
 
                 <p className="text-center text-sm text-muted-foreground">
-                  <Link to="/login" className="text-secondary font-medium hover:underline">
+                  <Link to="/login" className="text-violet-600 font-medium hover:underline">
                     Voltar ao login
                   </Link>
                 </p>
@@ -273,7 +271,7 @@ function RedefinirSenhaPage() {
             {/* Step 4: Sucesso */}
             {step === "success" && (
               <div className="text-center space-y-6">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary/10 text-secondary">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-violet-600/10 text-violet-600">
                   <CheckCircle2 className="h-8 w-8" />
                 </div>
                 <div className="space-y-2">
@@ -282,7 +280,7 @@ function RedefinirSenhaPage() {
                 </div>
 
                 <Link to="/login">
-                  <Button className="w-full h-12 bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold">Ir para o login</Button>
+                  <Button className="w-full h-12 bg-violet-600 hover:bg-violet-600/90 text-white font-semibold">Ir para o login</Button>
                 </Link>
               </div>
             )}

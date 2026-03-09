@@ -31,14 +31,14 @@ export function SwitchChoiceCard({ titulo, descricao, eixo, hora_inicio, palestr
           <FieldContent className="cursor-pointer">
             <div className="flex flex-col lg:flex-row">
               <div className="lg:w-48 flex-shrink-0 bg-muted p-6 flex flex-col justify-center items-center">
-                <div className="flex flex-col items-center gap-2 text-secondary font-semibold mb-1">
+                <div className="flex flex-col items-center gap-2 text-violet-600 font-semibold mb-1">
                   <Clock className="h-4 w-4" />
                   <span>{format(eventoDatas[0], "dd/MM/yyyy")}</span>
                   <span className="leading-relaxed text-sm font-medium">
                     {hora_inicio} até {hora_fim}
                   </span>
                 </div>
-                <Badge className="w-fit mt-2 border-secondary/50 text-white">{eixo}</Badge>
+                <Badge className="w-fit mt-2 border-violet-600/50 text-white">{eixo}</Badge>
               </div>
 
               <div className="flex-1 p-6 space-y-2">
@@ -49,7 +49,7 @@ export function SwitchChoiceCard({ titulo, descricao, eixo, hora_inicio, palestr
                   <div className="flex items-center gap-2">
                     {palestrantes?.map((palestrante) => (
                       <div className="flex items-center gap-2">
-                        <User className="h-4 w-4 text-secondary" />
+                        <User className="h-4 w-4 text-violet-600" />
                         <span>{palestrante.palestrante}</span>
                       </div>
                     ))}

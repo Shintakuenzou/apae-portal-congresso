@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { User, Ticket, LogOut, History, ShoppingCart } from "lucide-react";
@@ -25,11 +25,12 @@ export const Route = createFileRoute("/painel")({
 
 function PainelPage() {
   const { user, logout } = useAuth();
+  const navigator = useNavigate();
 
   return (
     <div className="min-h-screen bg-muted/30">
       {/* Header do Painel */}
-      <header className="bg-primary text-primary-foreground">
+      <header className="bg-violet-950 text-white">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -48,12 +49,13 @@ function PainelPage() {
               </div>
               <Link
                 to="/login"
-                className="text-primary-foreground hover:bg-white/10 cursor-pointer"
+                className="text-white hover:bg-white/10 cursor-pointer"
                 onClick={() => {
                   logout();
+                  navigator({ to: "/login" });
                 }}
               >
-                <Button variant="ghost" size="sm" className="text-primary-foreground hover:bg-white/10 hover:text-white cursor-pointer">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 hover:text-white cursor-pointer">
                   <LogOut className="h-4 w-4 mr-2" />
                   Sair
                 </Button>

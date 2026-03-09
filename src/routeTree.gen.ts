@@ -15,6 +15,7 @@ import { Route as QuemSomosRouteImport } from './routes/quem-somos'
 import { Route as PalestrasRouteImport } from './routes/palestras'
 import { Route as PalestrantesRouteImport } from './routes/palestrantes'
 import { Route as PainelRouteImport } from './routes/painel'
+import { Route as NotFoundRouteImport } from './routes/not-found'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as InscricaoRouteImport } from './routes/inscricao'
 import { Route as GaleriaRouteImport } from './routes/galeria'
@@ -52,6 +53,11 @@ const PalestrantesRoute = PalestrantesRouteImport.update({
 const PainelRoute = PainelRouteImport.update({
   id: '/painel',
   path: '/painel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotFoundRoute = NotFoundRouteImport.update({
+  id: '/not-found',
+  path: '/not-found',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/galeria': typeof GaleriaRoute
   '/inscricao': typeof InscricaoRoute
   '/login': typeof LoginRoute
+  '/not-found': typeof NotFoundRoute
   '/painel': typeof PainelRouteWithChildren
   '/palestrantes': typeof PalestrantesRoute
   '/palestras': typeof PalestrasRoute
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/galeria': typeof GaleriaRoute
   '/inscricao': typeof InscricaoRoute
   '/login': typeof LoginRoute
+  '/not-found': typeof NotFoundRoute
   '/painel': typeof PainelRouteWithChildren
   '/palestrantes': typeof PalestrantesRoute
   '/palestras': typeof PalestrasRoute
@@ -133,6 +141,7 @@ export interface FileRoutesById {
   '/galeria': typeof GaleriaRoute
   '/inscricao': typeof InscricaoRoute
   '/login': typeof LoginRoute
+  '/not-found': typeof NotFoundRoute
   '/painel': typeof PainelRouteWithChildren
   '/palestrantes': typeof PalestrantesRoute
   '/palestras': typeof PalestrasRoute
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/galeria'
     | '/inscricao'
     | '/login'
+    | '/not-found'
     | '/painel'
     | '/palestrantes'
     | '/palestras'
@@ -167,6 +177,7 @@ export interface FileRouteTypes {
     | '/galeria'
     | '/inscricao'
     | '/login'
+    | '/not-found'
     | '/painel'
     | '/palestrantes'
     | '/palestras'
@@ -183,6 +194,7 @@ export interface FileRouteTypes {
     | '/galeria'
     | '/inscricao'
     | '/login'
+    | '/not-found'
     | '/painel'
     | '/palestrantes'
     | '/palestras'
@@ -200,6 +212,7 @@ export interface RootRouteChildren {
   GaleriaRoute: typeof GaleriaRoute
   InscricaoRoute: typeof InscricaoRoute
   LoginRoute: typeof LoginRoute
+  NotFoundRoute: typeof NotFoundRoute
   PainelRoute: typeof PainelRouteWithChildren
   PalestrantesRoute: typeof PalestrantesRoute
   PalestrasRoute: typeof PalestrasRoute
@@ -250,6 +263,13 @@ declare module '@tanstack/react-router' {
       path: '/painel'
       fullPath: '/painel'
       preLoaderRoute: typeof PainelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/not-found': {
+      id: '/not-found'
+      path: '/not-found'
+      fullPath: '/not-found'
+      preLoaderRoute: typeof NotFoundRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -333,6 +353,7 @@ const rootRouteChildren: RootRouteChildren = {
   GaleriaRoute: GaleriaRoute,
   InscricaoRoute: InscricaoRoute,
   LoginRoute: LoginRoute,
+  NotFoundRoute: NotFoundRoute,
   PainelRoute: PainelRouteWithChildren,
   PalestrantesRoute: PalestrantesRoute,
   PalestrasRoute: PalestrasRoute,

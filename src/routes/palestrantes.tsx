@@ -34,11 +34,11 @@ function PalestrantesPage() {
     <main className="min-h-screen bg-background">
       <Header />
 
-      <section className="pt-32 pb-12 bg-primary">
+      <section className="pt-32 pb-12 bg-violet-950">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl">
-            <h1 className="text-3xl sm:text-4xl font-bold text-primary-foreground mb-4">Palestrantes</h1>
-            <p className="text-lg text-primary-foreground/80">Conheça os especialistas que compartilharão conhecimentos e experiências no Congresso Nacional APAE Brasil 2026.</p>
+            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">Palestrantes</h1>
+            <p className="text-lg text-white/80">Conheça os especialistas que compartilharão conhecimentos e experiências no Congresso Nacional APAE Brasil 2026.</p>
           </div>
         </div>
       </section>
@@ -62,7 +62,7 @@ function PalestrantesPage() {
               <span className="text-sm text-muted-foreground mr-2">Filtrar:</span>
               <Badge
                 variant={selectedCategory === "Todos" ? "default" : "outline"}
-                className={`cursor-pointer transition-colors ${selectedCategory === "Todos" ? "bg-secondary text-secondary-foreground hover:bg-secondary/90" : "hover:bg-muted"}`}
+                className={`cursor-pointer transition-colors ${selectedCategory === "Todos" ? "bg-violet-600 text-white hover:bg-violet-600/90" : "hover:bg-muted"}`}
                 onClick={() => setSelectedCategory("Todos")}
               >
                 Todos
@@ -71,7 +71,7 @@ function PalestrantesPage() {
                 <Badge
                   key={category}
                   variant={selectedCategory === category ? "default" : "outline"}
-                  className={`cursor-pointer transition-colors ${selectedCategory === category ? "bg-secondary text-secondary-foreground hover:bg-secondary/90" : "hover:bg-muted"}`}
+                  className={`cursor-pointer transition-colors ${selectedCategory === category ? "bg-violet-600 text-white hover:bg-violet-600/90" : "hover:bg-muted"}`}
                   onClick={() => setSelectedCategory(category)}
                 >
                   {category}
@@ -80,14 +80,14 @@ function PalestrantesPage() {
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {filtrarPalestrantes?.map((palestrante, index) => (
-                <Card key={index} className="group border-border hover:border-secondary/50 hover:shadow-lg transition-all duration-300">
+                <Card key={index} className="group border-border hover:border-violet-600/50 hover:shadow-lg transition-all duration-300">
                   <CardContent className="p-6">
                     <div className="flex flex-col items-center text-center">
-                      <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/15 transition-colors">
+                      <div className="w-24 h-24 rounded-full bg-violet-600/10 flex items-center justify-center mb-4 group-hover:bg-violet-600/15 transition-colors">
                         <img src={palestrante.url_foto} alt={palestrante.nome} className="rounded-full object-cover size-full" />
                       </div>
 
-                      <Badge variant="secondary" className="mb-3 bg-secondary/10 text-secondary hover:bg-secondary/20">
+                      <Badge variant="secondary" className="mb-3 bg-violet-600/10 text-violet-600 hover:bg-violet-600/20">
                         {palestrante.empresa_faculdade}
                       </Badge>
 
@@ -100,7 +100,7 @@ function PalestrantesPage() {
                     <div className="flex items-center justify-center gap-3">
                       <Link
                         to={palestrante.linkedin}
-                        className="w-8 h-8 rounded-full bg-muted flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
+                        className="w-8 h-8 rounded-full bg-muted flex items-center justify-center hover:bg-violet-600 hover:text-white transition-colors"
                         aria-label={`LinkedIn de ${palestrante.nome}`}
                       >
                         <Linkedin className="h-4 w-4" />
@@ -108,7 +108,7 @@ function PalestrantesPage() {
 
                       <Link
                         to={palestrante.instagram}
-                        className="w-8 h-8 rounded-full bg-muted flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
+                        className="w-8 h-8 rounded-full bg-muted flex items-center justify-center hover:bg-violet-600 hover:text-white transition-colors"
                         aria-label={`LinkedIn de ${palestrante.nome}`}
                       >
                         <Instagram className="h-4 w-4" />
