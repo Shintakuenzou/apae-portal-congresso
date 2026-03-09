@@ -1,4 +1,3 @@
-// src/contexts/auth-context.tsx
 import { fetchDataset } from "@/services/fetch-dataset";
 import type { AuthContextType } from "@/types/auth-context";
 import type { User } from "@/types/user";
