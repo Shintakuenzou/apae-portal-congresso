@@ -1,5 +1,5 @@
 import { fetchDataset } from "@/services/fetch-dataset";
-import type { AuthContextType } from "@/types/auth-context";
+import type { AuthContextType } from "@/types/auth-context-type";
 import type { User } from "@/types/user";
 import { sha256 } from "@/utils/hash-pass";
 import { createContext, useContext, useState, type ReactNode } from "react";
