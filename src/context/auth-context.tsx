@@ -15,7 +15,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const passHash = await sha256(pass);
     try {
       const responseLogin = await fetchDataset({
-        datasetId: import.meta.env.VITE_DATASET_PARTICIPANTE as string,
+        datasetId: import.meta.env.VITE_DATASET_DS_LOGIN as string,
         constraints: [
           {
             fieldName: "cpf",
