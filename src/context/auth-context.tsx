@@ -20,8 +20,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         constraints: [
           {
             fieldName: "cpf",
-            initialValue: cpf.replace(/\D/g, ""),
-            finalValue: cpf.replace(/\D/g, ""),
+            initialValue: cpf,
+            finalValue: cpf,
             constraintType: "MUST",
           },
           {
