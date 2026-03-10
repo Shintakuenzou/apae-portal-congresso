@@ -12,7 +12,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (cpf: string, pass: string) => {
     setIsLoading(true);
-    const passHash = await sha256(pass);
+
     try {
       const responseLogin = await fetchDataset({
         datasetId: import.meta.env.VITE_DATASET_DS_LOGIN as string,
@@ -25,8 +25,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           },
           {
             fieldName: "senha",
-            initialValue: passHash,
-            finalValue: passHash,
+            initialValue: pass,
+            finalValue: pass,
             constraintType: "MUST",
           },
         ],
