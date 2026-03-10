@@ -25,6 +25,8 @@ function App() {
     <main className="min-h-screen">
       <Header />
       <Hero formatedDataEvento={formatedDataEvento} />
+
+      {/* <EventInfoSection formatedDataEvento={formatedDataEvento} /> */}
       <SponsorsSection />
       <SpeakersSection />
       <FeaturedSchedule />
