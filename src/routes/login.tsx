@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Eye, EyeOff, LogIn, ArrowLeft } from "lucide-react";
-import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Link, Navigate, createFileRoute, useNavigate } from "@tanstack/react-router";
 
 import BgLogin from "../../public/login-bg.png";
 import { formatCPF } from "@/utils/format-cpf";
@@ -62,7 +62,11 @@ function LoginPage() {
       }
 
       // ✅ Fazer login
-      await login(cpfLimpo, formData.password);
+      const response = await login(cpfLimpo, formData.password);
+
+      if (response?.items[0].status == "SUCESSO") {
+        navigate({ to: "/painel/evento" });
+      }
     } catch (error: unknown) {
       console.error("❌ Erro no login:", error);
       if (error instanceof Error) {

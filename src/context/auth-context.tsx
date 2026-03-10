@@ -43,6 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       setAuthCookie(responseValidationToken.items[0].token, responseValidationToken.items[0].exp);
+      return responseValidationToken;
     } catch (error) {
       console.error("Erro ao fazer login:", error);
       throw error;
