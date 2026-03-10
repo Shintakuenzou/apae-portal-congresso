@@ -53,7 +53,7 @@ export function Hero({ formatedDataEvento }: HeroProps) {
   return (
     <section className="relative min-h-screen flex items-center bg-muted overflow-hidden">
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-32 w-full">
-        <img src={LogoCN} alt="" className="absolute size-1/2 object-contain -right-72 top-24" />
+        <img src={LogoCN} alt="" className="size-40 mx-auto relative -top-5  lg:absolute lg:size-1/2 lg:object-contain lg:-right-72 lg:top-24" />
         <div className="max-w-4xl">
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-violet-950 leading-[1.1] font-playfair">
             <span className="font-cormorant font-bold text-4xl">XVII</span>
@@ -64,7 +64,7 @@ export function Hero({ formatedDataEvento }: HeroProps) {
             <span className="font-cormorant font-light text-violet-600">{lastTitle}</span>
           </h1>
 
-          <p className="mt-8 text-lg sm:text-xl text-violet-950/75 max-w-2xl leading-relaxed">{description}</p>
+          <p className="mt-8 text-lg sm:text-xl text-violet-950/75 max-w-2xl leading-relaxed text-justify">{description}</p>
 
           <div className="mt-10 flex flex-col sm:flex-row items-start gap-4">
             <Button asChild size="lg" className="bg-violet-600 hover:bg-violet-600/90 text-white text-lg px-8 h-14 font-semibold shadow-lg hover:shadow-xl transition-all group">

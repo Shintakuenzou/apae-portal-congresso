@@ -28,7 +28,7 @@ export function Header() {
 
           <Button
             type="button"
-            className="md:hidden p-2 rounded-lg text-white hover:bg-white/10 transition-colors"
+            className="md:hidden p-2 rounded-lg text-white hover:bg-white/10 transition-colors bg-violet-900"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? "Fechar menu" : "Abrir menu"}
           >
