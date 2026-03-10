@@ -12,9 +12,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (cpf: string, pass: string) => {
     setIsLoading(true);
-
-    console.log(cpf, pass);
-
     const hash = await sha256(pass);
 
     try {
@@ -22,21 +19,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         datasetId: import.meta.env.VITE_DATASET_DS_LOGIN as string,
         constraints: [
           {
-            fieldName: "cpf",
-            initialValue: cpf,
-            finalValue: cpf,
-            constraintType: "MUST",
-          },
-          {
-            fieldName: "senha",
-            initialValue: hash,
-            finalValue: hash,
+            fieldName: "ref_id",
+            initialValue: cpf + "|" + hash,
+            finalValue: cpf + "|" + hash,
             constraintType: "MUST",
           },
         ],
       });
 
-      console.log("responseLogin: ", responseLogin);
+      console.log("responseLogin:", responseLogin.items[0]);
     } catch (error) {
       console.error("Erro ao fazer login:", error);
       throw error;
