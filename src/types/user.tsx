@@ -14,4 +14,5 @@ export interface User {
   dataInscricao: string;
   cardid: string;
   documentid: string;
+  exp: string;
 }

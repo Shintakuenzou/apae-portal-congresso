@@ -1,11 +1,11 @@
-import { setAuthCookie } from "@/lib/cookie";
+import { clearAuthCookies, getAuthCookie, setAuthCookie } from "@/lib/cookie";
 import { fetchDataset } from "@/services/fetch-dataset";
 import { type AuthContextType } from "@/types/auth-context-type";
 import type { LoginResponseProps } from "@/types/login-response";
 import type { TokenProps } from "@/types/token";
 import type { User } from "@/types/user";
 import { sha256 } from "@/utils/hash-pass";
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -13,8 +13,16 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthemticated] = useState(false);
 
-  const login = async (cpf: string, pass: string) => {
+  useEffect(() => {
+    const token = getAuthCookie("token");
+    if (token) {
+      setIsAuthemticated(true);
+    }
+  }, []);
+
+  const login = async (cpf: string, pass: string): Promise<void> => {
     setIsLoading(true);
     const hash = await sha256(pass);
 
@@ -31,29 +39,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         ],
       });
 
-      const token = responseLogin.items[0];
-      const responseValidationToken = await fetchDataset<TokenProps>({
-        datasetId: import.meta.env.VITE_DATASET_DS_VALIDATE_TOKEN as string,
-        constraints: [{ fieldName: "token", initialValue: token.token, finalValue: token.token, constraintType: "MUST" }],
-      });
+      const tokenData = responseLogin.items[0];
 
-      if (responseValidationToken.items[0].status != "SUCCESS") {
-        toast.warning("Erro ao realizar login, verifique se o CPF ou a senha foi digitado corretamente.");
+      if (!tokenData?.token) {
+        toast.warning("CPF ou senha incorretos.");
         return;
       }
 
-      setAuthCookie(responseValidationToken.items[0].token, responseValidationToken.items[0].exp);
-      return responseValidationToken;
+      const responseValidation = await fetchDataset<TokenProps>({
+        datasetId: import.meta.env.VITE_DATASET_DS_VALIDATE_TOKEN as string,
+        constraints: [{ fieldName: "token", initialValue: tokenData.token, finalValue: tokenData.token, constraintType: "MUST" }],
+      });
+
+      const validated = responseValidation.items[0];
+
+      if (validated?.status !== "SUCCESS") {
+        toast.warning("Erro ao realizar login, verifique CPF ou senha.");
+        return;
+      }
+
+      // ✅ salva o cookie
+      setAuthCookie(tokenData.token, validated.exp);
+
+      setIsAuthemticated(true);
     } catch (error) {
       console.error("Erro ao fazer login:", error);
-      throw error;
+      toast.error("Erro inesperado ao fazer login.");
     } finally {
       setIsLoading(false);
     }
   };
 
   const logout = () => {
-    setUser(null);
+    clearAuthCookies();
+    setIsAuthemticated(false);
   };
 
   const updateUser = (updatedData: Partial<User>) => {
@@ -71,7 +90,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading,
         login,
         logout,
-        isAuthenticated: !!user,
+        isAuthenticated,
         updateUser,
       }}
     >

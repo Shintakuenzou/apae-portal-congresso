@@ -8,6 +8,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Pencil, X, Save } from "lucide-react";
 import { useState } from "react";
 import { PersonalDataSection, ContactDataSection, AddressDataSection, AdditionalInfoSection } from "@/components/painel/data/form-sections";
+import { getAuthCookie } from "@/lib/cookie";
 
 export const Route = createFileRoute("/_authenticated/painel/data")({
   component: RouteComponent,
@@ -19,6 +20,10 @@ function RouteComponent() {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
+  const token = getAuthCookie("token");
+  const exp = getAuthCookie("tokenExp");
+
+  console.log(token, exp);
   console.table(user);
 
   const handleSave = async () => {

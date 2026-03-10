@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/context/auth-context";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
+import { getAuthCookie } from "@/lib/cookie";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
@@ -62,15 +63,11 @@ function LoginPage() {
       }
 
       // ✅ Fazer login
-      const response = await login(cpfLimpo, formData.password);
-
-      if (response?.items[0].status == "SUCESSO") {
-        navigate({ to: "/painel/evento" });
-      }
+      await login(cpfLimpo, formData.password);
     } catch (error: unknown) {
-      console.error("❌ Erro no login:", error);
       if (error instanceof Error) {
-        toast.error(error.message, { position: "top-right" });
+        console.error("❌ Erro no login:", error.message);
+        toast.error("Erro no login:", { position: "top-right" });
       }
     } finally {
       setIsLoading(false);

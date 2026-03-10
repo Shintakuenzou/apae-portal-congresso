@@ -123,4 +123,11 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .font-playfair {
+    font-family: "Playfair Display", serif;
+  }
+  .font-Cardo {
+    font-family: "Cormorant Garamond", serif;
+  }
 }

@@ -6,6 +6,7 @@ import { Calendar, MapPin, ArrowRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { DynamicIcon, type IconName } from "lucide-react/dynamic";
 import { Card, CardContent, CardHeader } from "./ui/card";
+import LogoCN from "/public/logoCN.png";
 
 export interface HeroProps {
   formatedDataEvento: FluigEntity<EventoFields>[] | undefined;
@@ -52,11 +53,15 @@ export function Hero({ formatedDataEvento }: HeroProps) {
   return (
     <section className="relative min-h-screen flex items-center bg-muted overflow-hidden">
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-32 w-full">
+        <img src={LogoCN} alt="" className="absolute size-1/2 object-contain -right-72 top-20" />
         <div className="max-w-4xl">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-violet-950 leading-[1.1]">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-violet-950 leading-[1.1] font-playfair">
+            <span className="font-cormorant font-bold text-4xl">XVII</span>
+            <br />
             {firstTitle}
             <br />
-            <span className="text-violet-600">{lastTitle}</span>
+            <span className="font-cormorant font-light text-violet-950">das </span>
+            <span className="font-cormorant font-light text-violet-600">{lastTitle}</span>
           </h1>
 
           <p className="mt-8 text-lg sm:text-xl text-violet-950/75 max-w-2xl leading-relaxed">{description}</p>
@@ -82,9 +87,9 @@ export function Hero({ formatedDataEvento }: HeroProps) {
           </div>
         </div>
 
-        <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl ">
+        <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto max-w-7xl">
           {info.map((stat, index) => (
-            <Card key={index} className="cursor-auto hover:scale-105 transition-all">
+            <Card key={index} className="cursor-auto hover:scale-105 transition-all w-full">
               <CardHeader>
                 <DynamicIcon name={stat.icon} className="h-6 w-6 text-violet-600 mb-3" />
               </CardHeader>
