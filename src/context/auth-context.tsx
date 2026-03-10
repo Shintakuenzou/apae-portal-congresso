@@ -1,7 +1,6 @@
 import { fetchDataset } from "@/services/fetch-dataset";
 import { type AuthContextType } from "@/types/auth-context-type";
 import type { User } from "@/types/user";
-import { sha256 } from "@/utils/hash-pass";
 import { createContext, useContext, useState, type ReactNode } from "react";
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -12,7 +11,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (cpf: string, pass: string) => {
     setIsLoading(true);
-    const pass256 = await sha256(pass);
+
+    console.log(cpf, pass);
 
     try {
       const responseLogin = await fetchDataset({
@@ -26,8 +26,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           },
           {
             fieldName: "senha",
-            initialValue: pass256,
-            finalValue: pass256,
+            initialValue: pass,
+            finalValue: pass,
             constraintType: "MUST",
           },
         ],

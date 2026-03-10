@@ -49,7 +49,6 @@ function LoginPage() {
     setIsLoading(true);
 
     try {
-      // ✅ Validações
       const cpfLimpo = formData.cpf.replace(/\D/g, "");
 
       if (cpfLimpo.length !== 11) {
