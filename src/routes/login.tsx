@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Eye, EyeOff, LogIn, ArrowLeft } from "lucide-react";
-import { Link, Navigate, createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 
 import BgLogin from "../../public/login-bg.png";
 import { formatCPF } from "@/utils/format-cpf";
