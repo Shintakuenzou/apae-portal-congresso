@@ -1,7 +1,7 @@
-import { clearAuthCookies, getAuthCookie, isTokenExpired } from "@/lib/cookie";
-import { fetchDataset } from "@/services/fetch-dataset";
-import type { TokenProps } from "@/types/token";
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+// import { clearAuthCookies, getAuthCookie, isTokenExpired } from "@/lib/cookie";
+// import { fetchDataset } from "@/services/fetch-dataset";
+// import type { TokenProps } from "@/types/token";
+import { createFileRoute, Outlet, } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated")({
   component: () => (
