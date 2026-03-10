@@ -1,6 +1,7 @@
 import { fetchDataset } from "@/services/fetch-dataset";
 import { type AuthContextType } from "@/types/auth-context-type";
 import type { User } from "@/types/user";
+import { sha256 } from "@/utils/hash-pass";
 import { createContext, useContext, useState, type ReactNode } from "react";
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -14,6 +15,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     console.log(cpf, pass);
 
+    const hash = await sha256(pass);
+
     try {
       const responseLogin = await fetchDataset({
         datasetId: import.meta.env.VITE_DATASET_DS_LOGIN as string,
@@ -26,8 +29,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           },
           {
             fieldName: "senha",
-            initialValue: pass,
-            finalValue: pass,
+            initialValue: hash,
+            finalValue: hash,
             constraintType: "MUST",
           },
         ],
