@@ -18,6 +18,7 @@ interface ImportMetaEnv {
   readonly VITE_DATASET_EVENTO?: string;
   readonly VITE_DATASET_PARTICIPANTE?: string;
   readonly VITE_DATASET_DS_LOGIN?: string;
+  readonly VITE_DATASET_DS_VALIDATE_TOKEN?: string;
 }
 interface ImportMeta {
   readonly env: ImportMetaEnv;

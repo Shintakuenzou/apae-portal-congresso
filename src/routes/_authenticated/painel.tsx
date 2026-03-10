@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { User, Ticket, LogOut, History, ShoppingCart } from "lucide-react";
 import LogoApae from "/public/logo-transparente.png";
 import { useAuth } from "@/context/auth-context";
+import { clearAuthCookies } from "@/lib/cookie";
 
 export const Route = createFileRoute("/_authenticated/painel")({
   beforeLoad: ({ context, location }) => {
@@ -52,6 +53,7 @@ function PainelPage() {
                 className="text-white hover:bg-white/10 cursor-pointer"
                 onClick={() => {
                   logout();
+                  clearAuthCookies();
                   navigator({ to: "/login" });
                 }}
               >

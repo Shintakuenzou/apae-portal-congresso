@@ -1,8 +1,12 @@
+import { setAuthCookie } from "@/lib/cookie";
 import { fetchDataset } from "@/services/fetch-dataset";
 import { type AuthContextType } from "@/types/auth-context-type";
+import type { LoginResponseProps } from "@/types/login-response";
+import type { TokenProps } from "@/types/token";
 import type { User } from "@/types/user";
 import { sha256 } from "@/utils/hash-pass";
 import { createContext, useContext, useState, type ReactNode } from "react";
+import { toast } from "sonner";
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -15,7 +19,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const hash = await sha256(pass);
 
     try {
-      const responseLogin = await fetchDataset({
+      const responseLogin = await fetchDataset<LoginResponseProps>({
         datasetId: import.meta.env.VITE_DATASET_DS_LOGIN as string,
         constraints: [
           {
@@ -27,7 +31,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         ],
       });
 
-      console.log("responseLogin:", responseLogin.items[0]);
+      const token = responseLogin.items[0];
+      const responseValidationToken = await fetchDataset<TokenProps>({
+        datasetId: import.meta.env.VITE_DATASET_DS_VALIDATE_TOKEN as string,
+        constraints: [{ fieldName: "token", initialValue: token.token, finalValue: token.token, constraintType: "MUST" }],
+      });
+
+      if (responseValidationToken.items[0].status != "SUCCESS") {
+        toast.warning("Erro ao realizar login, verifique se o CPF ou a senha foi digitado corretamente.");
+        return;
+      }
+
+      setAuthCookie(responseValidationToken.items[0].token, responseValidationToken.items[0].exp);
     } catch (error) {
       console.error("Erro ao fazer login:", error);
       throw error;

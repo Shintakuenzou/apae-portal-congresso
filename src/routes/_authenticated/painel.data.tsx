@@ -4,10 +4,13 @@ import { Separator } from "@/components/ui/separator";
 import { escolaridades } from "@/constants";
 import { useAuth } from "@/context/auth-context";
 import { handleUpdateFormParticipant } from "@/services/form-service";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Pencil, X, Save } from "lucide-react";
 import { useState } from "react";
 import { PersonalDataSection, ContactDataSection, AddressDataSection, AdditionalInfoSection } from "@/components/painel/data/form-sections";
+import { clearAuthCookies, getAuthCookie, isTokenExpired } from "@/lib/cookie";
+import { fetchDataset } from "@/services/fetch-dataset";
+import type { TokenProps } from "@/types/token";
 
 export const Route = createFileRoute("/_authenticated/painel/data")({
   component: RouteComponent,
