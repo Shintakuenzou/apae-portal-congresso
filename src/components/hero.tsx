@@ -53,7 +53,7 @@ export function Hero({ formatedDataEvento }: HeroProps) {
   return (
     <section className="relative min-h-screen flex items-center bg-muted overflow-hidden">
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-32 w-full">
-        <img src={LogoCN} alt="" className="absolute size-1/2 object-contain -right-72 top-20" />
+        <img src={LogoCN} alt="" className="absolute size-1/2 object-contain -right-72 top-24" />
         <div className="max-w-4xl">
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-violet-950 leading-[1.1] font-playfair">
             <span className="font-cormorant font-bold text-4xl">XVII</span>

@@ -13,7 +13,6 @@ import { useEffect } from "react";
 import { useAuth } from "@/context/auth-context";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
-import { getAuthCookie } from "@/lib/cookie";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
