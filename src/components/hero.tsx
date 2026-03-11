@@ -28,8 +28,6 @@ const info: Info[] = [
 export function Hero({ formatedDataEvento }: HeroProps) {
   const { isAuthenticated } = useAuth();
 
-  let firstTitle = "";
-  let lastTitle = "";
   let description = "";
   let date = "";
   let location = "";
@@ -38,8 +36,6 @@ export function Hero({ formatedDataEvento }: HeroProps) {
     const idx = formatedDataEvento.length - 1;
     const tituloRaw = formatedDataEvento[idx]?.fields?.titulo ?? "";
 
-    firstTitle = tituloRaw.replaceAll(" ", ",").split(",").slice(0, 2).join(" ");
-    lastTitle = tituloRaw.replaceAll(" ", ",").split(",").slice(2).join(" ");
     description = formatedDataEvento[idx].fields.descricao ?? "";
     date = formatThreeDayRangeSimple(formatedDataEvento[idx].fields.data_inicio, formatedDataEvento[idx].fields.data_fim);
     location = `${formatedDataEvento[idx].fields.cidade}-${formatedDataEvento[idx].fields.estado}`;
