@@ -59,7 +59,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      // ✅ salva o cookie
       setAuthCookie(tokenData.token, validated.exp);
 
       setIsAuthemticated(true);

@@ -48,14 +48,11 @@ export function Hero({ formatedDataEvento }: HeroProps) {
   return (
     <section className="relative min-h-screen flex items-center bg-muted overflow-hidden">
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-        {/* ══ BLOCO SUPERIOR — grid responsivo ══ */}
         <div className="grid grid-cols-1 lg:grid-cols-[25%_1fr] gap-8 lg:gap-12 items-center">
-          {/* Coluna esquerda — imagem */}
-          <div className="flex justify-center lg:justify-start relative h-full">
-            <img src={LogoCN} alt="Congresso Nacional das Apaes" className="w-56 sm:w-72 lg:w-[80%] max-w-sm object-contain absolute top-0" />
+          <div className="flex justify-center lg:justify-center relative h-full">
+            <img src={LogoCN} alt="Congresso Nacional das Apaes" className="w-56 sm:w-72 lg:w-[80%] max-w-sm object-contain xl:absolute xl:top-0" />
           </div>
 
-          {/* Coluna direita — texto */}
           <div className="flex flex-col items-start">
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-violet-950 leading-[1.1] font-playfair">
               <span className="font-cormorant font-bold text-3xl sm:text-4xl block mb-1">XVII</span>
@@ -97,7 +94,6 @@ export function Hero({ formatedDataEvento }: HeroProps) {
           </div>
         </div>
 
-        {/* ══ BLOCO INFERIOR — cards ══ */}
         <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
           {info.map((stat, index) => (
             <Card key={index} className="cursor-auto hover:scale-105 transition-all w-full">
