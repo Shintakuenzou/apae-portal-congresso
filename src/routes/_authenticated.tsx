@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_authenticated")({
       <Outlet />
     </>
   ),
-  beforeLoad: async ({ location }) => {
+  beforeLoad: async ({}) => {
     const token = getAuthCookie("token");
     const exp = getAuthCookie("tokenExp");
 
