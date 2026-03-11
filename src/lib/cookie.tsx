@@ -1,10 +1,10 @@
 export function setAuthCookie(token: string, exp: string) {
   const unixToNumber = Number(exp);
-  const expData = new Date(unixToNumber * 100);
+  const expData = new Date(unixToNumber * 1000);
 
   console.log("setando token: ", token, exp);
 
-  document.cookie = `token${token}; expires=${expData.toUTCString()}; path=/; SameSite=Strict`;
+  document.cookie = `token=${token}; expires=${expData.toUTCString()}; path=/; SameSite=Strict`;
   document.cookie = `tokenExp=${exp}; expires=${expData.toUTCString()}; path=/; SameSite=Strict`;
 }
 
