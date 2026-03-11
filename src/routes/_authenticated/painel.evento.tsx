@@ -9,6 +9,9 @@ import { useAuth } from "@/context/auth-context";
 import { LoadingScreen } from "@/components/loading";
 import { AvailableEvents } from "@/components/painel/evento/available-events";
 import { EventDetails } from "@/components/painel/evento/event-details";
+import { toast } from "sonner";
+import { PaymentLoading } from "@/components/payment-loading";
+import type { Payment } from "@/types/payment-type";
 
 export const Route = createFileRoute("/_authenticated/painel/evento")({
   component: RouteComponent,
@@ -52,6 +55,8 @@ function RouteComponent() {
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const { formatedDataLote } = useLotes();
   const [eventoSelecionado, setEventoSelecionado] = useState<LoteFields | null>(null);
+  const [payment, setPayment] = useState<Payment>();
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   const eventoDatas = useMemo(() => {
     if (!evento.items || evento.items.length === 0) return [];
@@ -105,31 +110,45 @@ function RouteComponent() {
   }, [atividadeComPalestrantes]);
 
   async function handlePayment() {
-    const payload = JSON.stringify({
-      email: user?.email,
-      titulo: eventoSelecionado?.nome,
-      preco: eventoSelecionado?.preco,
-      ref_id: eventoSelecionado?.documentId,
-    });
+    setIsProcessingPayment(true);
+    const email = user?.email ?? "";
+    const titulo = eventoSelecionado?.nome ?? "";
+    const preco = (eventoSelecionado?.preco ?? "0").replace(/\./g, "").replace(",", ".");
 
-    const response = await fetchDataset({
-      datasetId: "pagCN",
-      constraints: [
-        {
-          fieldName: "ref_id",
-          initialValue: payload,
-          finalValue: payload,
-          constraintType: "MUST",
-        },
-      ],
-    });
+    const refId = (eventoSelecionado as any)?.documentid ?? eventoSelecionado?.documentId ?? "";
 
-    const item = response.items[0] as any;
+    const rawPayload = `${email}|${titulo}|${preco}|${refId}`;
+    const payload = btoa(unescape(encodeURIComponent(rawPayload)));
 
-    if (item?.status === "SUCCESS") {
-      window.open(item.init_point, "_blank");
-    } else {
-      console.error("Erro no pagamento:", item?.message);
+    try {
+      const response = await fetchDataset<Payment>({
+        datasetId: "pagCN",
+        constraints: [
+          {
+            fieldName: "ref_id",
+            initialValue: payload,
+            finalValue: payload,
+            constraintType: "MUST",
+          },
+        ],
+      });
+
+      const item = response.items[0];
+      console.log("item payment: ", item);
+
+      if (item?.status === "SUCCESS") {
+        toast.success("Compra processada com sucesso!");
+
+        window.open(item.init_point);
+        setPayment(item);
+      } else {
+        toast.error("Erro no pagamento, tente novamente ou entre em contato com o suporte");
+      }
+    } catch (error) {
+      console.error("Erro no pagamento:", error);
+      toast.error("Erro no pagamento, tente novamente ou entre em contato com o suporte");
+    } finally {
+      setIsProcessingPayment(false);
     }
   }
 
@@ -140,6 +159,7 @@ function RouteComponent() {
           evento={eventoSelecionado}
           onBack={() => setEventoSelecionado(null)}
           onPayment={handlePayment}
+          isProcessingPayment={isProcessingPayment}
           eventoDatas={eventoDatas}
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}

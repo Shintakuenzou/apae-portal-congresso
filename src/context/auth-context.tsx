@@ -40,6 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       const tokenData = responseLogin.items[0];
+      console.log("tokenData: ", tokenData);
 
       if (!tokenData?.token) {
         toast.warning("CPF ou senha incorretos.");

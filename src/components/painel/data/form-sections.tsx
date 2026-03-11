@@ -162,9 +162,9 @@ export function ContactDataSection({ formData, isEditing, handleInputChange }: S
         <div className="space-y-5">
           <Label className="text-muted-foreground">Telefone</Label>
           {isEditing ? (
-            <Input value={formData?.telefone_contato || ""} onChange={(e) => handleInputChange("telefone_contato", formatPhone(e.target.value))} maxLength={15} />
+            <Input value={formData?.telefone || ""} onChange={(e) => handleInputChange("telefone_contato", formatPhone(e.target.value))} maxLength={15} />
           ) : (
-            <ReadInput value={formData?.telefone_contato || ""} />
+            <ReadInput value={formData?.telefone || ""} />
           )}
         </div>
 

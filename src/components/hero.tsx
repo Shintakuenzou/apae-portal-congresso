@@ -46,55 +46,57 @@ export function Hero({ formatedDataEvento }: HeroProps) {
   }
 
   return (
-    <section className="relative min-h-screen flex items-center bg-muted overflow-hidden">
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-[25%_1fr] gap-8 lg:gap-12 items-center">
-          <div className="flex justify-center lg:justify-center relative h-full">
-            <img src={LogoCN} alt="Congresso Nacional das Apaes" className="w-56 sm:w-72 lg:w-[80%] max-w-sm object-contain xl:absolute xl:top-0" />
-          </div>
-
-          <div className="flex flex-col items-start">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-violet-950 leading-[1.1] font-playfair">
-              <span className="font-cormorant font-bold text-3xl sm:text-4xl block mb-1">XVII</span>
-              {firstTitle}
-              <br />
-              <span className="font-cormorant font-light text-violet-950">das </span>
-              <span className="font-cormorant font-light text-violet-600">{lastTitle}</span>
-            </h1>
-
-            <p className="mt-6 text-base sm:text-lg text-violet-950/75 leading-relaxed text-justify">{description}</p>
-
-            <div className="mt-8 flex flex-wrap items-center gap-4 text-violet-950/70">
-              {date && (
-                <div className="flex items-center gap-2 bg-violet-950/5 px-4 py-2 rounded-full text-sm">
-                  <Calendar className="h-4 w-4 text-violet-600" />
-                  <span className="font-medium">{date}</span>
-                </div>
-              )}
-              {location && (
-                <div className="flex items-center gap-2 bg-violet-950/5 px-4 py-2 rounded-full text-sm">
-                  <MapPin className="h-4 w-4 text-violet-600" />
-                  <span className="font-medium">{location}</span>
-                </div>
-              )}
-            </div>
-
-            <div className="mt-8 flex justify-end w-full">
-              <Button
-                asChild
-                size="lg"
-                className="bg-violet-600 hover:bg-violet-600/90 text-white text-base sm:text-lg px-8 h-12 sm:h-14 font-semibold shadow-lg hover:shadow-xl transition-all group rounded-full"
-              >
-                <Link to={isAuthenticated ? "/painel" : "/login"}>
-                  Garanta sua vaga
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-            </div>
-          </div>
+    <section className="relative min-h-screen flex flex-col items-center bg-muted overflow-hidden">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 flex flex-col items-center">
+        {/* Logo centralizada no topo */}
+        <div className="flex justify-center w-full mb-10">
+          <img src={LogoCN} alt="Congresso Nacional das Apaes" className="w-48 sm:w-64 md:w-80 object-contain" />
         </div>
 
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+        {/* Título centralizado */}
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-violet-950 leading-[1.1] font-playfair text-center">
+          <span className="font-cormorant font-bold text-3xl sm:text-4xl block mb-1">XVII</span>
+          {firstTitle}
+          <br />
+          <span className="font-cormorant font-light text-violet-950">das </span>
+          <span className="font-cormorant font-light text-violet-600">{lastTitle}</span>
+        </h1>
+
+        {/* Descrição */}
+        <p className="mt-6 text-base sm:text-lg text-violet-950/75 leading-relaxed text-center max-w-2xl">{description}</p>
+
+        {/* Data e local */}
+        <div className="mt-8 flex flex-wrap justify-center items-center gap-4 text-violet-950/70">
+          {date && (
+            <div className="flex items-center gap-2 bg-violet-950/5 px-4 py-2 rounded-full text-sm">
+              <Calendar className="h-4 w-4 text-violet-600" />
+              <span className="font-medium">{date}</span>
+            </div>
+          )}
+          {location && (
+            <div className="flex items-center gap-2 bg-violet-950/5 px-4 py-2 rounded-full text-sm">
+              <MapPin className="h-4 w-4 text-violet-600" />
+              <span className="font-medium">{location}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Botão */}
+        <div className="mt-8">
+          <Button
+            asChild
+            size="lg"
+            className="bg-violet-600 hover:bg-violet-600/90 text-white text-base sm:text-lg px-8 h-12 sm:h-14 font-semibold shadow-lg hover:shadow-xl transition-all group rounded-full"
+          >
+            <Link to={isAuthenticated ? "/painel" : "/login"}>
+              Garanta sua vaga
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </Button>
+        </div>
+
+        {/* Cards de stats */}
+        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full">
           {info.map((stat, index) => (
             <Card key={index} className="cursor-auto hover:scale-105 transition-all w-full">
               <CardHeader>
