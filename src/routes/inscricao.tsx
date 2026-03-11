@@ -26,6 +26,7 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useQuery } from "@tanstack/react-query";
 import { sha256 } from "@/utils/hash-pass";
+import { PurchaseStep } from "@/components/purchase-step";
 
 export const Route = createFileRoute("/inscricao")({
   component: InscricaoPage,
@@ -173,24 +174,7 @@ function InscricaoPage() {
   };
 
   if (submitted) {
-    return (
-      <main className="min-h-screen bg-background">
-        <Header />
-        <section className="pt-32 pb-24 min-h-[80vh] flex items-center">
-          <div className="mx-auto max-w-lg px-4 sm:px-6 lg:px-8 text-center">
-            <div className="w-20 h-20 bg-violet-600 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="h-10 w-10 text-white" />
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">Inscricao Realizada!</h1>
-
-            <Button type="button" variant="outline" size="lg" asChild>
-              <Link to="/login">Fazer Login</Link>
-            </Button>
-          </div>
-        </section>
-        <Footer />
-      </main>
-    );
+    return <PurchaseStep />;
   }
 
   const handleCheckExistingParticipant = async (cpf: string) => {
