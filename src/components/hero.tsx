@@ -44,10 +44,10 @@ export function Hero({ formatedDataEvento }: HeroProps) {
   return (
     <section className="w-full bg-white">
       <div className=" mx-auto px-8 sm:px-12 lg:px-16">
-        <div className="flex flex-col md:flex-row items-center gap-16 py-48">
+        <div className="flex flex-col md:flex-row items-center gap-16 py-32 xL:py-48">
           {/* Coluna esquerda — Imagem */}
           <div className="w-full md:w-2/5 flex-shrink-0">
-            <img src={LogoCN} alt="Congresso Nacional das Apaes" className="w-full object-contain bg-gray-100 rounded-sm " />
+            <img src={LogoCN} alt="Congresso Nacional das Apaes" className="w-full object-contain bg-gray-100 rounded-sm" />
           </div>
 
           {/* Coluna direita — Conteúdo */}
@@ -63,7 +63,7 @@ export function Hero({ formatedDataEvento }: HeroProps) {
 
             {/* Badge data + local */}
             {(date || location) && (
-              <div className="flex items-center justify-center border-2 border-violet-600 rounded-sm px-6 py-4 w-full gap-3">
+              <div className="flex items-center justify-center px-6 py-4 w-full gap-3">
                 {date && <span className="text-violet-700 font-semibold text-base sm:text-lg text-center">{date}</span>}
                 {date && location && <MapPin className="h-5 w-5 text-violet-700 flex-shrink-0" />}
                 {location && <span className="text-violet-700 font-semibold text-base sm:text-lg">{location}</span>}
