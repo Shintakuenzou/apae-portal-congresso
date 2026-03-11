@@ -127,6 +127,7 @@ function InscricaoPage() {
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
+    console.log("data submit", data);
 
     const hshPs = await sha256(data.senha);
 
@@ -156,6 +157,7 @@ function InscricaoPage() {
           { fieldId: "tipo_apoio", value: data.tipo_apoio != "Outros" ? data.tipo_apoio || "" : data.outros_apoio || "" },
           { fieldId: "coordenacao", value: data.coordenacao || "" },
           { fieldId: "tamanho_camiseta", value: data.tamanho_camiseta || "" },
+          { fieldId: "cep", value: data.cep || "" },
         ],
       });
 

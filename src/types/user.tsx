@@ -12,7 +12,13 @@ export interface User {
   apaeFiliada: string;
   inscricao: string;
   dataInscricao: string;
-  cardid: string;
+  tamanho_camiseta: string;
   documentid: string;
-  exp: string;
+  presidente_apae: string;
+  cep: string;
+  funcao: string;
+  area_atuacao: string;
+  possui_deficiencia: string;
+  necessita_apoio: string;
+  coordenacao: string;
 }

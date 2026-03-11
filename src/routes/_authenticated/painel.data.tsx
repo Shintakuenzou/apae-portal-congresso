@@ -7,8 +7,7 @@ import { handleUpdateFormParticipant } from "@/services/form-service";
 import { createFileRoute } from "@tanstack/react-router";
 import { Pencil, X, Save } from "lucide-react";
 import { useState } from "react";
-import { PersonalDataSection, ContactDataSection, AddressDataSection, AdditionalInfoSection } from "@/components/painel/data/form-sections";
-import { getAuthCookie } from "@/lib/cookie";
+import { PersonalDataSection, ApaeDataSection, ContactDataSection, AddressDataSection, AccessibilitySection } from "@/components/painel/data/form-sections";
 
 export const Route = createFileRoute("/_authenticated/painel/data")({
   component: RouteComponent,
@@ -19,16 +18,11 @@ function RouteComponent() {
   const [formData, setFormData] = useState(user);
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-
-  const token = getAuthCookie("token");
-  const exp = getAuthCookie("tokenExp");
-
-  console.log(token, exp);
-  console.table(user);
+  console.log(formData);
 
   const handleSave = async () => {
-    if (!formData?.cardid) {
-      console.error("cardid não encontrado no usuário:", formData);
+    if (!formData?.documentid) {
+      console.error("documentid não encontrado no usuário:", formData);
       return;
     }
 
@@ -39,11 +33,15 @@ function RouteComponent() {
         value: value as string,
       }));
 
+      console.log(formatedPutFormData);
+
       const updateResponse = await handleUpdateFormParticipant({
         documentId: import.meta.env.VITE_FORM_PARTICIPANTE as string,
         cardId: formData.documentid, // ✅ campo correto
         values: formatedPutFormData,
       });
+
+      console.log(updateResponse);
 
       if (updateResponse?.values?.length > 0) {
         setIsEditing(false);
@@ -98,19 +96,15 @@ function RouteComponent() {
           )}
         </CardHeader>
         <CardContent className="space-y-6">
-          <PersonalDataSection formData={formData} isEditing={isEditing} handleInputChange={handleInputChange} />
-
+          <PersonalDataSection formData={formData} isEditing={isEditing} handleInputChange={handleInputChange} getEscolaridadeLabel={getEscolaridadeLabel} />
           <Separator />
-
+          <ApaeDataSection formData={formData} isEditing={isEditing} handleInputChange={handleInputChange} />
+          <Separator />
           <ContactDataSection formData={formData} isEditing={isEditing} handleInputChange={handleInputChange} />
-
           <Separator />
-
           <AddressDataSection formData={formData} isEditing={isEditing} handleInputChange={handleInputChange} />
-
           <Separator />
-
-          <AdditionalInfoSection formData={formData} isEditing={isEditing} handleInputChange={handleInputChange} getEscolaridadeLabel={getEscolaridadeLabel} />
+          <AccessibilitySection formData={formData} isEditing={isEditing} handleInputChange={handleInputChange} />
         </CardContent>
       </Card>
     </div>

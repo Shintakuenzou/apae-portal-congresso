@@ -75,6 +75,7 @@ export async function handleUpdateFormParticipant({ documentId, cardId, values }
   if (!documentId || documentId === "undefined") {
     throw new Error("documentId é obrigatório e não pode ser undefined");
   }
+
   if (!cardId || cardId === "undefined") {
     throw new Error("cardId é obrigatório e não pode ser undefined");
   }
