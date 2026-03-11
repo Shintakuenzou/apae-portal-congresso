@@ -41,10 +41,6 @@ export function TicketCard({ user }: TicketCardProps) {
                 <p className="text-sm text-muted-foreground">CPF</p>
                 <p className="font-medium">{user.cpf}</p>
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Inscrição</p>
-                <p className="font-medium">{user.inscricao}</p>
-              </div>
             </div>
 
             <Separator />

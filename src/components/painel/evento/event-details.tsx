@@ -1,4 +1,4 @@
-import { ArrowRight, Calendar, Filter, ShoppingCart, Loader2 } from "lucide-react";
+import { ArrowRight, Calendar, Filter, ShoppingCart } from "lucide-react";
 import { format, isSameDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,7 +13,6 @@ interface EventDetailsProps {
   evento: LoteFields;
   onBack: () => void;
   onPayment: () => void;
-  isProcessingPayment?: boolean;
   eventoDatas: Date[];
   selectedDate: Date | null;
   setSelectedDate: (date: Date) => void;
@@ -27,7 +26,6 @@ export function EventDetails({
   evento,
   onBack,
   onPayment,
-  isProcessingPayment,
   eventoDatas,
   selectedDate,
   setSelectedDate,
@@ -130,9 +128,9 @@ export function EventDetails({
               <p className="text-3xl font-bold text-violet-600">{evento.preco}</p>
               <p className="text-sm text-muted-foreground">{evento.quantidade} vagas disponiveis</p>
             </div>
-            <Button size="lg" className="w-full sm:w-auto" onClick={onPayment} disabled={isProcessingPayment}>
-              {isProcessingPayment ? <Loader2 className="h-5 w-5 mr-2 animate-spin" /> : <ShoppingCart className="h-5 w-5 mr-2" />}
-              {isProcessingPayment ? "Processando..." : "Comprar Ingresso"}
+            <Button size="lg" className="w-full sm:w-auto cursor-pointer" onClick={onPayment}>
+              <ShoppingCart className="h-5 w-5 mr-2" />
+              Comprar Ingresso
             </Button>
           </div>
         </CardContent>

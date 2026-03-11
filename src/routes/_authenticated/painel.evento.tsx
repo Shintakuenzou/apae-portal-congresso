@@ -157,7 +157,6 @@ function RouteComponent() {
           evento={eventoSelecionado}
           onBack={() => setEventoSelecionado(null)}
           onPayment={handlePayment}
-          isProcessingPayment={isProcessingPayment}
           eventoDatas={eventoDatas}
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
