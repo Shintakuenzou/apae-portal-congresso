@@ -59,7 +59,7 @@ const formSchema = z.object({
   tipo_apoio: z.string().optional(),
   outros_apoio: z.string().optional(),
   coordenacao: z.string().optional(),
-  tamanho_camiseta: z.string().optional(),
+  status: z.string().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -103,7 +103,7 @@ function InscricaoPage() {
       tipo_apoio: "",
       outros_apoio: "",
       coordenacao: "",
-      tamanho_camiseta: "",
+      status: "ATIVO",
     },
   });
 
@@ -157,8 +157,9 @@ function InscricaoPage() {
           { fieldId: "necessita_apoio", value: data.necessita_apoio || "" },
           { fieldId: "tipo_apoio", value: data.tipo_apoio != "Outros" ? data.tipo_apoio || "" : data.outros_apoio || "" },
           { fieldId: "coordenacao", value: data.coordenacao || "" },
-          { fieldId: "tamanho_camiseta", value: data.tamanho_camiseta || "" },
+          { fieldId: "tamanho_camiseta", value: data.tamanho_camisa || "" },
           { fieldId: "cep", value: data.cep || "" },
+          { fieldId: "status", value: data.status || "" },
         ],
       });
 
