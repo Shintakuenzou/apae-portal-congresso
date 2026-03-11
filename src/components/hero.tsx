@@ -34,7 +34,6 @@ export function Hero({ formatedDataEvento }: HeroProps) {
 
   if (formatedDataEvento && formatedDataEvento.length > 0) {
     const idx = formatedDataEvento.length - 1;
-    const tituloRaw = formatedDataEvento[idx]?.fields?.titulo ?? "";
 
     description = formatedDataEvento[idx].fields.descricao ?? "";
     date = formatThreeDayRangeSimple(formatedDataEvento[idx].fields.data_inicio, formatedDataEvento[idx].fields.data_fim);

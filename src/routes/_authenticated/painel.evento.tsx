@@ -10,7 +10,6 @@ import { LoadingScreen } from "@/components/loading";
 import { AvailableEvents } from "@/components/painel/evento/available-events";
 import { EventDetails } from "@/components/painel/evento/event-details";
 import { toast } from "sonner";
-import { PaymentLoading } from "@/components/payment-loading";
 import type { Payment } from "@/types/payment-type";
 
 export const Route = createFileRoute("/_authenticated/painel/evento")({
@@ -55,7 +54,7 @@ function RouteComponent() {
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const { formatedDataLote } = useLotes();
   const [eventoSelecionado, setEventoSelecionado] = useState<LoteFields | null>(null);
-  const [payment, setPayment] = useState<Payment>();
+
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   const eventoDatas = useMemo(() => {
@@ -140,7 +139,6 @@ function RouteComponent() {
         toast.success("Compra processada com sucesso!");
 
         window.open(item.init_point);
-        setPayment(item);
       } else {
         toast.error("Erro no pagamento, tente novamente ou entre em contato com o suporte");
       }
