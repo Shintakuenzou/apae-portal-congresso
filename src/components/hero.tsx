@@ -6,7 +6,7 @@ import { Calendar, MapPin, ArrowRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { DynamicIcon, type IconName } from "lucide-react/dynamic";
 import { Card, CardContent, CardHeader } from "./ui/card";
-import LogoCN from "/public/logoCN.png";
+import LogoCN from "/public/hero1.png";
 
 export interface HeroProps {
   formatedDataEvento: FluigEntity<EventoFields>[] | undefined;
@@ -50,20 +50,19 @@ export function Hero({ formatedDataEvento }: HeroProps) {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 flex flex-col items-center">
         {/* Logo centralizada no topo */}
         <div className="flex justify-center w-full mb-10">
-          <img src={LogoCN} alt="Congresso Nacional das Apaes" className="w-48 sm:w-64 md:w-80 object-contain" />
+          <img src={LogoCN} alt="Congresso Nacional das Apaes" className="w-48 sm:w-64 md:w-1/2 object-contain" />
         </div>
 
-        {/* Título centralizado */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-violet-950 leading-[1.1] font-playfair text-center">
+        {/* <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-violet-950 leading-[1.1] font-playfair text-center">
           <span className="font-cormorant font-bold text-3xl sm:text-4xl block mb-1">XVII</span>
           {firstTitle}
           <br />
           <span className="font-cormorant font-light text-violet-950">das </span>
           <span className="font-cormorant font-light text-violet-600">{lastTitle}</span>
-        </h1>
+        </h1> */}
 
         {/* Descrição */}
-        <p className="mt-6 text-base sm:text-lg text-violet-950/75 leading-relaxed text-center max-w-2xl">{description}</p>
+        <p className="mt-6 text-base sm:text-lg text-violet-950/75 leading-relaxed text-center max-w-2xl lowercase">{description}</p>
 
         {/* Data e local */}
         <div className="mt-8 flex flex-wrap justify-center items-center gap-4 text-violet-950/70">
@@ -82,11 +81,11 @@ export function Hero({ formatedDataEvento }: HeroProps) {
         </div>
 
         {/* Botão */}
-        <div className="mt-8">
+        <div className="mt-8 flex justify-end w-full">
           <Button
             asChild
             size="lg"
-            className="bg-violet-600 hover:bg-violet-600/90 text-white text-base sm:text-lg px-8 h-12 sm:h-14 font-semibold shadow-lg hover:shadow-xl transition-all group rounded-full"
+            className="bg-violet-600 hover:bg-violet-600/90 text-white text-base sm:text-lg px-8 h-12 sm:h-14 font-semibold shadow-lg hover:shadow-xl transition-all group rounded-2xl"
           >
             <Link to={isAuthenticated ? "/painel" : "/login"}>
               Garanta sua vaga
