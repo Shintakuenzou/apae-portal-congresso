@@ -1,4 +1,4 @@
-import { ArrowRight, Calendar, Filter, ShoppingCart } from "lucide-react";
+import { ArrowRight, Calendar, Circle, Filter, ShoppingCart } from "lucide-react";
 import { format, isSameDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,6 +20,7 @@ interface EventDetailsProps {
   setSelectedCategory: (category: string) => void;
   atividadeCategorias: string[];
   atividadesFiltradas: any[];
+  isProcessingPayment: boolean;
 }
 
 export function EventDetails({
@@ -33,6 +34,7 @@ export function EventDetails({
   setSelectedCategory,
   atividadeCategorias,
   atividadesFiltradas,
+  isProcessingPayment,
 }: EventDetailsProps) {
   return (
     <div className="space-y-6">
@@ -129,8 +131,17 @@ export function EventDetails({
               <p className="text-sm text-muted-foreground">{evento.quantidade} vagas disponiveis</p>
             </div>
             <Button size="lg" className="w-full sm:w-auto cursor-pointer" onClick={onPayment}>
-              <ShoppingCart className="h-5 w-5 mr-2" />
-              Comprar Ingresso
+              {isProcessingPayment ? (
+                <>
+                  <Circle className="h-5 w-5 mr-2 animate-spin" />
+                  Processando
+                </>
+              ) : (
+                <>
+                  <ShoppingCart className="h-5 w-5 mr-2" />
+                  Comprar Ingresso
+                </>
+              )}
             </Button>
           </div>
         </CardContent>
