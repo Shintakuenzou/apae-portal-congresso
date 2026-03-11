@@ -4,8 +4,9 @@ import type { EventoFields, FluigEntity } from "@/types";
 import { formatThreeDayRangeSimple } from "@/utils/formatThreeDayRange";
 import { MapPin, ArrowRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { type IconName } from "lucide-react/dynamic";
+import { DynamicIcon, type IconName } from "lucide-react/dynamic";
 import LogoCN from "/public/hero1.png";
+import { Card, CardContent, CardHeader } from "./ui/card";
 
 export interface HeroProps {
   formatedDataEvento: FluigEntity<EventoFields>[] | undefined;
@@ -79,6 +80,20 @@ export function Hero({ formatedDataEvento }: HeroProps) {
               </Button>
             </div>
           </div>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mb-20">
+          {info.map((stat, index) => (
+            <Card key={index} className="hover:scale-105 transition-all w-full cursor-default">
+              <CardHeader className="pb-2">
+                <DynamicIcon name={stat.icon} className="h-6 w-6 text-violet-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl sm:text-3xl font-bold text-violet-600">{stat.value}</div>
+                <div className="text-xs sm:text-sm text-violet-600/60 mt-1">{stat.label}</div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
     </section>
