@@ -1,4 +1,4 @@
-import { clearAuthCookies, getAuthCookie, setAuthCookie } from "@/lib/cookie";
+import { clearAuthCookies, getAuthCookie, isTokenExpired, setAuthCookie } from "@/lib/cookie";
 import { fetchDataset } from "@/services/fetch-dataset";
 import { type AuthContextType } from "@/types/auth-context-type";
 import type { LoginResponseProps } from "@/types/login-response";
@@ -17,9 +17,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const token = getAuthCookie("token");
-    if (token) {
+    const exp = getAuthCookie("tokenExp");
+
+    if (token && exp && !isTokenExpired(exp)) {
       setIsAuthemticated(true);
+    } else {
+      clearAuthCookies();
     }
+
+    setIsLoading(false);
   }, []);
 
   const login = async (cpf: string, pass: string): Promise<void> => {
@@ -54,6 +60,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const validated = responseValidation.items[0];
 
+      console.log("validated: ", validated);
+
       if (validated?.status !== "SUCCESS") {
         toast.warning("Erro ao realizar login, verifique CPF ou senha.");
         return;
@@ -84,6 +92,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         possui_deficiencia: tokenData.possui_deficiencia,
         necessita_apoio: tokenData.necessita_apoio,
         coordenacao: tokenData.coordenacao,
+        atividades: tokenData.atividades,
       });
       setIsAuthemticated(true);
     } catch (error) {

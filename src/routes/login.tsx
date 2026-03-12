@@ -35,7 +35,7 @@ function LoginPage() {
     if (isAuthenticated) {
       navigate({ to: "/painel" });
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated]);
 
   const handleCPFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatCPF(e.target.value);
@@ -61,7 +61,6 @@ function LoginPage() {
         throw new Error("Senha incorreta. Por favor, digite a senha correta para continuar.");
       }
 
-      // ✅ Fazer login
       await login(cpfLimpo, formData.password);
     } catch (error: unknown) {
       if (error instanceof Error) {

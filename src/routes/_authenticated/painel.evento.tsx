@@ -154,6 +154,7 @@ function RouteComponent() {
     <div className="space-y-6 col-span-4 lg:col-span-3">
       {eventoSelecionado ? (
         <EventDetails
+          user={user}
           evento={eventoSelecionado}
           onBack={() => setEventoSelecionado(null)}
           isProcessingPayment={isProcessingPayment}

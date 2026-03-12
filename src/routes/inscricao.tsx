@@ -54,7 +54,7 @@ const formSchema = z.object({
   telefone: z.string().min(14, "Telefone inválido"),
   whatsapp: z.string(),
   escolaridade: z.string(),
-  tamanho_camisa: z.string().min(1, "Selecione a escolaridade"),
+  tamanho_camisa: z.string().min(1, "Selecione o tamanho da camisa"),
   apaeFiliada: z.string(),
   senha: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
   presidente_apae: z.string().optional(),
@@ -77,7 +77,7 @@ function InscricaoPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { atividade } = Route.useLoaderData();
   const options = useMemo(() => {
-    return atividade.items.map((item) => ({ value: item.documentid, label: item.titulo }));
+    return atividade.items.map((item) => ({ value: String(item.documentid), label: item.titulo }));
   }, [atividade]);
 
   const {
@@ -176,12 +176,10 @@ function InscricaoPage() {
           { fieldId: "atividades", value: JSON.stringify(data.atividades) || "" },
         ],
       });
-
+      localStorage.setItem("atividades", JSON.stringify(data.atividades));
       if (response && response.values.length > 0) {
         setSubmitted(true);
       }
-
-      localStorage.setItem("atividades", JSON.stringify(data.atividades));
     } catch (error) {
       console.error("Error submitting form data:", error);
       toast.error("Erro ao enviar formulário");
@@ -191,6 +189,7 @@ function InscricaoPage() {
   };
 
   if (submitted) {
+    window.scrollTo(0, 0);
     return <PurchaseStep />;
   }
 
@@ -289,7 +288,12 @@ function InscricaoPage() {
             <p className="text-muted-foreground text-lg">Preencha seus dados para participar do Congresso Nacional APAE Brasil 2026</p>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form
+            onSubmit={handleSubmit(onSubmit, (errors) => {
+              console.log(errors);
+            })}
+            className="space-y-6"
+          >
             {/* Dados Pessoais */}
             <Card className="border-border shadow-sm">
               <CardContent className="p-6 sm:p-8">
@@ -743,7 +747,6 @@ function InscricaoPage() {
                         control={control}
                         render={({ field }) => <MultiSelectCommand onChange={field.onChange} value={field.value || []} options={options} />}
                       />
-                      {errors.senha && <p className="text-sm text-destructive mt-1">{errors.senha.message}</p>}
                     </Field>
                   </FieldGroup>
                 </FieldSet>

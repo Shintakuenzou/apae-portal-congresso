@@ -130,15 +130,6 @@ export function ApaeDataSection({ formData, isEditing, handleInputChange }: Sect
             <ReadInput value={formData?.area_atuacao || ""} />
           )}
         </div>
-
-        <div className="space-y-5">
-          <Label className="text-muted-foreground">Coordenação</Label>
-          {isEditing ? (
-            <Input value={formData?.coordenacao || ""} onChange={(e) => handleInputChange("coordenacao", e.target.value)} />
-          ) : (
-            <ReadInput value={formData?.coordenacao || ""} />
-          )}
-        </div>
       </div>
     </div>
   );

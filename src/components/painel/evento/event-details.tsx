@@ -8,8 +8,10 @@ import { Separator } from "@/components/ui/separator";
 import { SwitchChoiceCard } from "@/components/switch-choice-event-card";
 import { SkeletonCard } from "@/components/skelton-card";
 import type { LoteFields } from "@/services/form-service";
+import type { User } from "@/types/user";
 
 interface EventDetailsProps {
+  user: User | null;
   evento: LoteFields;
   onBack: () => void;
   onPayment: () => void;
@@ -24,6 +26,7 @@ interface EventDetailsProps {
 }
 
 export function EventDetails({
+  user,
   evento,
   onBack,
   onPayment,
@@ -36,6 +39,7 @@ export function EventDetails({
   atividadesFiltradas,
   isProcessingPayment,
 }: EventDetailsProps) {
+  
   return (
     <div className="space-y-6">
       <Button variant="ghost" className="cursor-pointer" onClick={onBack}>
@@ -112,6 +116,7 @@ export function EventDetails({
                         data_inicio={atividade.data_inicio}
                         hora_fim={atividade.hora_fim}
                         eventoDatas={eventoDatas}
+                        user={user}
                       />
                     ) : (
                       <SkeletonCard />

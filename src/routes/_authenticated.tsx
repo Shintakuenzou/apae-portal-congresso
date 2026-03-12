@@ -1,8 +1,7 @@
-// import { clearAuthCookies, getAuthCookie, isTokenExpired } from "@/lib/cookie";
-// import { fetchDataset } from "@/services/fetch-dataset";
-// import type { TokenProps } from "@/types/token";
-import { getAuthCookie } from "@/lib/cookie";
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { clearAuthCookies, getAuthCookie, isTokenExpired } from "@/lib/cookie";
+import { fetchDataset } from "@/services/fetch-dataset";
+import type { TokenProps } from "@/types/token";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated")({
   component: () => (
@@ -14,33 +13,30 @@ export const Route = createFileRoute("/_authenticated")({
     const token = getAuthCookie("token");
     const exp = getAuthCookie("tokenExp");
 
-    console.log(token, exp);
+    if (!token) {
+      throw redirect({ to: "/login", search: { redirect: location.href } });
+    }
 
-    // if (!token) {
-    //   throw redirect({ to: "/login", search: { redirect: location.href } });
-    // }
+    if (exp && isTokenExpired(exp)) {
+      clearAuthCookies();
+      throw redirect({ to: "/login", search: { redirect: location.href } });
+    }
 
-    // if (exp && isTokenExpired(exp)) {
-    //   clearAuthCookies();
-    //   throw redirect({ to: "/login", search: { redirect: location.href } });
-    // }
+    const user = await fetchDataset<TokenProps>({
+      datasetId: import.meta.env.VITE_DATASET_DS_VALIDATE_TOKEN as string,
+      constraints: [
+        {
+          fieldName: "token",
+          initialValue: token,
+          finalValue: token,
+          constraintType: "MUST",
+        },
+      ],
+    });
 
-    // // Valida no servidor
-    // const user = await fetchDataset<TokenProps>({
-    //   datasetId: import.meta.env.VITE_DATASET_DS_VALIDATE_TOKEN as string,
-    //   constraints: [
-    //     {
-    //       fieldName: "token",
-    //       initialValue: token,
-    //       finalValue: token,
-    //       constraintType: "MUST",
-    //     },
-    //   ],
-    // });
-
-    // if (user.items[0].status != "SUCESSO") {
-    //   clearAuthCookies();
-    //   throw redirect({ to: "/login", search: { redirect: location.href } });
-    // }
+    if (user.items[0].status !== "SUCCESS") {
+      clearAuthCookies();
+      throw redirect({ to: "/login", search: { redirect: location.href } });
+    }
   },
 });

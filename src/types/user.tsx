@@ -21,4 +21,5 @@ export interface User {
   possui_deficiencia: string;
   necessita_apoio: string;
   coordenacao: string;
+  atividades: string[];
 }

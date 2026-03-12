@@ -26,4 +26,5 @@ export interface LoginResponseProps {
   documentid: string;
   dataInscricao: string;
   cep: string;
+  atividades: string[];
 }
