@@ -30,7 +30,10 @@ function RouteComponent() {
     try {
       const formatedPutFormData = Object.entries(formData).map(([key, value]) => ({
         fieldId: key,
-        value: value as string,
+        value:
+          key === "atividades" && Array.isArray(value)
+            ? value.join(",") // ✅ só para atividades: array → string
+            : (value as string),
       }));
 
       console.log(formatedPutFormData);

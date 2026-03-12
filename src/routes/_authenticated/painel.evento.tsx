@@ -154,12 +154,11 @@ function RouteComponent() {
   const handleToggleAtividade = async (novasAtividades: string[]) => {
     // 1. Atualiza localmente (UI reage imediatamente)
     updateUser({ ...user, atividades: novasAtividades });
-    console.log(novasAtividades);
 
     const updateResponse = await handleUpdateFormParticipant({
       documentId: import.meta.env.VITE_FORM_PARTICIPANTE as string,
       cardId: user!.documentid,
-      values: JSON.stringify(novasAtividades),
+      values: [{ fieldId: "atividades", value: JSON.stringify(novasAtividades) }],
     });
 
     console.log("updateResponse: ", updateResponse);
