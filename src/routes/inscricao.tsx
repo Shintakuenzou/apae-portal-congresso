@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -10,8 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Field, FieldDescription, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
-import { Mail, MapPinned, User, Lock, Briefcase, Heart, Loader2 } from "lucide-react";
-import { handlePostFormParticipant } from "@/services/form-service";
+import { Mail, MapPinned, User, Lock, Briefcase, Heart, Loader2, Ticket } from "lucide-react";
+import { handlePostFormParticipant, type ActivityFields } from "@/services/form-service";
 import { formatCPF } from "@/utils/format-cpf";
 import { formatPhone } from "@/utils/format-phone";
 import { escolaridades, estados, tamanhosCamisa } from "@/constants";
@@ -27,12 +27,19 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { useQuery } from "@tanstack/react-query";
 import { sha256 } from "@/utils/hash-pass";
 import { PurchaseStep } from "@/components/purchase-step";
+import { MultiSelectCommand } from "@/components/multi-select-command";
 
 export const Route = createFileRoute("/inscricao")({
   component: InscricaoPage,
+  loader: async () => {
+    const [atividade] = await Promise.all([fetchDataset<ActivityFields>({ datasetId: import.meta.env.VITE_DATASET_ATIVIDADE as string })]);
+
+    return {
+      atividade,
+    };
+  },
 });
 
-// Schema de validação com Zod
 const formSchema = z.object({
   criado_em: z.string(),
   criado_por: z.string(),
@@ -60,6 +67,7 @@ const formSchema = z.object({
   outros_apoio: z.string().optional(),
   coordenacao: z.string().optional(),
   status: z.string().optional(),
+  atividades: z.array(z.string()).optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -67,6 +75,10 @@ type FormData = z.infer<typeof formSchema>;
 function InscricaoPage() {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { atividade } = Route.useLoaderData();
+  const options = useMemo(() => {
+    return atividade.items.map((item) => ({ value: item.documentid, label: item.titulo }));
+  }, [atividade]);
 
   const {
     register,
@@ -104,6 +116,7 @@ function InscricaoPage() {
       outros_apoio: "",
       coordenacao: "",
       status: "ATIVO",
+      atividades: [],
     },
   });
 
@@ -699,6 +712,36 @@ function InscricaoPage() {
                         />
                       </Field>
                     )} */}
+                  </FieldGroup>
+                </FieldSet>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border shadow-sm">
+              <CardContent className="p-6 sm:p-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-full bg-violet-600/10 flex items-center justify-center">
+                    <Ticket className="h-5 w-5 text-violet-600" />
+                  </div>
+                  <div>
+                    <h2 className="font-semibold text-lg text-foreground">Selecionar atividade</h2>
+                    <p className="text-sm text-muted-foreground">Selecione as atividades que deseja participar</p>
+                  </div>
+                </div>
+
+                <FieldSet className="w-full">
+                  <FieldGroup>
+                    <Field>
+                      <FieldLabel htmlFor="atividades">Atividades *</FieldLabel>
+                      <FieldDescription>Selecione as atividades que deseja participar</FieldDescription>
+
+                      <Controller
+                        name="atividades"
+                        control={control}
+                        render={({ field }) => <MultiSelectCommand onChange={field.onChange} value={field.value || []} options={options} />}
+                      />
+                      {errors.senha && <p className="text-sm text-destructive mt-1">{errors.senha.message}</p>}
+                    </Field>
                   </FieldGroup>
                 </FieldSet>
               </CardContent>
