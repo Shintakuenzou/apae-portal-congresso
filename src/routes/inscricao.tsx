@@ -173,12 +173,15 @@ function InscricaoPage() {
           { fieldId: "tamanho_camiseta", value: data.tamanho_camisa || "" },
           { fieldId: "cep", value: data.cep || "" },
           { fieldId: "status", value: data.status || "" },
+          { fieldId: "atividades", value: JSON.stringify(data.atividades) || "" },
         ],
       });
 
       if (response && response.values.length > 0) {
         setSubmitted(true);
       }
+
+      localStorage.setItem("atividades", JSON.stringify(data.atividades));
     } catch (error) {
       console.error("Error submitting form data:", error);
       toast.error("Erro ao enviar formulário");

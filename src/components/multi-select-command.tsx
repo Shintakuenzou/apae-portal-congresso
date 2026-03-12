@@ -151,14 +151,15 @@ export function MultiSelectCommand({
                   return (
                     <Badge key={optionValue} variant="secondary" className="text-xs px-1.5 py-0.5 gap-1">
                       {label}
-                      <button
-                        type="button"
+                      <span
+                        role="button"
+                        tabIndex={0}
                         onClick={(e) => optionValue && handleRemove(optionValue, e)}
                         className="ml-0.5 rounded-full hover:bg-muted-foreground/20 p-0.5"
                         aria-label={`Remover ${label}`}
                       >
                         <X className="h-3 w-3" />
-                      </button>
+                      </span>
                     </Badge>
                   );
                 })}

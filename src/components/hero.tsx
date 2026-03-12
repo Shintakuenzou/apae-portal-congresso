@@ -2,11 +2,11 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/auth-context";
 import type { EventoFields, FluigEntity } from "@/types";
 import { formatThreeDayRangeSimple } from "@/utils/formatThreeDayRange";
-import { MapPin, ArrowRight } from "lucide-react";
+import { Calendar, MapPin, ArrowRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { DynamicIcon, type IconName } from "lucide-react/dynamic";
-import LogoCN from "/public/hero1.png";
 import { Card, CardContent, CardHeader } from "./ui/card";
+import LogoCN from "/public/hero1.png";
 
 export interface HeroProps {
   formatedDataEvento: FluigEntity<EventoFields>[] | undefined;
@@ -28,68 +28,81 @@ const info: Info[] = [
 export function Hero({ formatedDataEvento }: HeroProps) {
   const { isAuthenticated } = useAuth();
 
+  let firstTitle = "";
+  let lastTitle = "";
   let description = "";
   let date = "";
   let location = "";
 
   if (formatedDataEvento && formatedDataEvento.length > 0) {
     const idx = formatedDataEvento.length - 1;
+    const tituloRaw = formatedDataEvento[idx]?.fields?.titulo ?? "";
+
+    firstTitle = tituloRaw.replaceAll(" ", ",").split(",").slice(0, 2).join(" ");
+    lastTitle = tituloRaw.replaceAll(" ", ",").split(",").slice(2).join(" ");
     description = formatedDataEvento[idx].fields.descricao ?? "";
     date = formatThreeDayRangeSimple(formatedDataEvento[idx].fields.data_inicio, formatedDataEvento[idx].fields.data_fim);
-    location = `${formatedDataEvento[idx].fields.cidade}/${formatedDataEvento[idx].fields.estado}`;
+    location = `${formatedDataEvento[idx].fields.cidade}-${formatedDataEvento[idx].fields.estado}`;
   }
 
-  const nomeEvento = "Congresso Nacional das Apaes";
-
   return (
-    <section className="w-full bg-gray-100">
-      <div className=" mx-auto px-8 sm:px-12 lg:px-16">
-        <div className="flex flex-col md:flex-row items-center gap-16 py-32 xL:py-48">
-          {/* Coluna esquerda — Imagem */}
-          <div className="w-full md:w-2/5 flex-shrink-0">
-            <img src={LogoCN} alt="Congresso Nacional das Apaes" className="w-full object-contain rounded-sm" />
-          </div>
-
-          {/* Coluna direita — Conteúdo */}
-          <div className="w-full md:w-3/5 flex flex-col gap-10">
-            {/* Título */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-violet-700 text-center leading-tight">{nomeEvento}</h1>
-
-            {/* Descrição */}
-            {description && <p className="text-base sm:text-lg md:text-xl text-gray-800 font-semibold text-justify leading-relaxed tracking-wide lowercase">{description}</p>}
-
-            {/* Citação */}
-            <p className="text-end text-gray-700 italic text-base sm:text-lg md:text-xl">"Inclusão que inspira, inovação que transforma."</p>
-
-            {/* Badge data + local */}
-            {(date || location) && (
-              <div className="flex items-center justify-center px-6 py-4 w-full gap-3">
-                {date && <span className="text-violet-700 font-semibold text-base sm:text-lg text-center">{date}</span>}
-                {date && location && <MapPin className="h-5 w-5 text-violet-700 flex-shrink-0" />}
-                {location && <span className="text-violet-700 font-semibold text-base sm:text-lg">{location}</span>}
-              </div>
-            )}
-
-            {/* Botão */}
-            <div className="flex justify-end pt-2">
-              <Button asChild size="lg" className="bg-violet-700 hover:bg-violet-800 text-white text-lg sm:text-xl px-10 h-16 font-semibold rounded-xl shadow-md">
-                <Link to={isAuthenticated ? "/painel" : "/login"}>
-                  Garanta sua vaga
-                  <ArrowRight className="ml-3 h-6 w-6" />
-                </Link>
-              </Button>
-            </div>
-          </div>
+    <section className="relative min-h-screen flex flex-col items-center bg-muted overflow-hidden">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 flex flex-col items-center">
+        {/* Logo centralizada no topo */}
+        <div className="flex justify-center w-full mb-10">
+          <img src={LogoCN} alt="Congresso Nacional das Apaes" className="w-48 sm:w-64 md:w-1/2 object-contain" />
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full mb-20">
+        {/* <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-violet-950 leading-[1.1] font-playfair text-center">
+          <span className="font-cormorant font-bold text-3xl sm:text-4xl block mb-1">XVII</span>
+          {firstTitle}
+          <br />
+          <span className="font-cormorant font-light text-violet-950">das </span>
+          <span className="font-cormorant font-light text-violet-600">{lastTitle}</span>
+        </h1> */}
+
+        {/* Descrição */}
+        <p className="mt-6 text-base sm:text-lg text-violet-950/75 leading-relaxed text-center max-w-2xl lowercase">{description}</p>
+
+        {/* Data e local */}
+        <div className="mt-8 flex flex-wrap justify-center items-center gap-4 text-violet-950/70">
+          {date && (
+            <div className="flex items-center gap-2 bg-violet-950/5 px-4 py-2 rounded-full text-sm">
+              <Calendar className="h-4 w-4 text-violet-600" />
+              <span className="font-medium">{date}</span>
+            </div>
+          )}
+          {location && (
+            <div className="flex items-center gap-2 bg-violet-950/5 px-4 py-2 rounded-full text-sm">
+              <MapPin className="h-4 w-4 text-violet-600" />
+              <span className="font-medium">{location}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Botão */}
+        <div className="mt-8 flex justify-end w-full">
+          <Button
+            asChild
+            size="lg"
+            className="bg-violet-600 hover:bg-violet-600/90 text-white text-base sm:text-lg px-8 h-12 sm:h-14 font-semibold shadow-lg hover:shadow-xl transition-all group rounded-2xl"
+          >
+            <Link to={isAuthenticated ? "/painel" : "/login"}>
+              Garanta sua vaga
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </Button>
+        </div>
+
+        {/* Cards de stats */}
+        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full">
           {info.map((stat, index) => (
-            <Card key={index} className="hover:scale-105 transition-all w-full cursor-default">
-              <CardHeader className="pb-2">
-                <DynamicIcon name={stat.icon} className="h-6 w-6 text-violet-600" />
+            <Card key={index} className="cursor-auto hover:scale-105 transition-all w-full">
+              <CardHeader>
+                <DynamicIcon name={stat.icon} className="h-6 w-6 text-violet-600 mb-3" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl sm:text-3xl font-bold text-violet-600">{stat.value}</div>
+                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-violet-600">{stat.value}</div>
                 <div className="text-xs sm:text-sm text-violet-600/60 mt-1">{stat.label}</div>
               </CardContent>
             </Card>
