@@ -47,6 +47,6 @@ export interface FluigPostResponse {
 export interface SendFormData {
   documentId: string;
   cardId?: string;
-  values?: { fieldId: string; value: string | null }[];
+  values?: { fieldId: string; value: string | null }[] | string;
   queryParams?: string;
 }

@@ -15,21 +15,42 @@ interface SwitchChoiceCardProps {
   data_inicio: string;
   eixo: string;
   hora_fim: string;
-  eventoDatas: EachDayOfIntervalResult<
-    {
-      start: Date;
-      end: Date;
-    },
-    undefined
-  >;
+  eventoDatas: EachDayOfIntervalResult<{ start: Date; end: Date }, undefined>;
   user: UserType | null;
+  onToggle: (novasAtividades: string[]) => void; // ✅ sobe o array atualizado
 }
 
-export function SwitchChoiceCard({ titulo, descricao, eixo, hora_inicio, palestrantes, documentId, hora_fim, eventoDatas, user }: SwitchChoiceCardProps) {
-  const parsedAtividades: string[] = JSON.parse(user?.atividades as any);
-  const isSelected = parsedAtividades.filter((id) => id == documentId).length > 0;
+export function SwitchChoiceCard({ titulo, descricao, eixo, hora_inicio, palestrantes, documentId, hora_fim, eventoDatas, user, onToggle }: SwitchChoiceCardProps) {
+  const raw = user?.atividades as any;
 
-  function handleCheckedChange() {}
+  console.log("RAW atividades:", raw);
+  console.log("RAW tipo:", typeof raw);
+  console.log("RAW JSON.stringify:", JSON.stringify(raw));
+
+  const parsedAtividades: string[] = (() => {
+    try {
+      if (!raw) return [];
+      if (Array.isArray(raw)) return raw.map(String);
+      if (typeof raw === "string") {
+        const trimmed = raw.trim();
+        if (trimmed.startsWith("[")) return JSON.parse(trimmed).map(String);
+        return trimmed.split(",").filter(Boolean).map(String);
+      }
+      return [];
+    } catch (e) {
+      console.error("Erro ao parsear atividades:", e, "| valor:", raw);
+      return []; // ✅ nunca quebra o componente
+    }
+  })();
+  const isSelected = parsedAtividades.some((id) => id == documentId);
+
+  function handleCheckedChange(checked: boolean) {
+    const atuais = parsedAtividades;
+
+    const novas = checked ? [...atuais, documentId] : atuais.filter((id) => id != documentId);
+
+    onToggle(novas);
+  }
 
   return (
     <FieldGroup className="w-full">
@@ -51,11 +72,10 @@ export function SwitchChoiceCard({ titulo, descricao, eixo, hora_inicio, palestr
               <div className="flex-1 p-6 space-y-2">
                 <h3 className="text-xl font-semibold text-foreground mb-2">{titulo}</h3>
                 <p className="text-muted-foreground mb-4 text-sm">{descricao}</p>
-
                 <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
-                    {palestrantes?.map((palestrante) => (
-                      <div className="flex items-center gap-2">
+                    {palestrantes?.map((palestrante, i) => (
+                      <div key={i} className="flex items-center gap-2">
                         <User className="h-4 w-4 text-violet-600" />
                         <span>{palestrante.palestrante}</span>
                       </div>

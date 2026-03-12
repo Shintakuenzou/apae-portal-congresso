@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { eachDayOfInterval, isWithinInterval, parseISO } from "date-fns";
 import { useLotes } from "@/hooks/useLotes";
 import { createFileRoute } from "@tanstack/react-router";
-import type { ActivityFields, EventoFields, LoteFields } from "@/services/form-service";
+import { handleUpdateFormParticipant, type ActivityFields, type EventoFields, type LoteFields } from "@/services/form-service";
 import { type VinculoFields } from "@/hooks/useVinculo";
 import { fetchDataset } from "@/services/fetch-dataset";
 import { useAuth } from "@/context/auth-context";
@@ -49,7 +49,7 @@ export const Route = createFileRoute("/_authenticated/painel/evento")({
 });
 
 function RouteComponent() {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const { atividade, evento, vinculo_palestra_atividade } = Route.useLoaderData();
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const { formatedDataLote } = useLotes();
@@ -149,6 +149,21 @@ function RouteComponent() {
       setIsProcessingPayment(false);
     }
   }
+  console.log("user: ", user);
+
+  const handleToggleAtividade = async (novasAtividades: string[]) => {
+    // 1. Atualiza localmente (UI reage imediatamente)
+    updateUser({ ...user, atividades: novasAtividades });
+    console.log(novasAtividades);
+
+    const updateResponse = await handleUpdateFormParticipant({
+      documentId: import.meta.env.VITE_FORM_PARTICIPANTE as string,
+      cardId: user!.documentid,
+      values: JSON.stringify(novasAtividades),
+    });
+
+    console.log("updateResponse: ", updateResponse);
+  };
 
   return (
     <div className="space-y-6 col-span-4 lg:col-span-3">
@@ -166,6 +181,7 @@ function RouteComponent() {
           setSelectedCategory={setSelectedCategory}
           atividadeCategorias={atividadeCategorias}
           atividadesFiltradas={atividadesFiltradas}
+          onToggleAtividade={handleToggleAtividade}
         />
       ) : (
         <AvailableEvents eventos={formatedDataLote} onSelectEvent={setEventoSelecionado} />
