@@ -118,7 +118,13 @@ export function SponsorsSection() {
         >
           <div className="flex py-2">
             {sponsorsData?.items?.map((sponsor, i) => (
-              <div key={i} className="embla__slide flex-shrink-0 px-2" role="group" aria-roledescription="item" aria-label={`${sponsor.name} — ${sponsor.tipo}`}>
+              <div
+                key={i}
+                className="embla__slide flex-shrink-0 px-2 lg:w-96 md:w-72 w-64"
+                role="group"
+                aria-roledescription="item"
+                aria-label={`${sponsor.name} — ${sponsor.tipo}`}
+              >
                 <div
                   role="button"
                   tabIndex={0}

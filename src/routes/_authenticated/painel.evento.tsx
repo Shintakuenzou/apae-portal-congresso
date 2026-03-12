@@ -133,9 +133,9 @@ function RouteComponent() {
       });
 
       const item = response.items[0];
-      console.log("item payment: ", item);
 
       if (item?.status === "SUCCESS") {
+        handleToggleAtividade([...user?.atividades!]);
         toast.success("Compra processada com sucesso!");
 
         window.open(item.init_point);
@@ -149,12 +149,8 @@ function RouteComponent() {
       setIsProcessingPayment(false);
     }
   }
-  console.log("user: ", user);
 
   const handleToggleAtividade = async (novasAtividades: string[]) => {
-    // 1. Atualiza localmente (UI reage imediatamente)
-    updateUser({ ...user, atividades: novasAtividades });
-
     const updateResponse = await handleUpdateFormParticipant({
       documentId: import.meta.env.VITE_FORM_PARTICIPANTE as string,
       cardId: user!.documentid,
@@ -180,7 +176,7 @@ function RouteComponent() {
           setSelectedCategory={setSelectedCategory}
           atividadeCategorias={atividadeCategorias}
           atividadesFiltradas={atividadesFiltradas}
-          onToggleAtividade={handleToggleAtividade}
+          updateUser={updateUser}
         />
       ) : (
         <AvailableEvents eventos={formatedDataLote} onSelectEvent={setEventoSelecionado} />

@@ -23,7 +23,7 @@ interface EventDetailsProps {
   atividadeCategorias: string[];
   atividadesFiltradas: any[];
   isProcessingPayment: boolean;
-  onToggleAtividade: (novasAtividades: string[]) => void;
+  updateUser: (user: User) => void;
 }
 
 export function EventDetails({
@@ -38,8 +38,8 @@ export function EventDetails({
   setSelectedCategory,
   atividadeCategorias,
   atividadesFiltradas,
-  isProcessingPayment,
-  onToggleAtividade,
+  isProcessingPayment, 
+  updateUser,
 }: EventDetailsProps) {
   return (
     <div className="space-y-6">
@@ -118,7 +118,7 @@ export function EventDetails({
                         hora_fim={atividade.hora_fim}
                         eventoDatas={eventoDatas}
                         user={user}
-                        onToggle={onToggleAtividade}
+                        updateUser={updateUser}
                       />
                     ) : (
                       <SkeletonCard />

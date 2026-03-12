@@ -17,10 +17,10 @@ interface SwitchChoiceCardProps {
   hora_fim: string;
   eventoDatas: EachDayOfIntervalResult<{ start: Date; end: Date }, undefined>;
   user: UserType | null;
-  onToggle: (novasAtividades: string[]) => void; // ✅ sobe o array atualizado
+  updateUser: (user: UserType) => void;
 }
 
-export function SwitchChoiceCard({ titulo, descricao, eixo, hora_inicio, palestrantes, documentId, hora_fim, eventoDatas, user, onToggle }: SwitchChoiceCardProps) {
+export function SwitchChoiceCard({ titulo, descricao, eixo, hora_inicio, palestrantes, documentId, hora_fim, eventoDatas, user, updateUser }: SwitchChoiceCardProps) {
   const raw = user?.atividades as any;
 
   console.log("RAW atividades:", raw);
@@ -49,7 +49,7 @@ export function SwitchChoiceCard({ titulo, descricao, eixo, hora_inicio, palestr
 
     const novas = checked ? [...atuais, documentId] : atuais.filter((id) => id != documentId);
 
-    onToggle(novas);
+    updateUser({ ...user!, atividades: novas });
   }
 
   return (
