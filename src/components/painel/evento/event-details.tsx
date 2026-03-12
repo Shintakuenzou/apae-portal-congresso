@@ -38,7 +38,7 @@ export function EventDetails({
   setSelectedCategory,
   atividadeCategorias,
   atividadesFiltradas,
-  isProcessingPayment, 
+  isProcessingPayment,
   updateUser,
 }: EventDetailsProps) {
   return (
@@ -107,6 +107,7 @@ export function EventDetails({
                   <div key={atividade.documentid}>
                     {eventoDatas.length > 0 ? (
                       <SwitchChoiceCard
+                        todasAtividades={atividadesFiltradas}
                         key={index}
                         titulo={atividade.titulo}
                         documentId={atividade.documentid}

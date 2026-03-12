@@ -1,10 +1,11 @@
 import { Field, FieldContent, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Switch } from "@/components/ui/switch";
 import type { VinculoFields } from "@/hooks/useVinculo";
-import { format, type EachDayOfIntervalResult } from "date-fns";
+import { format, isSameDay, type EachDayOfIntervalResult } from "date-fns";
 import { Clock, User } from "lucide-react";
 import { Badge } from "./ui/badge";
 import type { User as UserType } from "@/types/user";
+import { toast } from "sonner";
 
 interface SwitchChoiceCardProps {
   palestrantes: VinculoFields[];
@@ -12,20 +13,45 @@ interface SwitchChoiceCardProps {
   descricao: string;
   titulo: string;
   hora_inicio: string;
+  hora_fim: string;
   data_inicio: string;
   eixo: string;
-  hora_fim: string;
   eventoDatas: EachDayOfIntervalResult<{ start: Date; end: Date }, undefined>;
   user: UserType | null;
   updateUser: (user: UserType) => void;
+  todasAtividades: any[]; // ✅ todas as atividades para checar conflitos
 }
 
-export function SwitchChoiceCard({ titulo, descricao, eixo, hora_inicio, palestrantes, documentId, hora_fim, eventoDatas, user, updateUser }: SwitchChoiceCardProps) {
-  const raw = user?.atividades as any;
+// Converte "HH:mm" para minutos para comparar horários
+function toMinutes(hora: string): number {
+  const [h, m] = hora.split(":").map(Number);
+  return h * 60 + m;
+}
 
-  console.log("RAW atividades:", raw);
-  console.log("RAW tipo:", typeof raw);
-  console.log("RAW JSON.stringify:", JSON.stringify(raw));
+// Verifica se dois intervalos de tempo se sobrepõem
+function hasTimeConflict(inicio1: string, fim1: string, inicio2: string, fim2: string): boolean {
+  const start1 = toMinutes(inicio1);
+  const end1 = toMinutes(fim1);
+  const start2 = toMinutes(inicio2);
+  const end2 = toMinutes(fim2);
+  return start1 < end2 && end1 > start2;
+}
+
+export function SwitchChoiceCard({
+  titulo,
+  descricao,
+  eixo,
+  hora_inicio,
+  hora_fim,
+  data_inicio,
+  palestrantes,
+  documentId,
+  eventoDatas,
+  user,
+  updateUser,
+  todasAtividades,
+}: SwitchChoiceCardProps) {
+  const raw = user?.atividades as any;
 
   const parsedAtividades: string[] = (() => {
     try {
@@ -38,18 +64,43 @@ export function SwitchChoiceCard({ titulo, descricao, eixo, hora_inicio, palestr
       }
       return [];
     } catch (e) {
-      console.error("Erro ao parsear atividades:", e, "| valor:", raw);
-      return []; // ✅ nunca quebra o componente
+      return [];
     }
   })();
+
   const isSelected = parsedAtividades.some((id) => id == documentId);
 
   function handleCheckedChange(checked: boolean) {
-    const atuais = parsedAtividades;
+    if (checked) {
+      const atividadesSelecionadas = todasAtividades.filter((a) => parsedAtividades.includes(String(a.documentid)));
 
-    const novas = checked ? [...atuais, documentId] : atuais.filter((id) => id != documentId);
+      const conflito = atividadesSelecionadas.find((atividade) => {
+        const mesmodia = isSameDay(new Date(data_inicio), new Date(atividade.data_inicio));
+        return mesmodia && hasTimeConflict(hora_inicio, hora_fim, atividade.hora_inicio, atividade.hora_fim);
+      });
 
-    updateUser({ ...user!, atividades: novas });
+      if (conflito) {
+        toast.error(`Conflito de horário com a atividade "${conflito.titulo}" (${conflito.hora_inicio} - ${conflito.hora_fim})`, { position: "top-right" });
+        return;
+      }
+
+      updateUser({ ...user!, atividades: [...parsedAtividades, documentId] });
+    } else {
+      const diaAtual = new Date(data_inicio);
+
+      const atividadesDoDia = todasAtividades.filter(
+        (atividade) => isSameDay(new Date(atividade.data_inicio), diaAtual) && parsedAtividades.includes(String(atividade.documentid)),
+      );
+
+      if (atividadesDoDia.length <= 1) {
+        toast.warning(`Você precisa ter pelo menos uma atividade no dia ${format(diaAtual, "dd/MM/yyyy")}.`, { position: "top-right" });
+      }
+
+      updateUser({
+        ...user!,
+        atividades: parsedAtividades.filter((id) => id != documentId),
+      });
+    }
   }
 
   return (
