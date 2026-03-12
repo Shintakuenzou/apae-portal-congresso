@@ -112,7 +112,7 @@ function RouteComponent() {
     setIsProcessingPayment(true);
     const email = user?.email ?? "";
     const titulo = eventoSelecionado?.nome ?? "";
-    const preco = (eventoSelecionado?.preco ?? "0").replace(/\./g, "").replace(",", ".");
+    const preco = 0.01;
 
     const refId = (eventoSelecionado as any)?.documentid ?? eventoSelecionado?.documentId ?? "";
 

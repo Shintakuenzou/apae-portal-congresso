@@ -5,7 +5,6 @@ import { format, type EachDayOfIntervalResult } from "date-fns";
 import { Clock, User } from "lucide-react";
 import { Badge } from "./ui/badge";
 import type { User as UserType } from "@/types/user";
-import { useState } from "react";
 
 interface SwitchChoiceCardProps {
   palestrantes: VinculoFields[];
@@ -27,10 +26,10 @@ interface SwitchChoiceCardProps {
 }
 
 export function SwitchChoiceCard({ titulo, descricao, eixo, hora_inicio, palestrantes, documentId, hora_fim, eventoDatas, user }: SwitchChoiceCardProps) {
-  const parsedAtividades: string[] = JSON.parse(user?.atividades as any);
-  const isSelected = parsedAtividades.filter((id) => id == documentId).length > 0;
+  // const parsedAtividades: string[] = JSON.parse(user?.atividades as any);
+  // const isSelected = parsedAtividades.filter((id) => id == documentId).length > 0;
 
-  function handleCheckedChange() {}
+  // function handleCheckedChange() {}
 
   return (
     <FieldGroup className="w-full">
@@ -66,7 +65,7 @@ export function SwitchChoiceCard({ titulo, descricao, eixo, hora_inicio, palestr
               </div>
             </div>
           </FieldContent>
-          <Switch id={documentId} checked={isSelected} onCheckedChange={handleCheckedChange} />
+          <Switch id={documentId} />
         </Field>
       </FieldLabel>
     </FieldGroup>

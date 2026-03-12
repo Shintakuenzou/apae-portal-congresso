@@ -28,19 +28,13 @@ const info: Info[] = [
 export function Hero({ formatedDataEvento }: HeroProps) {
   const { isAuthenticated } = useAuth();
 
-  let firstTitle = "";
-  let lastTitle = "";
   let description = "";
   let date = "";
   let location = "";
 
   if (formatedDataEvento && formatedDataEvento.length > 0) {
     const idx = formatedDataEvento.length - 1;
-    const tituloRaw = formatedDataEvento[idx]?.fields?.titulo ?? "";
 
-    firstTitle = tituloRaw.replaceAll(" ", ",").split(",").slice(0, 2).join(" ");
-    lastTitle = tituloRaw.replaceAll(" ", ",").split(",").slice(2).join(" ");
-    description = formatedDataEvento[idx].fields.descricao ?? "";
     date = formatThreeDayRangeSimple(formatedDataEvento[idx].fields.data_inicio, formatedDataEvento[idx].fields.data_fim);
     location = `${formatedDataEvento[idx].fields.cidade}-${formatedDataEvento[idx].fields.estado}`;
   }
@@ -52,14 +46,6 @@ export function Hero({ formatedDataEvento }: HeroProps) {
         <div className="flex justify-center w-full mb-10">
           <img src={LogoCN} alt="Congresso Nacional das Apaes" className="w-48 sm:w-64 md:w-1/2 object-contain" />
         </div>
-
-        {/* <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-violet-950 leading-[1.1] font-playfair text-center">
-          <span className="font-cormorant font-bold text-3xl sm:text-4xl block mb-1">XVII</span>
-          {firstTitle}
-          <br />
-          <span className="font-cormorant font-light text-violet-950">das </span>
-          <span className="font-cormorant font-light text-violet-600">{lastTitle}</span>
-        </h1> */}
 
         {/* Descrição */}
         <p className="mt-6 text-base sm:text-lg text-violet-950/75 leading-relaxed text-center max-w-2xl lowercase">{description}</p>
