@@ -42,12 +42,12 @@ export function Hero({ formatedDataEvento }: HeroProps) {
   const nomeEvento = "Congresso Nacional das Apaes";
 
   return (
-    <section className="w-full bg-white">
+    <section className="w-full bg-gray-100">
       <div className=" mx-auto px-8 sm:px-12 lg:px-16">
         <div className="flex flex-col md:flex-row items-center gap-16 py-32 xL:py-48">
           {/* Coluna esquerda — Imagem */}
           <div className="w-full md:w-2/5 flex-shrink-0">
-            <img src={LogoCN} alt="Congresso Nacional das Apaes" className="w-full object-contain bg-gray-100 rounded-sm" />
+            <img src={LogoCN} alt="Congresso Nacional das Apaes" className="w-full object-contain rounded-sm" />
           </div>
 
           {/* Coluna direita — Conteúdo */}
