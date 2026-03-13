@@ -12,7 +12,7 @@ const getBaseURL = () => {
     return "";
   }
   // Em produção, usa o proxy.php
-  return "https://tan-oryx-750041.hostingersite.com/proxy.php";
+  return "https://congresso.apaebrasil.org.br";
 };
 
 // Instância do Axios

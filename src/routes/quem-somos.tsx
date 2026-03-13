@@ -10,6 +10,33 @@ import { DynamicIcon, type IconName } from "lucide-react/dynamic";
 import { useAuth } from "@/context/auth-context";
 
 export const Route = createFileRoute("/quem-somos")({
+  head: () => ({
+    meta: [
+      { title: "Sobre nós | APAE BRASIL" },
+      {
+        name: "description",
+        content:
+          "A Federação Nacional das Apaes, ou Apae Brasil, é a maior rede de defesa e garantia de direitos das pessoas com deficiência intelectual e deficiência múltipla da América Latina.",
+      },
+      {
+        name: "keywords",
+        content: "APAE, APAE BRASIL, deficiência intelectual, deficiência múltipla, inclusão social, educação, saúde, direitos",
+      },
+      {
+        property: "og:title",
+        content: "Sobre nós | APAE BRASIL",
+      },
+      {
+        property: "og:description",
+        content:
+          "A Federação Nacional das Apaes, ou Apae Brasil, é a maior rede de defesa e garantia de direitos das pessoas com deficiência intelectual e deficiência múltipla da América Latina.",
+      },
+      {
+        property: "og:type",
+        content: "website",
+      },
+    ],
+  }),
   component: QuemSomosPage,
 });
 

@@ -28,6 +28,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   }, []);
 
+  console.log("user: ", user);
+  console.log("isLoading: ", isLoading);
+  console.log("isAuthenticated: ", isAuthenticated);
+
   const login = async (cpf: string, pass: string): Promise<void> => {
     setIsLoading(true);
     const hash = await sha256(pass);
