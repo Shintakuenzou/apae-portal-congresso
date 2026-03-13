@@ -30,6 +30,31 @@ import { PurchaseStep } from "@/components/purchase-step";
 import { MultiSelectCommand } from "@/components/multi-select-command";
 
 export const Route = createFileRoute("/inscricao")({
+  head: () => ({
+    meta: [
+      { title: "Inscrição | APAE BRASIL" },
+      {
+        name: "description",
+        content: "Inscrição no Congresso Nacional APAE Brasil 2026.",
+      },
+      {
+        name: "keywords",
+        content: "APAE, APAE BRASIL, inscrição, congresso",
+      },
+      {
+        property: "og:title",
+        content: "Inscrição | APAE BRASIL",
+      },
+      {
+        property: "og:description",
+        content: "Inscrição no Congresso Nacional APAE Brasil 2026.",
+      },
+      {
+        property: "og:type",
+        content: "website",
+      },
+    ],
+  }),
   component: InscricaoPage,
   loader: async () => {
     const [atividade] = await Promise.all([fetchDataset<ActivityFields>({ datasetId: import.meta.env.VITE_DATASET_ATIVIDADE as string })]);

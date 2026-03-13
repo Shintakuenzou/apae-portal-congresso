@@ -17,6 +17,31 @@ const categories = [
 ];
 
 export const Route = createFileRoute("/galeria")({
+  head: () => ({
+    meta: [
+      { title: "Galeria | APAE BRASIL" },
+      {
+        name: "description",
+        content: "Galeria de fotos do Congresso Nacional APAE Brasil.",
+      },
+      {
+        name: "keywords",
+        content: "APAE, APAE BRASIL, galeria, fotos, congresso",
+      },
+      {
+        property: "og:title",
+        content: "Galeria | APAE BRASIL",
+      },
+      {
+        property: "og:description",
+        content: "Galeria de fotos do Congresso Nacional APAE Brasil.",
+      },
+      {
+        property: "og:type",
+        content: "website",
+      },
+    ],
+  }),
   component: Galery,
 });
 

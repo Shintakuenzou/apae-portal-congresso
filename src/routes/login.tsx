@@ -15,6 +15,31 @@ import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/login")({
+  head: () => ({
+    meta: [
+      { title: "Login | APAE BRASIL" },
+      {
+        name: "description",
+        content: "Login no Congresso Nacional APAE Brasil 2026.",
+      },
+      {
+        name: "keywords",
+        content: "APAE, APAE BRASIL, login, congresso",
+      },
+      {
+        property: "og:title",
+        content: "Login | APAE BRASIL",
+      },
+      {
+        property: "og:description",
+        content: "Login no Congresso Nacional APAE Brasil 2026.",
+      },
+      {
+        property: "og:type",
+        content: "website",
+      },
+    ],
+  }),
   component: LoginPage,
 });
 

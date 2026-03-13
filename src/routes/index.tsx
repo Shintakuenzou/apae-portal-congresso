@@ -11,6 +11,31 @@ import { LoadingScreen } from "@/components/loading";
 import { SponsorsSection } from "@/components/sponsor-section";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Home | APAE BRASIL" },
+      {
+        name: "description",
+        content: "Home do Congresso Nacional APAE Brasil 2026.",
+      },
+      {
+        name: "keywords",
+        content: "APAE, APAE BRASIL, congresso",
+      },
+      {
+        property: "og:title",
+        content: "Home | APAE BRASIL",
+      },
+      {
+        property: "og:description",
+        content: "Home do Congresso Nacional APAE Brasil 2026.",
+      },
+      {
+        property: "og:type",
+        content: "website",
+      },
+    ],
+  }),
   component: App,
 });
 

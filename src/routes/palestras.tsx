@@ -16,6 +16,31 @@ import type { ActivityFields, EventoFields } from "@/types";
 import type { VinculoFields } from "@/hooks/useVinculo";
 
 export const Route = createFileRoute("/palestras")({
+  head: () => ({
+    meta: [
+      { title: "Palestras | APAE BRASIL" },
+      {
+        name: "description",
+        content: "Palestras sobre inclusão social, educação, saúde e cidadania.",
+      },
+      {
+        name: "keywords",
+        content: "APAE, APAE BRASIL, inclusão social, educação, saúde, cidadania",
+      },
+      {
+        property: "og:title",
+        content: "Palestras | APAE BRASIL",
+      },
+      {
+        property: "og:description",
+        content: "Palestras sobre inclusão social, educação, saúde e cidadania.",
+      },
+      {
+        property: "og:type",
+        content: "website",
+      },
+    ],
+  }),
   component: PalestrasPage,
 
   loader: async () => {
