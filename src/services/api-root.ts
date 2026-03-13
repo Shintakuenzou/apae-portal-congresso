@@ -3,7 +3,7 @@ import CryptoJs from "crypto-js";
 import axios, { type AxiosRequestHeaders, type InternalAxiosRequestConfig } from "axios";
 
 // ✅ URL real do Fluig (para OAuth)
-const FLUIG_BASE_URL = "https://federacaonacional201538.fluig.cloudtotvs.com.br";
+const FLUIG_BASE_URL = "https://federacaonacional130419.fluig.cloudtotvs.com.br";
 
 // ✅ Determina a base URL dependendo do ambiente
 const getBaseURL = () => {
