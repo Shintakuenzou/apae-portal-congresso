@@ -2,8 +2,8 @@ import OAuth from "oauth-1.0a";
 import CryptoJs from "crypto-js";
 import axios, { type AxiosRequestHeaders, type InternalAxiosRequestConfig } from "axios";
 
-// ✅ URL real do Fluig (para OAuth)
-const FLUIG_BASE_URL = "https://federacaonacional130419.fluig.cloudtotvs.com.br";
+// URL do Fluig (usada para assinar requisições OAuth em desenvolvimento)
+const FLUIG_BASE_URL = import.meta.env.VITE_BASE_URL as string;
 
 // ✅ Determina a base URL dependendo do ambiente
 const getBaseURL = () => {
@@ -31,8 +31,8 @@ const hashFunction = (baseString: string, key: string) => {
 
 const oauth = new OAuth({
   consumer: {
-    key: import.meta.env.VITE_CONSUMER_KEY_BASE_TESTE as string,
-    secret: import.meta.env.VITE_CONSUMER_SECRET_BASE_TESTE as string,
+    key: import.meta.env.VITE_CONSUMER_KEY as string,
+    secret: import.meta.env.VITE_CONSUMER_SECRET as string,
   },
   signature_method: "HMAC-SHA1",
   hash_function: hashFunction,
@@ -41,8 +41,8 @@ const oauth = new OAuth({
 // Retorna autenticação OAuth
 const getAuthorizationHeaders = async (url: string, method: string) => {
   const token = {
-    key: import.meta.env.VITE_ACCESS_TOKEN_BASE_TESTE as string,
-    secret: import.meta.env.VITE_TOKEN_SECRET_BASE_TESTE as string,
+    key: import.meta.env.VITE_ACCESS_TOKEN as string,
+    secret: import.meta.env.VITE_TOKEN_SECRET as string,
   };
 
   const requestData = {
