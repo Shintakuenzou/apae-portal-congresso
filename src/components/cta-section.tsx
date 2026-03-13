@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle } from "lucide-react";
 
 const benefits = ["Acesso completo a todas as palestras", "Material exclusivo do evento", "Certificado de participação", "Networking com profissionais"];
@@ -10,7 +11,7 @@ export function CTASection() {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">Garanta sua Vaga no Maior Evento do Movimento Apaeano</h2>
-            <p className="text-lg text-white/75 mb-8">
+            <p className="text-lg text-white/95 mb-8">
               Inscrições com desconto de 30% ate 30 de Junho de 2026. Não perca essa oportunidade única de fazer parte dessa transformação.
             </p>
 
@@ -18,17 +19,21 @@ export function CTASection() {
               {benefits.map((benefit, index) => (
                 <li key={index} className="flex items-center gap-3 text-white/85">
                   <CheckCircle className="h-5 w-5 text-violet-400" />
-                  <span>{benefit}</span>
+                  <span className="text-white/95 font-medium">{benefit}</span>
                 </li>
               ))}
             </ul>
 
             <div className="flex flex-col sm:flex-row items-start gap-4">
-              <Button asChild size="lg" className="bg-amber-400 hover:bg-amber-400/90 text-base text-violet-950 font-semibold h-14 px-8 shadow-lg hover:shadow-xl transition-all group">
-                <a href="/login">
+              <Button
+                asChild
+                size="lg"
+                className="bg-amber-400 hover:bg-amber-400/90 text-base text-violet-950 font-semibold h-14 px-8 shadow-lg hover:shadow-xl transition-all group"
+              >
+                <Link to="/login">
                   Inscreva-se agora
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </a>
+                </Link>
               </Button>
             </div>
           </div>
@@ -44,17 +49,17 @@ export function CTASection() {
 
               <div className="mt-8 pt-8 border-t border-white/20">
                 <div className="grid grid-cols-3 gap-4 text-center">
-                  <div>
+                  <div className="flex flex-col items-center">
                     <div className="text-2xl font-bold text-white">3</div>
-                    <div className="text-xs text-white/60">Dias</div>
+                    <div className="text-xs text-white/95 font-medium">Dias</div>
                   </div>
-                  <div>
+                  <div className="flex flex-col items-center">
                     <div className="text-2xl font-bold text-white">50+</div>
-                    <div className="text-xs text-white/60">Palestras</div>
+                    <div className="text-xs text-white/95 font-medium">Palestras</div>
                   </div>
-                  <div>
+                  <div className="flex flex-col items-center">
                     <div className="text-2xl font-bold text-white">100%</div>
-                    <div className="text-xs text-white/60">Acessivel</div>
+                    <div className="text-xs text-white/95 font-medium">Acessivel</div>
                   </div>
                 </div>
               </div>

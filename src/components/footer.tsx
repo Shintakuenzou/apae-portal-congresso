@@ -38,7 +38,7 @@ export function Footer() {
             </div>
 
             {/* Tagline */}
-            <p className="text-sm text-background/65 leading-relaxed text-justify flex">
+            <p className="text-sm text-muted leading-relaxed text-justify flex">
               O maior evento de inclusão social do Brasil. Transformando vidas por meio da educação, da saúde e da cidadania.
             </p>
 
@@ -71,7 +71,7 @@ export function Footer() {
               <li>
                 <div className="flex items-center gap-2 mb-1">
                   <Mail className="h-4 w-4 text-amber-400" />
-                  <span className="text-xs text-white/50 uppercase tracking-wide font-medium">E-mail</span>
+                  <span className="text-xs text-muted uppercase tracking-wide font-medium">E-mail</span>
                 </div>
                 <a
                   href="mailto:fenapaes@apaebrasil.org.br"
@@ -85,27 +85,12 @@ export function Footer() {
               <li className="border-t border-background/10 pt-4">
                 <div className="flex items-center gap-2 mb-1">
                   <Phone className="h-4 w-4 text-amber-400" />
-                  <span className="text-xs text-white/50 uppercase tracking-wide font-medium">Telefone</span>
+                  <span className="text-xs text-muted uppercase tracking-wide font-medium">Telefone</span>
                 </div>
                 <a href="tel:+556132249922" className="text-sm hover:text-amber-400 transition-colors pl-6">
                   (61) 3224-9922
                 </a>
               </li>
-
-              {/* Endereço */}
-              {/* <li className="border-t border-background/10 pt-4">
-                <div className="flex items-center gap-2 mb-1">
-                  <MapPin className="h-4 w-4 text-secondary flex-shrink-0" />
-                  <span className="text-xs text-background/50 uppercase tracking-wide font-medium">Endereço</span>
-                </div>
-                <address className="not-italic text-sm text-background/75 leading-relaxed pl-6">
-                  SDS Venâncio IV — Cobertura
-                  <br />
-                  CEP: 70393-903
-                  <br />
-                  Brasília — Distrito Federal
-                </address>
-              </li> */}
             </ul>
           </FooterCard>
 
@@ -122,15 +107,15 @@ export function Footer() {
 
                     {/* Cidade/Estado */}
                     <div className="flex items-center gap-1.5 text-background/60 text-xs">
-                      <MapPin className="h-3.5 w-3.5" />
-                      <span>
+                      <MapPin className="h-3.5 w-3.5 text-amber-400" />
+                      <span className="text-muted font-medium">
                         {item.fields.cidade} — {item.fields.estado}
                       </span>
                     </div>
 
                     {/* Data */}
                     <div className="border-t border-background/10 pt-3">
-                      <p className="text-xs text-background/50 mb-0.5 uppercase tracking-wide font-medium">Data</p>
+                      <p className="text-xs mb-0.5 uppercase tracking-wide font-medium text-muted">Data</p>
                       <p className="text-sm font-semibold text-amber-400">{formatThreeDayRangeSimple(item.fields.data_inicio, item.fields.data_fim)}</p>
                     </div>
                   </div>
@@ -143,10 +128,10 @@ export function Footer() {
         </div>
 
         {/* ── Rodapé inferior ── */}
-        <div className="mt-10 pt-6 border-t border-background/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-amber-200">
+        <div className="mt-10 pt-6 border-t border-background/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted">
           <p>© {new Date().getFullYear()} Federação Nacional das APAEs. Todos os direitos reservados.</p>
           <p className="flex items-center gap-1">
-            Desenvolvido pela Equipe de TI da Apae Brasil
+            Desenvolvido pela Equipe de TI da Federação Nacional das APAEs
             <ExternalLink className="h-3 w-3 opacity-60" />
           </p>
         </div>

@@ -60,7 +60,7 @@ export function Hero({ formatedDataEvento }: HeroProps) {
           )}
           {location && (
             <div className="flex items-center gap-2 bg-violet-950/5 px-4 py-2 rounded-full text-sm">
-              <MapPin className="h-4 w-4 text-violet-600" />
+              <MapPin className="h-4 w-4 text-violet-500" />
               <span className="font-medium">{location}</span>
             </div>
           )}
@@ -89,7 +89,9 @@ export function Hero({ formatedDataEvento }: HeroProps) {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-violet-600">{stat.value}</div>
-                <div className="text-xs sm:text-sm text-violet-600/60 mt-1">{stat.label}</div>
+                <div className="mt-1">
+                  <p className="text-xs sm:text-sm font-medium text-violet-950">{stat.label}</p>
+                </div>
               </CardContent>
             </Card>
           ))}
