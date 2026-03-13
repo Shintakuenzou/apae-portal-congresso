@@ -43,7 +43,7 @@ export function Hero({ formatedDataEvento }: HeroProps) {
     <section className="relative min-h-screen flex flex-col items-center bg-muted overflow-hidden">
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 flex flex-col items-center">
         {/* Logo centralizada no topo */}
-        <div className="flex justify-center w-full mb-10">
+        <div className="flex justify-center w-full">
           <img src={LogoCN} alt="Congresso Nacional das Apaes" className="w-48 sm:w-64 md:w-1/2 object-contain" />
         </div>
 

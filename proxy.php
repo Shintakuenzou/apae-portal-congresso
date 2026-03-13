@@ -15,9 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $config = [
     'consumer_key' => 'API_Key',
     'consumer_secret' => 'api_secret',
-    'token_access' => '449651ad-cd8d-43c3-9d62-10077e069db0',
-    'token_secret' => '7192d223-95d7-4a1e-8761-2c1b9efa50285872bb60-a38b-4045-b09b-d3e19d26f944',
-    'base_url' => 'https://federacaonacional201538.fluig.cloudtotvs.com.br'
+    'token_access' => '757990a6-0191-417d-b4e4-1d0e348a34b1',
+    'token_secret' => 'cbf09865-6f9d-48f5-af0c-1b9d7d8416831ec842a4-a1e3-4453-afcd-efab44db1532',
+    'base_url' => 'https://federacaonacional130419.fluig.cloudtotvs.com.br'
 ];
 
 $inputJSON = file_get_contents('php://input');

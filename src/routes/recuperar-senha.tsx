@@ -10,6 +10,31 @@ import BgLogin from "../../public/login-bg.png";
 import { formatCPF } from "@/utils/format-cpf";
 
 export const Route = createFileRoute("/recuperar-senha")({
+  head: () => ({
+    meta: [
+      { title: "Recuperar Senha | APAE BRASIL" },
+      {
+        name: "description",
+        content: "Recuperar senha no Congresso Nacional APAE Brasil 2026.",
+      },
+      {
+        name: "keywords",
+        content: "APAE, APAE BRASIL, recuperar senha, congresso",
+      },
+      {
+        property: "og:title",
+        content: "Recuperar Senha | APAE BRASIL",
+      },
+      {
+        property: "og:description",
+        content: "Recuperar senha no Congresso Nacional APAE Brasil 2026.",
+      },
+      {
+        property: "og:type",
+        content: "website",
+      },
+    ],
+  }),
   component: RedefinirSenhaPage,
 });
 
@@ -54,6 +79,23 @@ function RedefinirSenhaPage() {
     setIsLoading(false);
     setStep("success");
   };
+
+  function handleForgotPassword(cpf: string, email: string) {
+    const subject = encodeURIComponent("Solicitação de redefinição de senha — Congresso APAE Brasil 2026");
+    const body = encodeURIComponent(`Olá, equipe de suporte!
+    Gostaria de solicitar a redefinição de minha senha de acesso ao portal do Congresso APAE Brasil 2026.
+
+    Dados para identificação:
+    - CPF/Matrícula: ${cpf}
+    - E-mail cadastrado: ${email}
+
+    Aguardo orientações para redefinição.
+
+    Atenciosamente.`);
+
+    const url = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
+    window.open(url, "_blank");
+  }
 
   return (
     <div className="min-h-screen flex">
@@ -135,14 +177,19 @@ function RedefinirSenhaPage() {
                     <Input id="email" type="email" placeholder="seu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required className="h-12" />
                   </div>
 
-                  <Button type="submit" className="w-full h-12 bg-violet-600 hover:bg-violet-600/90 text-white font-semibold" disabled={isLoading}>
+                  <Button
+                    type="submit"
+                    className="w-full h-12 bg-violet-600 hover:bg-violet-600/90 text-white font-semibold"
+                    disabled={isLoading}
+                    onClick={() => handleForgotPassword(cpf, email)}
+                  >
                     {isLoading ? (
                       <span className="flex items-center gap-2">
                         <span className="h-4 w-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
                         Enviando...
                       </span>
                     ) : (
-                      "Enviar link de recuperacao"
+                      "Enviar"
                     )}
                   </Button>
                 </form>

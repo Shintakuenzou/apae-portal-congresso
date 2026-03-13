@@ -46,7 +46,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       const tokenData = responseLogin.items[0];
-      console.log("tokenData: ", tokenData);
 
       if (!tokenData?.token) {
         toast.warning("CPF ou senha incorretos.");
@@ -58,8 +57,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       const validated = responseValidation.items[0];
-
-      console.log("validated: ", validated);
 
       if (validated?.status !== "SUCCESS") {
         toast.warning("Erro ao realizar login, verifique CPF ou senha.");

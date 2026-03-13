@@ -119,7 +119,7 @@ function PalestrantesPage() {
                       <h3 className="font-semibold text-foreground mb-1">{palestrante.nome}</h3>
                       <p className="text-sm text-muted-foreground mb-3">{palestrante.empresa_faculdade}</p>
 
-                      <p className="text-sm text-muted-foreground leading-relaxed mb-4 text-justify">{palestrante.descricao}</p>
+                      <p className="text-sm text-muted-foreground leading-relaxed mb-4 text-justify lowercase">{palestrante.descricao}</p>
                     </div>
 
                     <div className="flex items-center justify-center gap-3">

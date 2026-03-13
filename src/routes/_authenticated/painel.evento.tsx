@@ -151,13 +151,11 @@ function RouteComponent() {
   }
 
   const handleToggleAtividade = async (novasAtividades: string[]) => {
-    const updateResponse = await handleUpdateFormParticipant({
+    await handleUpdateFormParticipant({
       documentId: import.meta.env.VITE_FORM_PARTICIPANTE as string,
       cardId: user!.documentid,
       values: [{ fieldId: "atividades", value: JSON.stringify(novasAtividades) }],
     });
-
-    console.log("updateResponse: ", updateResponse);
   };
 
   return (
