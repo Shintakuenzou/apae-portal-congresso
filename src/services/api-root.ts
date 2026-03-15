@@ -24,7 +24,7 @@ export const axiosApi = axios.create({
   },
 });
 
-// Funções e configurações OAuth 1.0a
+// ─── OAuth 1.0a ───────────────────────────────────────────────────────────────
 const hashFunction = (baseString: string, key: string) => {
   return CryptoJs.HmacSHA1(baseString, key).toString(CryptoJs.enc.Base64);
 };
@@ -38,48 +38,53 @@ const oauth = new OAuth({
   hash_function: hashFunction,
 });
 
-// Retorna autenticação OAuth
 const getAuthorizationHeaders = async (url: string, method: string) => {
   const token = {
     key: import.meta.env.VITE_ACCESS_TOKEN as string,
     secret: import.meta.env.VITE_TOKEN_SECRET as string,
   };
 
-  const requestData = {
-    url,
-    method,
-  };
-
-  return oauth.toHeader(oauth.authorize(requestData, token));
+  return oauth.toHeader(oauth.authorize({ url, method }, token));
 };
 
-// Interceptor de Requisição do Axios para OAuth 1.0a
+// ─── Interceptor de Requisição ────────────────────────────────────────────────
 axiosApi.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     const method = config.method ? config.method.toUpperCase() : "GET";
     const url = config.url || "";
 
     if (!import.meta.env.DEV) {
-      // ✅ Evita duplo encoding — só reescreve se ainda não for URL de proxy
-      if (!url.startsWith("?endpoint=") && !url.startsWith("/proxy.php")) {
-        const [path, existingQS] = url.split("?");
-        let proxyUrl = `/proxy.php?endpoint=${encodeURIComponent(path)}&method=${method}`;
-        if (existingQS) proxyUrl += `&${existingQS}`;
-        config.url = proxyUrl;
-      }
+      // ✅ Evita reescrever se já for URL de proxy
+      if (!url.startsWith("/proxy.php")) {
+        // Usa URL API para separar corretamente path e query string
+        const urlObj = new URL(url, "http://placeholder");
+        const path = urlObj.pathname;
 
-      // ✅ POST/PUT precisam manter o method real — não converte para GET
-      // O proxy lê o ?method=POST e usa como CURLOPT_CUSTOMREQUEST
+        // Monta os parâmetros do proxy corretamente
+        const proxyParams = new URLSearchParams();
+        proxyParams.set("endpoint", path);
+        proxyParams.set("method", method);
+
+        // Adiciona todos os query params originais
+        urlObj.searchParams.forEach((value, key) => {
+          proxyParams.set(key, value);
+        });
+
+        config.url = `/proxy.php?${proxyParams.toString()}`;
+      }
 
       return config;
     }
 
-    // DEV — OAuth direto
+    // ─── DEV: OAuth direto sem proxy ─────────────────────────────────────────
     const oauthURL = `${FLUIG_BASE_URL}${url}`;
     try {
       const authorizationHeader = await getAuthorizationHeaders(oauthURL, method);
-      config.headers = { ...(config.headers || {}), ...authorizationHeader } as AxiosRequestHeaders;
-    } catch (error) {
+      config.headers = {
+        ...(config.headers || {}),
+        ...authorizationHeader,
+      } as AxiosRequestHeaders;
+    } catch {
       return Promise.reject(new Error("Falha na autenticação OAuth 1.0a."));
     }
 
@@ -88,11 +93,9 @@ axiosApi.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-// Interceptor de resposta
+// ─── Interceptor de Resposta ──────────────────────────────────────────────────
 axiosApi.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
     console.error("❌ Response Error:", {
       status: error.response?.status,
