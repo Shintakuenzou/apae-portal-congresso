@@ -9,7 +9,6 @@ import { Clock, User, MapPin, Calendar, Filter } from "lucide-react";
 import { eachDayOfInterval, format, isSameDay, isWithinInterval, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { LoadingScreen } from "@/components/loading";
-import { useAuth } from "@/context/auth-context";
 import { fetchDataset } from "@/services/fetch-dataset";
 import type { ActivityFields, EventoFields } from "@/types";
 import type { VinculoFields } from "@/hooks/useVinculo";
@@ -69,11 +68,6 @@ export const Route = createFileRoute("/palestras")({
 function PalestrasPage() {
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const { atividade, vinculo_palestra_atividade, evento } = Route.useLoaderData();
-  const { isAuthenticated } = useAuth();
-
-  console.log(atividade);
-  console.log(vinculo_palestra_atividade);
-  console.log(evento);
 
   const isData = useMemo(() => {
     if (!atividade || !vinculo_palestra_atividade || !evento) {

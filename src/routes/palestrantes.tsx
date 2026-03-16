@@ -53,7 +53,6 @@ export const Route = createFileRoute("/palestrantes")({
 
 function PalestrantesPage() {
   const { palestrantes } = Route.useLoaderData();
-  console.log(palestrantes?.items);
 
   const [selectedCategory, setSelectedCategory] = useState("Todos");
 
