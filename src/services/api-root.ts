@@ -5,13 +5,11 @@ import axios, { type AxiosRequestHeaders, type InternalAxiosRequestConfig } from
 // URL do Fluig (usada para assinar requisições OAuth em desenvolvimento)
 const FLUIG_BASE_URL = "https://federacaonacional130419.fluig.cloudtotvs.com.br";
 
-// ✅ Determina a base URL dependendo do ambiente
+// Determina a base URL dependendo do ambiente
 const getBaseURL = () => {
   if (import.meta.env.DEV) {
-    // Em desenvolvimento, usa string vazia para Vite Proxy interceptar
     return "";
   }
-  // Em produção, usa o proxy.php
   return "https://congresso.apaebrasil.org.br";
 };
 
@@ -45,31 +43,29 @@ const getAuthorizationHeaders = async (url: string, method: string) => {
     secret: import.meta.env.VITE_TOKEN_SECRET as string,
   };
 
-  const requestData = {
-    url,
-    method,
-  };
-
-  return oauth.toHeader(oauth.authorize(requestData, token));
+  return oauth.toHeader(oauth.authorize({ url, method }, token));
 };
 
 // Interceptor de Requisição do Axios para OAuth 1.0a
 axiosApi.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     const method = config.method ? config.method.toUpperCase() : "GET";
-    const url = config.url || "";
+
+    // ✅ Guarda: se não tiver URL, deixa passar sem modificar
+    if (!config.url) {
+      return config;
+    }
+
+    const url = config.url;
 
     if (!import.meta.env.DEV) {
-      // ✅ Evita duplo encoding — só reescreve se ainda não for URL de proxy
+      // Evita duplo encoding — só reescreve se ainda não for URL de proxy
       if (!url.startsWith("?endpoint=") && !url.startsWith("/proxy.php")) {
         const [path, existingQS] = url.split("?");
         let proxyUrl = `/proxy.php?endpoint=${encodeURIComponent(path)}&method=${method}`;
         if (existingQS) proxyUrl += `&${existingQS}`;
         config.url = proxyUrl;
       }
-
-      // ✅ POST/PUT precisam manter o method real — não converte para GET
-      // O proxy lê o ?method=POST e usa como CURLOPT_CUSTOMREQUEST
 
       return config;
     }
@@ -90,9 +86,7 @@ axiosApi.interceptors.request.use(
 
 // Interceptor de resposta
 axiosApi.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
     console.error("❌ Response Error:", {
       status: error.response?.status,
