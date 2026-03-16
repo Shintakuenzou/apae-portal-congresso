@@ -14,8 +14,8 @@ export function usePalestrantes(event_id?: string) {
     });
   }
 
-  const { data: palestrantes } = useQuery({
-    queryKey: ["palestrantes"],
+  const { data: palestrantes, isLoading } = useQuery({
+    queryKey: ["palestrantes", event_id],
     queryFn: async () =>
       await fetchDataset<PalestranteFields>({
         datasetId: "cadPalestranteCN",
@@ -23,5 +23,5 @@ export function usePalestrantes(event_id?: string) {
       }),
   });
 
-  return { palestrantes };
+  return { palestrantes, isLoading };
 }

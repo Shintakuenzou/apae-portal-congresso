@@ -5,8 +5,7 @@ import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Link } from "@tanstack/react-router";
-import { Clock, User, MapPin, Calendar, ArrowRight, Filter } from "lucide-react";
+import { Clock, User, MapPin, Calendar, Filter } from "lucide-react";
 import { eachDayOfInterval, format, isSameDay, isWithinInterval, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { LoadingScreen } from "@/components/loading";
@@ -44,17 +43,26 @@ export const Route = createFileRoute("/palestras")({
   component: PalestrasPage,
 
   loader: async () => {
-    const [atividade, vinculo_palestra_atividade, evento] = await Promise.all([
-      fetchDataset<ActivityFields>({ datasetId: import.meta.env.VITE_DATASET_ATIVIDADE as string }),
-      fetchDataset<VinculoFields>({ datasetId: import.meta.env.VITE_DATASET_VINCULO_PALESTRA_ATIVIDADE as string }),
-      fetchDataset<EventoFields>({ datasetId: import.meta.env.VITE_DATASET_EVENTO as string }),
-    ]);
+    try {
+      const [atividade, vinculo_palestra_atividade, evento] = await Promise.all([
+        fetchDataset<ActivityFields>({ datasetId: import.meta.env.VITE_DATASET_ATIVIDADE as string }),
+        fetchDataset<VinculoFields>({ datasetId: import.meta.env.VITE_DATASET_VINCULO_PALESTRA_ATIVIDADE as string }),
+        fetchDataset<EventoFields>({ datasetId: import.meta.env.VITE_DATASET_EVENTO as string }),
+      ]);
 
-    return {
-      atividade,
-      vinculo_palestra_atividade,
-      evento,
-    };
+      return {
+        atividade,
+        vinculo_palestra_atividade,
+        evento,
+      };
+    } catch (error) {
+      console.error("Erro ao carregar dados:", error);
+      return {
+        atividade: null,
+        vinculo_palestra_atividade: null,
+        evento: null,
+      };
+    }
   },
 });
 
@@ -62,6 +70,17 @@ function PalestrasPage() {
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const { atividade, vinculo_palestra_atividade, evento } = Route.useLoaderData();
   const { isAuthenticated } = useAuth();
+
+  console.log(atividade);
+  console.log(vinculo_palestra_atividade);
+  console.log(evento);
+
+  const isData = useMemo(() => {
+    if (!atividade || !vinculo_palestra_atividade || !evento) {
+      return false;
+    }
+    return true;
+  }, [atividade, vinculo_palestra_atividade, evento]);
 
   const eventoDatas = useMemo(() => {
     if (!evento || evento.items.length === 0) {
@@ -110,7 +129,7 @@ function PalestrasPage() {
     return [...new Set(atividadeComPalestrantes.map((atividade) => atividade.eixo))];
   }, [atividadeComPalestrantes]);
 
-  if (atividadesFiltradas.length == 0) {
+  if (!isData) {
     return <LoadingScreen />;
   }
 
@@ -129,6 +148,7 @@ function PalestrasPage() {
       </section>
 
       {/* Schedule Section */}
+
       <section className="py-16 bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Day Tabs */}
@@ -140,7 +160,7 @@ function PalestrasPage() {
                   key={index}
                   variant={estaSelecionado ? "default" : "outline"}
                   onClick={() => setSelectedDate(data)}
-                  className={`cursor-pointer ${estaSelecionado ? "bg-violet-600 text-white" : ""}`}
+                  className={`cursor-pointer ${estaSelecionado ? "bg-violet-600 text-white hover:bg-violet-600/90" : ""}`}
                 >
                   <Calendar className="h-4 w-4 mr-2" />
                   <span className="hidden sm:inline">{format(data, "PPP", { locale: ptBR })}</span>
@@ -177,7 +197,7 @@ function PalestrasPage() {
           <div className="space-y-4">
             {atividadesFiltradas.length === 0 ? (
               <div className="text-center py-12">
-                <p className="text-muted-foreground">Nenhuma atividade encontrada para este filtro.</p>
+                <p className="text-muted-foreground">Nenhum palestrante cadastrado no momento!</p>
               </div>
             ) : (
               atividadesFiltradas.map((atividade, index) => {
@@ -220,17 +240,6 @@ function PalestrasPage() {
                 );
               })
             )}
-          </div>
-
-          {/* CTA */}
-          <div className="mt-16 text-center">
-            <p className="text-muted-foreground mb-6">Garanta sua vaga e participe de todas as atividades do congresso.</p>
-            <Button asChild size="lg" className="group">
-              <Link to={isAuthenticated ? "/painel" : "/login"}>
-                Inscreva-se Agora
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </Button>
           </div>
         </div>
       </section>

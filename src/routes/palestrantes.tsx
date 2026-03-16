@@ -4,10 +4,12 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { usePalestrantes } from "@/hooks/usePalestrantes";
 import { Filter, Instagram, Linkedin } from "lucide-react";
 import { EmptyState } from "@/components/empty-state";
 import { useMemo, useState } from "react";
+import { SkeletonSpeakersGrid } from "@/components/skeleton-speaker-card";
+import { fetchDataset } from "@/services/fetch-dataset";
+import type { PalestranteFields } from "@/types";
 
 export const Route = createFileRoute("/palestrantes")({
   head: () => ({
@@ -35,11 +37,23 @@ export const Route = createFileRoute("/palestrantes")({
       },
     ],
   }),
+  loader: async () => {
+    try {
+      const palestrantes = await fetchDataset<PalestranteFields>({
+        datasetId: import.meta.env.VITE_DATASET_PALESTRANTE as string,
+      });
+      return { palestrantes };
+    } catch (error) {
+      console.error("Erro ao carregar dados:", error);
+      return { palestrantes: null };
+    }
+  },
   component: PalestrantesPage,
 });
 
 function PalestrantesPage() {
-  const { palestrantes } = usePalestrantes();
+  const { palestrantes } = Route.useLoaderData();
+  console.log(palestrantes?.items);
 
   const [selectedCategory, setSelectedCategory] = useState("Todos");
 
@@ -50,7 +64,7 @@ function PalestrantesPage() {
   }, [palestrantes]);
 
   const filtrarPalestrantes = useMemo(() => {
-    if (selectedCategory === "Todos") return palestrantes?.items;
+    if (selectedCategory == "Todos") return palestrantes?.items;
 
     return palestrantes?.items.filter((palestrante) => palestrante.eixo === selectedCategory);
   }, [selectedCategory]);
@@ -69,7 +83,12 @@ function PalestrantesPage() {
       </section>
 
       <section className="py-16">
-        {palestrantes?.items?.length == 0 ? (
+        {/* Carregando: exibe grid de skeletons no lugar dos cards */}
+        {palestrantes == null ? (
+          <div className="mx-auto max-w-full px-10 sm:px-6 lg:px-8">
+            <SkeletonSpeakersGrid />
+          </div>
+        ) : palestrantes?.items?.length == 0 ? (
           <div className="px-5">
             <EmptyState
               type="no-users"
