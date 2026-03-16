@@ -39,8 +39,6 @@ export const Route = createFileRoute("/palestras")({
       },
     ],
   }),
-  component: PalestrasPage,
-
   loader: async () => {
     try {
       const [atividade, vinculo_palestra_atividade, evento] = await Promise.all([
@@ -63,6 +61,8 @@ export const Route = createFileRoute("/palestras")({
       };
     }
   },
+
+  component: PalestrasPage,
 });
 
 function PalestrasPage() {
@@ -102,7 +102,7 @@ function PalestrasPage() {
   const atividadeComPalestrantes = useMemo(() => {
     if (!atividade?.items || !vinculo_palestra_atividade?.items) return [];
 
-    return atividade?.items.map((atividade) => ({ ...atividade, palestrantes: vinculo_palestra_atividade.items.filter((v) => v.id_atividade === atividade.documentid) }));
+    return atividade?.items.map((atividade) => ({ ...atividade, palestrantes: vinculo_palestra_atividade.items.filter((v) => v.id_atividade == atividade.documentid) }));
   }, [atividade, vinculo_palestra_atividade]);
 
   const atividadesFiltradas = useMemo(() => {
@@ -189,9 +189,9 @@ function PalestrasPage() {
 
           {/* Schedule List */}
           <div className="space-y-4">
-            {atividadesFiltradas.length === 0 ? (
+            {atividadesFiltradas.length == 0 ? (
               <div className="text-center py-12">
-                <p className="text-muted-foreground">Nenhum palestrante cadastrado no momento!</p>
+                <p className="text-muted-foreground">Nenhuma atividade cadastrada no momento!</p>
               </div>
             ) : (
               atividadesFiltradas.map((atividade, index) => {
