@@ -199,6 +199,7 @@ function InscricaoPage() {
           { fieldId: "cep", value: data.cep || "" },
           { fieldId: "status", value: data.status || "" },
           { fieldId: "atividades", value: JSON.stringify(data.atividades) || "" },
+          { fieldId: "criado_por", value: data.nome + " " + data.sobrenome },
         ],
       });
       localStorage.setItem("atividades", JSON.stringify(data.atividades));

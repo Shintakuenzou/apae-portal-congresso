@@ -149,15 +149,15 @@ function RouteComponent() {
           { fieldId: "id_evento", value: evento.items[0].documentid as string },
           { fieldId: "nome_evento", value: evento.items[0].titulo as string },
           { fieldId: "data_compra", value: new Date().toISOString() },
-          { fieldId: "atividades", value: JSON.stringify(atividadesAtuais) }, // ✅ stringify único
-          { fieldId: "status", value: "Pendente" },
+          { fieldId: "atividades", value: JSON.stringify(atividadesAtuais) },
         ],
       });
+      console.log("responsePedido: ", responsePedido);
 
       const email = user?.email ?? "";
       const titulo = eventoSelecionado?.nome ?? "";
       const preco = 0.01;
-      const refId = responsePedido.values;
+      const refId = responsePedido.cardId;
 
       const rawPayload = `${email}|${titulo}|${preco}|${refId}`;
       const payload = btoa(unescape(encodeURIComponent(rawPayload)));

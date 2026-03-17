@@ -2,11 +2,13 @@ import { Package, Calendar, CreditCard } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useAtividade } from "@/hooks/useAtividade";
+import { EmptyState } from "./empty-state";
 
 export type PurchaseStatus = "approved" | "pending" | "in_process" | "authorized" | "reject" | "cancelled" | "refunded" | "charged_back";
 
 export interface Purchase {
-  atividades: string; // JSON string com array de nomes: { atividades: string[] }
+  atividades: string;
   nome_evento: string;
   id_evento: string;
   id_lote: string;
@@ -44,18 +46,23 @@ function formatDate(dateString: string): string {
 function parseAtividades(raw: string): string[] {
   try {
     const parsed = JSON.parse(raw);
-    // Suporta tanto { atividades: [...] } quanto [...] direto
     return Array.isArray(parsed) ? parsed : (parsed?.atividades ?? []);
   } catch {
     return [];
   }
 }
 
-export function PurchaseHistoryCard({ purchase, onViewDetails, className }: PurchaseHistoryCardProps) {
+export function PurchaseHistoryCard({ purchase, className }: PurchaseHistoryCardProps) {
   const atividades = parseAtividades(purchase.atividades);
 
+  const { atividades: atividadesData } = useAtividade();
+
+  const selectedActivities = atividadesData?.items.filter((activitie) => {
+    return atividades.includes(String(activitie.documentid));
+  });
+
   return (
-    <Card className={cn("group cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/20", className)} onClick={() => onViewDetails?.(purchase)}>
+    <Card className={cn("group cursor-auto transition-all duration-200 hover:shadow-md hover:border-primary/20", className)}>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -80,18 +87,14 @@ export function PurchaseHistoryCard({ purchase, onViewDetails, className }: Purc
           {atividades.length > 0 && (
             <div className="flex items-center gap-3">
               <div className="flex -space-x-2">
-                {atividades.map((atividade, index) => (
-                  <div
-                    key={index}
-                    className="flex h-10 w-10 items-center justify-center rounded-lg border-2 border-background bg-muted text-xs font-medium"
-                    style={{ zIndex: atividades.length - index }}
-                    title={atividade}
-                  >
-                    {atividade.substring(0, 2).toUpperCase()}
-                  </div>
-                ))}
+                <ul>
+                  {selectedActivities?.map((activitie, index) => (
+                    <li key={index} className="list-disc ml-6">
+                      {activitie.titulo}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <span className="text-sm text-muted-foreground">{atividades.length === 1 ? atividades[0] : `${atividades.length} atividades`}</span>
             </div>
           )}
 
@@ -111,25 +114,18 @@ export function PurchaseHistoryCard({ purchase, onViewDetails, className }: Purc
 
 interface PurchaseHistoryListProps {
   purchases: Purchase[];
-  onViewDetails?: (purchase: Purchase) => void;
-  emptyMessage?: string;
   className?: string;
 }
 
-export function PurchaseHistoryList({ purchases, onViewDetails, emptyMessage = "Nenhuma compra encontrada", className }: PurchaseHistoryListProps) {
+export function PurchaseHistoryList({ purchases, className }: PurchaseHistoryListProps) {
   if (purchases.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center py-12 text-center">
-        <Package className="h-12 w-12 text-muted-foreground/50 mb-4" />
-        <p className="text-muted-foreground">{emptyMessage}</p>
-      </div>
-    );
+    return <EmptyState title="Nenhuma compra encontrada" description="Você ainda não realizou nenhuma compra." icon={Package} />;
   }
 
   return (
-    <div className={cn("flex flex-col gap-4", className)}>
-      {purchases.map((purchase) => (
-        <PurchaseHistoryCard key={purchase.id_lote} purchase={purchase} onViewDetails={onViewDetails} />
+    <div className={cn("col-span-3 space-y-3.5", className)}>
+      {purchases.map((purchase, index) => (
+        <PurchaseHistoryCard key={index} purchase={purchase} />
       ))}
     </div>
   );
