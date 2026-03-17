@@ -1,6 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { fetchDataset } from "@/services/fetch-dataset";
 import { PurchaseHistoryList, type Purchase } from "@/components/purchase-history-card";
+import { queryOptions, useQuery } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
+
+const purchaseHistory = queryOptions({
+  queryKey: ["purchase-history"],
+  queryFn: async () => {
+    const response = await fetchDataset<Purchase>({
+      datasetId: import.meta.env.VITE_DATASET_PEDIDO as string,
+    });
+    return response.items;
+  },
+});
 
 export const Route = createFileRoute("/_authenticated/painel/historico")({
   head: () => ({
@@ -10,29 +22,23 @@ export const Route = createFileRoute("/_authenticated/painel/historico")({
       },
     ],
   }),
-  loader: async () => {
-    try {
-      const responsePedido = await fetchDataset<Purchase>({
-        datasetId: import.meta.env.VITE_DATASET_PEDIDO as string,
-      });
-      console.log("responsePedido: ", responsePedido);
-
-      return {
-        historicoCompras: responsePedido.items,
-      };
-    } catch (error) {
-      console.error("Erro ao carregar histórico de compras:", error);
-      return {
-        historicoCompras: [],
-      };
-    }
-  },
+  loader: async () => queryClient.ensureQueryData(purchaseHistory),
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { historicoCompras } = Route.useLoaderData();
+  const { data: historicoCompras } = useQuery<Purchase[]>({
+    queryKey: ["purchase"],
+    queryFn: async () => {
+      const response = await fetchDataset<Purchase>({
+        datasetId: import.meta.env.VITE_DATASET_PEDIDO as string,
+      });
+      return response.items;
+    },
+    refetchInterval: 1000 * 60 * 5,
+    refetchOnWindowFocus: true,
+  });
   console.log("historicoCompras: ", historicoCompras);
 
-  return <PurchaseHistoryList purchases={historicoCompras} />;
+  return <PurchaseHistoryList purchases={historicoCompras ?? []} />;
 }

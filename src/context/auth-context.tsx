@@ -25,7 +25,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       clearAuthCookies();
     }
 
-    setIsLoading(false);
+    const storedUser = sessionStorage.getItem("user");
+    if (storedUser) setUser(JSON.parse(storedUser));
   }, []);
 
   const login = async (cpf: string, pass: string): Promise<void> => {
@@ -63,6 +64,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       setAuthCookie(tokenData.token, validated.exp);
+      sessionStorage.setItem(
+        "user",
+        JSON.stringify({
+          cpf: cpf,
+          apaeFiliada: tokenData.apae_filiada,
+          nome: tokenData.nome,
+          email: tokenData.email,
+          telefone: tokenData.telefone_contato,
+          municipio: tokenData.municipio,
+          uf: tokenData.uf,
+          data_nascimento: tokenData.data_nascimento,
+          escolaridade: tokenData.escolaridade,
+          whatsapp: tokenData.whatsapp,
+          sobrenome: tokenData.sobrenome,
+          inscricao: tokenData.ref_id,
+          tamanho_camiseta: tokenData.tamanho_camiseta,
+          documentid: tokenData.documentid,
+          dataInscricao: tokenData.dataInscricao,
+          presidente_apae: tokenData.presidente_apae,
+          cep: tokenData.cep,
+          funcao: tokenData.funcao,
+          area_atuacao: tokenData.area_atuacao,
+          possui_deficiencia: tokenData.possui_deficiencia,
+          necessita_apoio: tokenData.necessita_apoio,
+          coordenacao: tokenData.coordenacao,
+          atividades: tokenData.atividades,
+        }),
+      );
 
       setUser({
         cpf: cpf,
@@ -89,6 +118,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         coordenacao: tokenData.coordenacao,
         atividades: tokenData.atividades,
       });
+
       setIsAuthemticated(true);
     } catch (error) {
       console.error("Erro ao fazer login:", error);
@@ -100,6 +130,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     clearAuthCookies();
+    sessionStorage.removeItem("user");
     setIsAuthemticated(false);
   };
 

@@ -80,7 +80,10 @@ export function SwitchChoiceCard({
       });
 
       if (conflito) {
-        toast.error(`Conflito de horário com a atividade "${conflito.titulo}" (${conflito.hora_inicio} - ${conflito.hora_fim})`, { position: "top-right" });
+        toast.error(`Conflito de horário com a atividade "${conflito.titulo}" (${conflito.hora_inicio} - ${conflito.hora_fim})`, {
+          position: "top-center",
+          style: { width: "550px", height: "auto", fontSize: "0.85rem" },
+        });
         return;
       }
 
