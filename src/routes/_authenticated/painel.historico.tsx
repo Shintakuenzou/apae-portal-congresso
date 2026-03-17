@@ -1,39 +1,38 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { EmptyState } from "@/components/empty-state";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { OrderCard } from "@/components/painel/historico/order-card";
+import { fetchDataset } from "@/services/fetch-dataset";
+import { PurchaseHistoryList, type Purchase } from "@/components/purchase-history-card";
 
 export const Route = createFileRoute("/_authenticated/painel/historico")({
+  head: () => ({
+    meta: [
+      {
+        title: "Histórico de Compras - Painel",
+      },
+    ],
+  }),
+  loader: async () => {
+    try {
+      const responsePedido = await fetchDataset<Purchase>({
+        datasetId: import.meta.env.VITE_DATASET_PEDIDO as string,
+      });
+      console.log("responsePedido: ", responsePedido);
+
+      return {
+        historicoCompras: responsePedido.items,
+      };
+    } catch (error) {
+      console.error("Erro ao carregar histórico de compras:", error);
+      return {
+        historicoCompras: [],
+      };
+    }
+  },
   component: RouteComponent,
 });
 
-const historicoCompras: any = [];
-
 function RouteComponent() {
-  const [compraSelecionada, setCompraSelecionada] = useState<any>();
+  const { historicoCompras } = Route.useLoaderData();
+  console.log("historicoCompras: ", historicoCompras);
 
-  return (
-    <>
-      {!compraSelecionada && (
-        <Card className="col-span-4 lg:col-span-3">
-          <CardHeader>
-            <CardTitle className="text-xl">Histórico de Compras</CardTitle>
-            <p className="text-sm text-muted-foreground">Acompanhe todas as suas compras e status de pagamento</p>
-          </CardHeader>
-
-          <CardContent className="space-y-4">
-            {historicoCompras.length === 0 ? (
-              <div className="text-center py-12">
-                <EmptyState title="Nenhum histórico de compras no momento" description="" type="no-data" />
-              </div>
-            ) : (
-              historicoCompras.map((compra: any) => <OrderCard key={compra.id} compra={compra} onClick={setCompraSelecionada} />)
-            )}
-          </CardContent>
-        </Card>
-      )}
-    </>
-  );
+  return <PurchaseHistoryList purchases={historicoCompras} />;
 }

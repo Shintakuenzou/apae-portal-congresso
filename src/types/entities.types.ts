@@ -44,10 +44,11 @@ export interface EventoFields {
   tipo_evento: string;
   titulo: string;
   datas: string[];
+  documentid: string;
 }
 
 export interface LoteFields {
-  documentId: any;
+  documentid: any;
   anonymization_date: string;
   anonymization_user_id: string;
   data_fim_vendas: string;
@@ -62,6 +63,7 @@ export interface LoteFields {
   publico_privado: string;
   quantidade: string;
   id_evento: string;
+  status: string;
 }
 
 export interface ActivityFields {

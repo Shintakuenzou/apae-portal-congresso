@@ -8,8 +8,7 @@ interface ImportMetaEnv {
   readonly VITE_BASE_URL_PROD?: string;
   readonly VITE_DATASET_PALESTRANTE?: string;
   readonly VITE_FORM_EVENTO?: string;
-  readonly VITE_FORM_EVENTO?: string;
-  readonly VITE_FORM_LOTES?: string;
+  readonly VITE_DATASET_LOTE?: string;
   readonly VITE_FORM_ATIVIDADE?: string;
   readonly VITE_FORM_VINCULO_PALESTRANTE_ATIVIDADE?: string;
   readonly VITE_FORM_PARCEIROS?: string;
@@ -19,6 +18,8 @@ interface ImportMetaEnv {
   readonly VITE_DATASET_PARTICIPANTE?: string;
   readonly VITE_DATASET_DS_LOGIN?: string;
   readonly VITE_DATASET_DS_VALIDATE_TOKEN?: string;
+  readonly VITE_DATASET_PEDIDO?: string;
+  readonly VITE_FORM_PEDIDO?: string;
 }
 interface ImportMeta {
   readonly env: ImportMetaEnv;

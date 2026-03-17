@@ -51,17 +51,17 @@ export function Hero({ formatedDataEvento }: HeroProps) {
         <p className="mt-6 text-base sm:text-lg text-violet-950/75 leading-relaxed text-center max-w-2xl lowercase">{description}</p>
 
         {/* Data e local */}
-        <div className="mt-8 flex flex-wrap justify-center items-center gap-4 text-violet-950/70">
+        <div className="mt-8 flex flex-wrap justify-center items-center gap-4">
           {date && (
             <div className="flex items-center gap-2 bg-violet-950/5 px-4 py-2 rounded-full text-sm">
               <Calendar className="h-4 w-4 text-violet-600" />
-              <span className="font-medium">{date}</span>
+              <span className="font-medium text-violet-950">{date}</span>
             </div>
           )}
           {location && (
             <div className="flex items-center gap-2 bg-violet-950/5 px-4 py-2 rounded-full text-sm">
               <MapPin className="h-4 w-4 text-violet-500" />
-              <span className="font-medium">{location}</span>
+              <span className="font-medium text-violet-950">{location}</span>
             </div>
           )}
         </div>

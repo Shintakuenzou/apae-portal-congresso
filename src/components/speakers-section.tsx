@@ -21,7 +21,7 @@ export function SpeakersSection() {
           <div>
             <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium bg-violet-950 text-white mb-4">Palestrantes</span>
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4 text-balance">Conheça Nossos Palestrantes</h2>
-            <p className="text-muted-foreground max-w-xl">Profissionais renomados que compartilharão conhecimento e experiências sobre inclusão e deficiência.</p>
+            <p className="text-zinc-900 font-medium max-w-xl">Profissionais renomados que compartilharão conhecimento e experiências sobre inclusão e deficiência.</p>
           </div>
           <Button variant="outline" className="self-start md:self-auto group bg-transparent hover:bg-transparent" asChild>
             <Link to="/palestrantes">
@@ -38,7 +38,7 @@ export function SpeakersSection() {
               className="group border-border hover:border-violet-600/30 hover:shadow-lg transition-all duration-300 overflow-hidden hover:scale-105 cursor-pointer bg-zinc-100/10"
               onClick={() => setSelectedImage(index)}
             >
-              <div className="flex flex-col items-center p-6 text-center h-full">
+              <div className="flex flex-col items-center p-6 text-center h-full space-y-2.5">
                 <div className="w-40 h-40 rounded-full overflow-hidden ring-4 ring-violet-600/10 shadow-md shrink-0">
                   <img
                     src={speaker.url_foto || "/placeholder.svg"}
@@ -53,7 +53,7 @@ export function SpeakersSection() {
                   <p className="text-xs text-muted-foreground capitalize">{speaker.empresa_faculdade}</p>
                 </div>
 
-                <Badge variant="secondary" className="text-[10px] mt-auto">
+                <Badge variant="secondary" className="text-sm mt-auto bg-violet-950 text-white">
                   Palestrante
                 </Badge>
               </div>

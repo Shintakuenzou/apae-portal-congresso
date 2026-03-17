@@ -11,7 +11,7 @@ export function GallerySection() {
           <div>
             <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium bg-violet-950 text-white mb-4">Galeria</span>
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4 text-balance">Galeria de fotos</h2>
-            <p className="text-muted-foreground max-w-xl">Reviva os melhores momentos dos eventos anteriores e prepare-se para o Congresso 2026.</p>
+            <p className="text-zinc-900 font-medium max-w-xl">Reviva os melhores momentos dos eventos anteriores e prepare-se para o Congresso 2023.</p>
           </div>
           <Button variant="outline" className="self-start md:self-auto group bg-transparent hover:bg-transparent" asChild>
             <Link to="/galeria">
