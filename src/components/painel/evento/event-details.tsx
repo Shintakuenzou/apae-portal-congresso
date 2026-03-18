@@ -1,4 +1,4 @@
-import { ArrowRight, Calendar, Circle, Filter, ShoppingCart } from "lucide-react";
+import { ArrowRight, Calendar, Circle, Filter, ShoppingCart, AlertCircle } from "lucide-react";
 import { format, isSameDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Card, CardContent } from "@/components/ui/card";
@@ -24,6 +24,7 @@ interface EventDetailsProps {
   atividadesFiltradas: any[];
   isProcessingPayment: boolean;
   updateUser: (user: User) => void;
+  validacaoHorarios: { valido: boolean; mensagem: string };
 }
 
 export function EventDetails({
@@ -40,6 +41,7 @@ export function EventDetails({
   atividadesFiltradas,
   isProcessingPayment,
   updateUser,
+  validacaoHorarios,
 }: EventDetailsProps) {
   return (
     <div className="space-y-6">
@@ -120,6 +122,7 @@ export function EventDetails({
                         eventoDatas={eventoDatas}
                         user={user}
                         updateUser={updateUser}
+                        selectedDate={selectedDate}
                       />
                     ) : (
                       <SkeletonCard />
@@ -132,13 +135,25 @@ export function EventDetails({
 
           <Separator />
 
+          {/* ✅ NOVO: Alerta de validação */}
+          {!validacaoHorarios.valido && (
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 flex gap-3">
+              <AlertCircle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="font-semibold text-amber-900">Horários incompletos</p>
+                <p className="text-sm text-amber-800">{validacaoHorarios.mensagem}</p>
+              </div>
+            </div>
+          )}
+
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
               <p className="text-sm text-muted-foreground">Valor do ingresso</p>
               <p className="text-3xl font-bold text-violet-600">{evento.preco}</p>
               <p className="text-sm text-muted-foreground">{evento.quantidade} vagas disponiveis</p>
             </div>
-            <Button size="lg" className="w-full sm:w-auto cursor-pointer" onClick={onPayment}>
+            {/* ✅ BOTÃO DESABILITADO SE HORÁRIOS NÃO ESTÃO PREENCHIDOS */}
+            <Button size="lg" className="w-full sm:w-auto cursor-pointer" onClick={onPayment} disabled={isProcessingPayment}>
               {isProcessingPayment ? (
                 <>
                   <Circle className="h-5 w-5 mr-2 animate-spin" />
@@ -147,7 +162,7 @@ export function EventDetails({
               ) : (
                 <>
                   <ShoppingCart className="h-5 w-5 mr-2" />
-                  Comprar Ingresso
+                  {validacaoHorarios.valido ? "Comprar Ingresso" : "Complete os horários"}
                 </>
               )}
             </Button>

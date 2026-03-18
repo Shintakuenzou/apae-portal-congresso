@@ -10,12 +10,16 @@ import { AvailableEvents } from "@/components/painel/evento/available-events";
 import { EventDetails } from "@/components/painel/evento/event-details";
 import { toast } from "sonner";
 import type { Payment } from "@/types/payment-type";
+import type { Purchase } from "@/components/purchase-history-card";
+import { validarHorariosPreenchidos } from "@/utils/validation-helper";
+import type { FluigPostResponse } from "@/types";
 
 interface LoaderData {
   atividade: { items: ActivityFields[]; hasNext?: boolean };
   vinculo_palestra_atividade: { items: VinculoFields[]; hasNext?: boolean };
   evento: { items: EventoFields[]; hasNext?: boolean };
   activeLote: LoteFields[];
+  orders: { items: Purchase[]; hasNext?: boolean };
 }
 
 const defaultLoaderData: LoaderData = {
@@ -23,6 +27,7 @@ const defaultLoaderData: LoaderData = {
   vinculo_palestra_atividade: { items: [] },
   evento: { items: [] },
   activeLote: [],
+  orders: { items: [] },
 };
 
 // ✅ Helper: garante que atividades seja sempre string[]
@@ -66,11 +71,16 @@ export const Route = createFileRoute("/_authenticated/painel/evento")({
         datasetId: import.meta.env.VITE_DATASET_VINCULO_PALESTRA_ATIVIDADE as string,
       });
 
+      const orders = await fetchDataset<Purchase>({
+        datasetId: import.meta.env.VITE_DATASET_PEDIDO as string,
+      });
+
       return {
         atividade,
         vinculo_palestra_atividade,
         evento,
         activeLote,
+        orders,
       };
     } catch (error) {
       console.error("Erro ao carregar dados:", error);
@@ -84,10 +94,14 @@ export const Route = createFileRoute("/_authenticated/painel/evento")({
 
 function RouteComponent() {
   const { user, updateUser } = useAuth();
-  const { atividade, evento, vinculo_palestra_atividade, activeLote } = Route.useLoaderData();
+  const { atividade, evento, vinculo_palestra_atividade, activeLote, orders } = Route.useLoaderData();
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const [eventoSelecionado, setEventoSelecionado] = useState<LoteFields | null>(null);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+
+  const filterOrderByUserId = orders.items.filter((order) => order.id_participante == user?.documentid);
+
+  console.log("filterOrderByUserId: ", filterOrderByUserId);
 
   const eventoDatas = useMemo(() => {
     if (!evento.items || evento.items.length === 0) return [];
@@ -134,55 +148,108 @@ function RouteComponent() {
     return [...new Set(atividadeComPalestrantes.map((atividade) => atividade.eixo))];
   }, [atividadeComPalestrantes]);
 
+  // ✅ NOVA VALIDAÇÃO: Verifica se todos os horários do dia estão preenchidos
+  const validacaoHorarios = useMemo(() => {
+    const atividadesAtuais = parseAtividades(user?.atividades);
+
+    // Filtra apenas as atividades selecionadas do dia atual
+    const atividadesDoDiaSelecionado = atividadeComPalestrantes.filter((atividade) => {
+      const estaNoIntervalo = selectedDate
+        ? isWithinInterval(selectedDate, {
+            start: `${atividade.data_inicio}`,
+            end: `${atividade.data_fim}T${atividade.hora_fim}`,
+          })
+        : false;
+      return estaNoIntervalo && atividadesAtuais.includes(String(atividade.documentid));
+    });
+
+    // Define horários do evento (você pode ajustar conforme necessário)
+    const horaInicio = "08:00"; // Ajuste conforme seu evento
+    const horaFim = "18:00"; // Ajuste conforme seu evento
+
+    return validarHorariosPreenchidos(atividadesDoDiaSelecionado, horaInicio, horaFim);
+  }, [user?.atividades, atividadeComPalestrantes, selectedDate]);
+
   async function handlePayment() {
+    // ✅ VALIDAÇÃO ANTES DO PAGAMENTO
+    // if (!validacaoHorarios.valido) {
+    //   toast.error(validacaoHorarios.mensagem, {
+    //     position: "top-center",
+    //     style: { width: "550px", height: "auto", fontSize: "0.85rem" },
+    //   });
+    //   return;
+    // }
+
     setIsProcessingPayment(true);
 
     try {
-      // ✅ Garante array limpo antes de salvar no pedido
       const atividadesAtuais = parseAtividades(user?.atividades);
 
-      const responsePedido = await handlePostFormParticipant({
-        documentId: import.meta.env.VITE_FORM_PEDIDO as string,
-        values: [
-          { fieldId: "id_participante", value: user?.documentid as string },
-          { fieldId: "id_lote", value: eventoSelecionado?.documentid as string },
-          { fieldId: "id_evento", value: evento.items[0].documentid as string },
-          { fieldId: "nome_evento", value: evento.items[0].titulo as string },
-          { fieldId: "data_compra", value: new Date().toISOString() },
-          { fieldId: "atividades", value: JSON.stringify(atividadesAtuais) },
-        ],
-      });
-      console.log("responsePedido: ", responsePedido);
+      let responsePedido: FluigPostResponse | null = null;
 
-      const email = user?.email ?? "";
-      const titulo = eventoSelecionado?.nome ?? "";
-      const preco = 0.01;
-      const refId = responsePedido.cardId;
+      for (const atividade of atividadesAtuais) {
+        const activity_id_to_string = String(atividade);
 
-      const rawPayload = `${email}|${titulo}|${preco}|${refId}`;
-      const payload = btoa(unescape(encodeURIComponent(rawPayload)));
+        responsePedido = await handlePostFormParticipant({
+          documentId: import.meta.env.VITE_FORM_PEDIDO as string,
+          values: [
+            { fieldId: "id_participante", value: user?.documentid as string },
+            { fieldId: "id_lote", value: eventoSelecionado?.documentid as string },
+            { fieldId: "id_evento", value: evento.items[0].documentid as string },
+            { fieldId: "nome_evento", value: evento.items[0].titulo as string },
+            { fieldId: "data_compra", value: new Date().toISOString() },
+            { fieldId: "atividades", value: JSON.stringify(atividadesAtuais) },
+            { fieldId: "status", value: "pending" },
+          ],
+        });
 
-      const response = await fetchDataset<Payment>({
-        datasetId: "pagCN",
-        constraints: [
-          {
-            fieldName: "ref_id",
-            initialValue: payload,
-            finalValue: payload,
-            constraintType: "MUST",
-          },
-        ],
-      });
+        const responseVinculo = await handlePostFormParticipant({
+          documentId: import.meta.env.VITE_FORM_VINCULO_PARTICIPANTE_ATIVIDADE as string,
+          values: [
+            { fieldId: "id_participante", value: user?.documentid as string },
+            { fieldId: "id_atividade", value: activity_id_to_string },
+            { fieldId: "id_pedido", value: String(responsePedido.cardId) },
+            { fieldId: "criado_em", value: new Date().toISOString() },
+            { fieldId: "criado_por", value: user?.nome as string },
+            { fieldId: "id_evento", value: evento.items[0].documentid as string },
+            { fieldId: "status", value: "pending" },
+          ],
+        });
 
-      const item = response.items[0];
+        console.log("responseVinculo: ", responseVinculo);
+      }
 
-      if (item?.status === "SUCCESS") {
-        // ✅ Passa array limpo para o toggle
-        await handleToggleAtividade(atividadesAtuais);
-        toast.success("Compra processada com sucesso!");
-        window.open(item.init_point);
-      } else {
-        toast.error("Erro no pagamento, tente novamente ou entre em contato com o suporte");
+      if (responsePedido) {
+        const email = user?.email ?? "";
+        const titulo = eventoSelecionado?.nome ?? "";
+        const preco = eventoSelecionado?.preco;
+        const refId = responsePedido.cardId;
+
+        const rawPayload = `${email}|${titulo}|${preco}|${refId}`;
+        const payload = btoa(unescape(encodeURIComponent(rawPayload)));
+
+        const response = await fetchDataset<Payment>({
+          datasetId: "pagCN",
+          constraints: [
+            {
+              fieldName: "ref_id",
+              initialValue: payload,
+              finalValue: payload,
+              constraintType: "MUST",
+            },
+          ],
+        });
+
+        const item = response.items[0];
+
+        if (item?.status === "SUCCESS") {
+          // ✅ Passa array limpo para o toggle
+          await handleToggleAtividade(atividadesAtuais);
+          toast.success("Compra processada com sucesso!");
+          window.open(item.init_point);
+        } else {
+          toast.error("Erro no pagamento, tente novamente ou entre em contato com o suporte");
+        }
       }
     } catch (error) {
       console.error("Erro no pagamento:", error);
@@ -218,9 +285,10 @@ function RouteComponent() {
           atividadeCategorias={atividadeCategorias}
           atividadesFiltradas={atividadesFiltradas}
           updateUser={updateUser}
+          validacaoHorarios={validacaoHorarios}
         />
       ) : (
-        <AvailableEvents eventos={activeLote[0]} onSelectEvent={setEventoSelecionado} />
+        <AvailableEvents eventos={activeLote} onSelectEvent={setEventoSelecionado} />
       )}
     </div>
   );

@@ -20,6 +20,8 @@ interface ImportMetaEnv {
   readonly VITE_DATASET_DS_VALIDATE_TOKEN?: string;
   readonly VITE_DATASET_PEDIDO?: string;
   readonly VITE_FORM_PEDIDO?: string;
+  readonly VITE_DATASET_VINCULO_PARTICIPANTE_ATIVIDADE?: string;
+  readonly VITE_FORM_VINCULO_PARTICIPANTE_ATIVIDADE?: string;
 }
 interface ImportMeta {
   readonly env: ImportMetaEnv;

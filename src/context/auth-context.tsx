@@ -31,7 +31,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (cpf: string, pass: string): Promise<void> => {
     setIsLoading(true);
+
     const hash = await sha256(pass);
+    console.log(hash);
 
     try {
       const responseLogin = await fetchDataset<LoginResponseProps>({
@@ -48,6 +50,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const tokenData = responseLogin.items[0];
 
+      console.log(tokenData);
+
       if (!tokenData?.token) {
         toast.warning("CPF ou senha incorretos.");
       }
@@ -58,6 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       const validated = responseValidation.items[0];
+      console.log(validated);
 
       if (validated?.status !== "SUCCESS") {
         toast.warning("Erro ao realizar login, verifique CPF ou senha.");

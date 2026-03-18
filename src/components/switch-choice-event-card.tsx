@@ -19,7 +19,8 @@ interface SwitchChoiceCardProps {
   eventoDatas: EachDayOfIntervalResult<{ start: Date; end: Date }, undefined>;
   user: UserType | null;
   updateUser: (user: UserType) => void;
-  todasAtividades: any[]; // ✅ todas as atividades para checar conflitos
+  todasAtividades: any[];
+  selectedDate: Date | null;
 }
 
 // Converte "HH:mm" para minutos para comparar horários
@@ -50,6 +51,7 @@ export function SwitchChoiceCard({
   user,
   updateUser,
   todasAtividades,
+  selectedDate,
 }: SwitchChoiceCardProps) {
   const raw = user?.atividades as any;
 
@@ -112,10 +114,10 @@ export function SwitchChoiceCard({
         <Field orientation="horizontal">
           <FieldContent className="cursor-pointer">
             <div className="flex flex-col lg:flex-row">
-              <div className="lg:w-48 flex-shrink-0 bg-muted p-6 flex flex-col justify-center items-center">
+              <div className="lg:w-48 bg-muted p-6 flex flex-col justify-center items-center">
                 <div className="flex flex-col items-center gap-2 text-violet-600 font-semibold mb-1">
                   <Clock className="h-4 w-4" />
-                  <span>{format(eventoDatas[0], "dd/MM/yyyy")}</span>
+                  <span>{format(selectedDate!.toString(), "dd/MM/yyyy")}</span>
                   <span className="leading-relaxed text-sm font-medium">
                     {hora_inicio} até {hora_fim}
                   </span>

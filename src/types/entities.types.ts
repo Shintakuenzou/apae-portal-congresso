@@ -64,6 +64,7 @@ export interface LoteFields {
   quantidade: string;
   id_evento: string;
   status: string;
+  tipo_lote: string;
 }
 
 export interface ActivityFields {
