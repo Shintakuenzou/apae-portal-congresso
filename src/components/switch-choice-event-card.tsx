@@ -16,7 +16,7 @@ interface SwitchChoiceCardProps {
   hora_fim: string;
   data_inicio: string;
   eixo: string;
-  eventoDatas: EachDayOfIntervalResult<{ start: Date; end: Date }, undefined>;
+  eventoDatas?: EachDayOfIntervalResult<{ start: Date; end: Date }, undefined>;
   user: UserType | null;
   updateUser: (user: UserType) => void;
   todasAtividades: any[];
@@ -47,7 +47,6 @@ export function SwitchChoiceCard({
   data_inicio,
   palestrantes,
   documentId,
-  eventoDatas,
   user,
   updateUser,
   todasAtividades,
