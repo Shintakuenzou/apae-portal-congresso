@@ -3,6 +3,7 @@ import { fetchDataset } from "@/services/fetch-dataset";
 import { PurchaseHistoryList, type Purchase } from "@/components/purchase-history-card";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
+import { useAuth } from "@/context/auth-context";
 
 const purchaseHistory = queryOptions({
   queryKey: ["purchase-history"],
@@ -27,11 +28,14 @@ export const Route = createFileRoute("/_authenticated/painel/historico")({
 });
 
 function RouteComponent() {
+  const { user } = useAuth();
+
   const { data: historicoCompras } = useQuery<Purchase[]>({
     queryKey: ["purchase"],
     queryFn: async () => {
       const response = await fetchDataset<Purchase>({
         datasetId: import.meta.env.VITE_DATASET_PEDIDO as string,
+        constraints: [{ fieldName: "id_participante", initialValue: String(user?.documentid), finalValue: String(user?.documentid), constraintType: "MUST" }],
       });
       return response.items;
     },

@@ -185,23 +185,20 @@ function RouteComponent() {
     try {
       const atividadesAtuais = parseAtividades(user?.atividades);
 
-      let responsePedido: FluigPostResponse | null = null;
+      const responsePedido = await handlePostFormParticipant({
+        documentId: import.meta.env.VITE_FORM_PEDIDO as string,
+        values: [
+          { fieldId: "id_participante", value: user?.documentid as string },
+          { fieldId: "id_lote", value: eventoSelecionado?.documentid as string },
+          { fieldId: "id_evento", value: evento.items[0].documentid as string },
+          { fieldId: "nome_evento", value: evento.items[0].titulo as string },
+          { fieldId: "data_compra", value: new Date().toISOString() },
+          { fieldId: "status", value: "pending" },
+        ],
+      });
 
       for (const atividade of atividadesAtuais) {
         const activity_id_to_string = String(atividade);
-
-        responsePedido = await handlePostFormParticipant({
-          documentId: import.meta.env.VITE_FORM_PEDIDO as string,
-          values: [
-            { fieldId: "id_participante", value: user?.documentid as string },
-            { fieldId: "id_lote", value: eventoSelecionado?.documentid as string },
-            { fieldId: "id_evento", value: evento.items[0].documentid as string },
-            { fieldId: "nome_evento", value: evento.items[0].titulo as string },
-            { fieldId: "data_compra", value: new Date().toISOString() },
-            { fieldId: "atividades", value: JSON.stringify(atividadesAtuais) },
-            { fieldId: "status", value: "pending" },
-          ],
-        });
 
         const responseVinculo = await handlePostFormParticipant({
           documentId: import.meta.env.VITE_FORM_VINCULO_PARTICIPANTE_ATIVIDADE as string,
@@ -211,7 +208,7 @@ function RouteComponent() {
             { fieldId: "id_pedido", value: String(responsePedido.cardId) },
             { fieldId: "criado_em", value: new Date().toISOString() },
             { fieldId: "criado_por", value: user?.nome as string },
-            { fieldId: "id_evento", value: evento.items[0].documentid as string },
+            { fieldId: "id_evento", value: String(evento.items[0].documentid) },
             { fieldId: "status", value: "pending" },
           ],
         });
@@ -288,7 +285,7 @@ function RouteComponent() {
           validacaoHorarios={validacaoHorarios}
         />
       ) : (
-        <AvailableEvents eventos={activeLote} onSelectEvent={setEventoSelecionado} />
+        <AvailableEvents eventos={activeLote} filterOrderByUserId={filterOrderByUserId} onSelectEvent={setEventoSelecionado} />
       )}
     </div>
   );

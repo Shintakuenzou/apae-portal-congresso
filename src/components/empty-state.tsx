@@ -150,12 +150,17 @@ export function EmptyState({
       {(action || secondaryAction) && (
         <div className={cn("flex items-center gap-2", size === "sm" && "mt-1", size === "default" && "mt-2", size === "lg" && "mt-4")}>
           {action && (
-            <Button variant={action.variant || "default"} size={size === "sm" ? "sm" : "default"} onClick={action.onClick}>
+            <Button
+              variant={action.variant || "default"}
+              size={size === "sm" ? "sm" : "default"}
+              onClick={action.onClick}
+              className="bg-violet-600 hover:bg-violet-700 cursor-pointer"
+            >
               {action.label}
             </Button>
           )}
           {secondaryAction && (
-            <Button variant="ghost" size={size === "sm" ? "sm" : "default"} onClick={secondaryAction.onClick}>
+            <Button variant="ghost" size={size === "sm" ? "sm" : "default"} onClick={secondaryAction.onClick} className="cursor-pointer">
               {secondaryAction.label}
             </Button>
           )}

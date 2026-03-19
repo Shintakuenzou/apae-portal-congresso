@@ -5,6 +5,18 @@ import { TicketCard } from "@/components/painel/ticket-card";
 import { PendingTicket } from "@/components/painel/pending-ticket";
 
 export const Route = createFileRoute("/_authenticated/painel/ingresso")({
+  head: () => ({
+    meta: [
+      {
+        title: "Meu Ingresso - Congresso",
+      },
+      {
+        name: "description",
+        content: "Meu Ingresso - Congresso",
+      },
+    ],
+  }),
+  loader: async () => {},
   component: RouteComponent,
 });
 

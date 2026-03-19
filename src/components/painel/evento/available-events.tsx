@@ -1,16 +1,42 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, Hourglass, Users } from "lucide-react";
+import { Calendar, Hourglass, Ticket, Users } from "lucide-react";
 import { format } from "date-fns";
 import type { LoteFields } from "@/services/form-service";
+import type { Purchase } from "@/components/purchase-history-card";
+import { EmptyState } from "@/components/empty-state";
+import { useNavigate } from "@tanstack/react-router";
+import type { PaymentResponse } from "@/types/payment-type";
 
 interface AvailableEventsProps {
   eventos: LoteFields[];
-
+  filterOrderByUserId: Purchase[];
   onSelectEvent: (evento: LoteFields) => void;
 }
 
-export function AvailableEvents({ eventos, onSelectEvent }: AvailableEventsProps) {
+export function AvailableEvents({ eventos, filterOrderByUserId, onSelectEvent }: AvailableEventsProps) {
   const FILTERED_EVENTS_PORTAL = eventos.filter((lote) => lote.tipo_lote.includes("PORTAL"));
+  const PAYMENT_METHOD = filterOrderByUserId.some((order) => order.metodo_pagamento?.includes("CORTESIA"));
+  const PAYMENT_STATUS = filterOrderByUserId.some((order) => {
+    const payment = JSON.parse(order.json_pagamento) as PaymentResponse;
+    return payment?.status !== "cancelled";
+  });
+
+  const navigate = useNavigate();
+
+  if (PAYMENT_METHOD || PAYMENT_STATUS) {
+    return (
+      <EmptyState
+        title="Você já possui um evento inscrito"
+        description="Você já possui um evento inscrito clique no botão abaixo para visualizar seus ingressos"
+        icon={Ticket}
+        action={{ label: "Meus Ingressos", onClick: () => navigate({ to: "/painel/historico" }) }}
+        variant="card"
+        size="default"
+        className="w-full h-full"
+      />
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
