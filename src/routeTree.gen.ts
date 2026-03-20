@@ -17,6 +17,7 @@ import { Route as NotFoundRouteImport } from './routes/not-found'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as InscricaoRouteImport } from './routes/inscricao'
 import { Route as GaleriaRouteImport } from './routes/galeria'
+import { Route as ComissaoCientificaRouteImport } from './routes/comissao-cientifica'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedPainelRouteImport } from './routes/_authenticated/painel'
@@ -65,6 +66,11 @@ const GaleriaRoute = GaleriaRouteImport.update({
   path: '/galeria',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ComissaoCientificaRoute = ComissaoCientificaRouteImport.update({
+  id: '/comissao-cientifica',
+  path: '/comissao-cientifica',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -105,6 +111,7 @@ const AuthenticatedPainelDataRoute = AuthenticatedPainelDataRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/comissao-cientifica': typeof ComissaoCientificaRoute
   '/galeria': typeof GaleriaRoute
   '/inscricao': typeof InscricaoRoute
   '/login': typeof LoginRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/comissao-cientifica': typeof ComissaoCientificaRoute
   '/galeria': typeof GaleriaRoute
   '/inscricao': typeof InscricaoRoute
   '/login': typeof LoginRoute
@@ -139,6 +147,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/comissao-cientifica': typeof ComissaoCientificaRoute
   '/galeria': typeof GaleriaRoute
   '/inscricao': typeof InscricaoRoute
   '/login': typeof LoginRoute
@@ -157,6 +166,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/comissao-cientifica'
     | '/galeria'
     | '/inscricao'
     | '/login'
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/comissao-cientifica'
     | '/galeria'
     | '/inscricao'
     | '/login'
@@ -190,6 +201,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/comissao-cientifica'
     | '/galeria'
     | '/inscricao'
     | '/login'
@@ -208,6 +220,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  ComissaoCientificaRoute: typeof ComissaoCientificaRoute
   GaleriaRoute: typeof GaleriaRoute
   InscricaoRoute: typeof InscricaoRoute
   LoginRoute: typeof LoginRoute
@@ -274,6 +287,13 @@ declare module '@tanstack/react-router' {
       path: '/galeria'
       fullPath: '/galeria'
       preLoaderRoute: typeof GaleriaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comissao-cientifica': {
+      id: '/comissao-cientifica'
+      path: '/comissao-cientifica'
+      fullPath: '/comissao-cientifica'
+      preLoaderRoute: typeof ComissaoCientificaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -360,6 +380,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  ComissaoCientificaRoute: ComissaoCientificaRoute,
   GaleriaRoute: GaleriaRoute,
   InscricaoRoute: InscricaoRoute,
   LoginRoute: LoginRoute,
