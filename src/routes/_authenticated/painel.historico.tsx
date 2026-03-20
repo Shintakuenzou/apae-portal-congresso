@@ -42,7 +42,6 @@ function RouteComponent() {
     refetchInterval: 1000 * 60 * 5,
     refetchOnWindowFocus: true,
   });
-  console.log("historicoCompras: ", historicoCompras);
 
   return <PurchaseHistoryList purchases={historicoCompras ?? []} />;
 }

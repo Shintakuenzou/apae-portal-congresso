@@ -12,7 +12,6 @@ import { toast } from "sonner";
 import type { Payment } from "@/types/payment-type";
 import type { Purchase } from "@/components/purchase-history-card";
 import { validarHorariosPreenchidos } from "@/utils/validation-helper";
-import type { FluigPostResponse } from "@/types";
 
 interface LoaderData {
   atividade: { items: ActivityFields[]; hasNext?: boolean };
