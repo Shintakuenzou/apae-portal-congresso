@@ -6,9 +6,10 @@ import { CTASection } from "@/components/cta-section";
 import { Footer } from "@/components/footer";
 import { SpeakersSection } from "@/components/speakers-section";
 import { GallerySection } from "@/components/galery";
-import { useEvents } from "@/hooks/useEvents";
-import { LoadingScreen } from "@/components/loading";
 import { SponsorsSection } from "@/components/sponsor-section";
+import { type ActivityFields, type EventoFields } from "@/services/form-service";
+import { fetchDataset } from "@/services/fetch-dataset";
+import type { ParticipantsFields } from "@/types/entities.types";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -36,20 +37,22 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
+  loader: async () => {
+    const responseEvent = await fetchDataset<EventoFields>({ datasetId: import.meta.env.VITE_FORM_EVENTO as string });
+    const responseActivities = await fetchDataset<ActivityFields>({ datasetId: import.meta.env.VITE_DATASET_PARTICIPANTE as string });
+    const responseParticipants = await fetchDataset<ParticipantsFields>({ datasetId: import.meta.env.VITE_DATASET_PARTICIPANTE as string });
+    return { responseEvent, responseActivities, responseParticipants };
+  },
   component: App,
 });
 
 function App() {
-  const { formatedDataEvento, isLoading } = useEvents();
-
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
+  const { responseEvent, responseActivities, responseParticipants } = Route.useLoaderData();
 
   return (
     <main className="min-h-screen">
       <Header />
-      <Hero formatedDataEvento={formatedDataEvento} />
+      <Hero event={responseEvent} activeEvent={responseActivities} participants={responseParticipants} />
 
       {/* <EventInfoSection formatedDataEvento={formatedDataEvento} /> */}
       <SponsorsSection />

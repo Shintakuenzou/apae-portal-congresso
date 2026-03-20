@@ -1,15 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/auth-context";
-import type { EventoFields, FluigEntity } from "@/types";
+import type { ActivityFields, EventoFields } from "@/types";
 import { formatThreeDayRangeSimple } from "@/utils/formatThreeDayRange";
 import { Calendar, MapPin, ArrowRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { DynamicIcon, type IconName } from "lucide-react/dynamic";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import LogoCN from "/public/hero1.png";
+import type { ParticipantsFields } from "@/types/entities.types";
 
 export interface HeroProps {
-  formatedDataEvento: FluigEntity<EventoFields>[] | undefined;
+  event: { items: EventoFields[]; hasNext: boolean } | undefined;
+  activeEvent: { items: ActivityFields[]; hasNext: boolean } | null;
+  participants: { items: ParticipantsFields[]; hasNext: boolean } | null;
 }
 
 interface Info {
@@ -18,25 +21,24 @@ interface Info {
   icon: IconName;
 }
 
-const info: Info[] = [
-  { value: "5.000+", label: "Participantes", icon: "users" },
-  { value: "50+", label: "Palestras", icon: "mic-2" },
-  { value: "3", label: "Dias de evento", icon: "calendar" },
-  { value: "2.000+", label: "APAEs representadas", icon: "building" },
-];
-
-export function Hero({ formatedDataEvento }: HeroProps) {
+export function Hero({ event, activeEvent, participants }: HeroProps) {
   const { isAuthenticated } = useAuth();
+  const info: Info[] = [
+    { value: participants?.items.length.toString() || "0", label: "Participantes", icon: "users" },
+    { value: activeEvent?.items.length.toString() || "0", label: "Palestras", icon: "mic-2" },
+    { value: "3", label: "Dias de evento", icon: "calendar" },
+    { value: "2.000+", label: "APAEs representadas", icon: "building" },
+  ];
 
   let description = "";
   let date = "";
   let location = "";
 
-  if (formatedDataEvento && formatedDataEvento.length > 0) {
-    const idx = formatedDataEvento.length - 1;
+  if (event && event.items.length > 0) {
+    const idx = event.items.length - 1;
 
-    date = formatThreeDayRangeSimple(formatedDataEvento[idx].fields.data_inicio, formatedDataEvento[idx].fields.data_fim);
-    location = `${formatedDataEvento[idx].fields.cidade}-${formatedDataEvento[idx].fields.estado}`;
+    date = formatThreeDayRangeSimple(event.items[idx].data_inicio, event.items[idx].data_fim);
+    location = `${event.items[idx].cidade}-${event.items[idx].estado}`;
   }
 
   return (
