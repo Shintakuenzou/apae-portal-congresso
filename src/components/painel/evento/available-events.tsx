@@ -18,7 +18,7 @@ export function AvailableEvents({ eventos, filterOrderByUserId, onSelectEvent }:
   const PAYMENT_METHOD = filterOrderByUserId.some((order) => order.metodo_pagamento?.includes("CORTESIA"));
   const PAYMENT_STATUS = filterOrderByUserId.some((order) => {
     const payment = JSON.parse(order.json_pagamento) as PaymentResponse;
-    return payment?.status !== "cancelled";
+    return payment?.status !== "cancelled" || "rejected";
   });
 
   const navigate = useNavigate();
