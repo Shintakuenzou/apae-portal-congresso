@@ -93,6 +93,7 @@ const formSchema = z.object({
   coordenacao: z.string().optional(),
   status: z.string().optional(),
   atividades: z.array(z.string()).optional(),
+  tipo_participante: z.string().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -142,6 +143,7 @@ function InscricaoPage() {
       coordenacao: "",
       status: "ATIVO",
       atividades: [],
+      tipo_participante: "Participante",
     },
   });
 
