@@ -10,6 +10,9 @@ import { useState } from "react";
 import { PersonalDataSection, ApaeDataSection, ContactDataSection, AddressDataSection, AccessibilitySection } from "@/components/painel/data/form-sections";
 
 export const Route = createFileRoute("/_authenticated/painel/data")({
+  head: () => ({
+    meta: [{ title: "Painel Dados - Evento  | APAE BRASIL" }],
+  }),
   component: RouteComponent,
 });
 

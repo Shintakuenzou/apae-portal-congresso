@@ -45,6 +45,9 @@ function parseAtividades(raw: unknown): string[] {
 }
 
 export const Route = createFileRoute("/_authenticated/painel/evento")({
+  head: () => ({
+    meta: [{ title: "Painel Compras - Evento  | APAE BRASIL" }],
+  }),
   loader: async (): Promise<LoaderData> => {
     try {
       const lote = await fetchDataset<LoteFields>({ datasetId: import.meta.env.VITE_DATASET_LOTE as string });
