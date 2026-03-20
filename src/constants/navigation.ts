@@ -14,6 +14,10 @@ export const navItems = linkOptions([
     label: "Programação",
   },
   {
+    to: "/comissao-cientifica",
+    label: "Comissão Científica",
+  },
+  {
     to: "/galeria",
     label: "Galeria",
   },
