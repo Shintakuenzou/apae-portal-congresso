@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Eye, EyeOff, LogIn, ArrowLeft } from "lucide-react";
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 
-import BgLogin from "../../public/login-bg.png";
+import BgLogin from "/public/login-bg.png";
 import { formatCPF } from "@/utils/format-cpf";
 import { useEffect } from "react";
 import { useAuth } from "@/context/auth-context";
