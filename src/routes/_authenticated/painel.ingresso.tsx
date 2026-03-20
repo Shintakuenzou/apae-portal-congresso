@@ -1,8 +1,50 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/context/auth-context";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { TicketCard } from "@/components/painel/ticket-card";
 import { PendingTicket } from "@/components/painel/pending-ticket";
+import { fetchDataset } from "@/services/fetch-dataset";
+import { useMutation, useQuery, type UseMutationResult } from "@tanstack/react-query";
+import { EmptyState } from "@/components/empty-state";
+import { Separator } from "@/components/ui/separator";
+import { Clock, MapPin, ArrowRightLeft, AlertCircle, CheckCircle } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { format, isSameDay } from "date-fns";
+import type { ActivityFields, FluigPostResponse } from "@/types";
+import { useMemo, useState } from "react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { handleUpdateFormParticipant } from "@/services/form-service";
+import { queryClient } from "@/lib/queryClient";
+import { toast } from "sonner";
+
+interface ActivitiesRelationParticipant {
+  VERSAO_ATIVA: string;
+  criado_em: string;
+  criado_por: string;
+  data_fim: string;
+  data_inicio: string;
+  descricao: string;
+  documentid: string;
+  eixo: string;
+  hora_fim: string;
+  hora_inicio: string;
+  id_atividade: string;
+  id_evento: string;
+  id_participante: string;
+  sala: string;
+  status: string;
+  tipo_atividade: string;
+  titulo: string;
+}
+
+interface UpdateActivityResponse {
+  success: boolean;
+  cardId?: string;
+}
 
 export const Route = createFileRoute("/_authenticated/painel/ingresso")({
   head: () => ({
@@ -16,40 +58,375 @@ export const Route = createFileRoute("/_authenticated/painel/ingresso")({
       },
     ],
   }),
-  loader: async () => {},
+  loader: async ({ context }) => {
+    try {
+      const userId = context.auth.user?.documentid;
+
+      if (!userId) {
+        return;
+      }
+
+      const resopnseTicketUserInfo = await fetchDataset<ActivitiesRelationParticipant>({
+        datasetId: import.meta.env.VITE_DATASET_BUSCA_ATIVIDADE_VINCULADAS_PARTICIPANTE as string,
+        constraints: [
+          {
+            fieldName: "id_participante",
+            initialValue: userId,
+            finalValue: userId,
+            constraintType: "MUST",
+          },
+        ],
+      });
+
+      const activities = await fetchDataset<ActivityFields>({
+        datasetId: import.meta.env.VITE_DATASET_ATIVIDADE as string,
+      });
+
+      return { resopnseTicketUserInfo, userId, activities };
+    } catch (error) {
+      console.error("Erro ao carregar dados:", error);
+      return;
+    }
+  },
   component: RouteComponent,
 });
 
 const mockPagamento = {
   status: "aprovado",
 };
+
 function RouteComponent() {
   const { user } = useAuth();
+  const loader = Route.useLoaderData();
+
+  if (!loader?.userId) {
+    return;
+  }
+
+  const { data: activities_vinc_participant } = useQuery({
+    queryKey: ["activities_vinc_participant"],
+    queryFn: async () =>
+      await fetchDataset<ActivitiesRelationParticipant>({
+        datasetId: import.meta.env.VITE_DATASET_BUSCA_ATIVIDADE_VINCULADAS_PARTICIPANTE as string,
+      }),
+    initialData: loader?.resopnseTicketUserInfo,
+  });
+
+  const navigate = useNavigate();
+  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
+  const filteredMyActivities = activities_vinc_participant.items.filter((activitie) => activitie.id_participante == loader?.userId);
+  const [activityToExchange, setActivityToExchange] = useState<ActivityFields | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const sameDayActivities = useMemo(() => {
+    if (!selectedActivity) return [];
+
+    return loader.activities.items.filter((otherActivities) => {
+      if (selectedActivity.id_atividade == otherActivities.documentid) {
+        return false;
+      }
+      const isSameDays = isSameDay(new Date(selectedActivity.data_inicio), new Date(otherActivities.data_inicio));
+      return isSameDays && selectedActivity.status != "approved";
+    });
+  }, [selectedActivity]);
+
+  // ✅ MUTAÇÃO CENTRALIZADA
+  const mutation = useMutation<FluigPostResponse, Error>({
+    mutationFn: async () => {
+      if (!selectedActivity || !activityToExchange) {
+        throw new Error("Selecione uma atividade para trocar");
+      }
+
+      return await handleUpdateFormParticipant({
+        documentId: import.meta.env.VITE_FORM_VINCULO_PARTICIPANTE_ATIVIDADE as string,
+        cardId: selectedActivity.documentid,
+        values: [
+          { fieldId: "id_atividade", value: activityToExchange.documentid },
+          { fieldId: "id_evento", value: selectedActivity.id_evento },
+          { fieldId: "id_participante", value: user?.documentid as string },
+          { fieldId: "modificado_em", value: new Date().toISOString() },
+          { fieldId: "modificado_por", value: user?.nome + " " + user?.sobrenome },
+        ],
+      });
+    },
+    onSuccess: () => {
+      // ✅ Invalidar cache
+      queryClient.invalidateQueries({
+        queryKey: ["activities_vinc_participant"],
+      });
+
+      // ✅ Fechar dialog
+      setIsOpen(false);
+
+      // ✅ Resetar seleções
+      setSelectedActivity(null);
+      setActivityToExchange(null);
+
+      // ✅ Toast de sucesso
+      toast.success("Atividade substituida com sucesso!");
+    },
+    onError: (error: Error) => {
+      console.error("Erro ao trocar atividade:", error);
+      toast.error(error.message || "Erro ao trocar atividade");
+    },
+  });
+
+  function handleSelectActivity(activity: Activity) {
+    setSelectedActivity(activity);
+  }
+
+  function handleActivityToExchange(activity: ActivityFields) {
+    setActivityToExchange(activity);
+  }
 
   return (
     <>
-      <Card className="col-span-4 lg:col-span-3">
-        <CardHeader>
-          <CardTitle className="text-xl">Meu Ingresso</CardTitle>
-        </CardHeader>
+      {sameDayActivities ? (
+        <Card className="col-span-4 lg:col-span-3">
+          <CardHeader>
+            <CardTitle className="text-xl">Meu Ingresso</CardTitle>
+          </CardHeader>
 
-        <CardContent>
-          {mockPagamento.status === "aprovado" ? (
-            <div className="space-y-6">
-              <TicketCard
-                user={{
-                  nome: user!.nome,
-                  sobrenome: user!.sobrenome,
-                  cpf: user!.cpf,
-                  inscricao: user!.inscricao,
-                }}
-              />
+          <CardContent>
+            {mockPagamento.status === "aprovado" ? (
+              <div className="space-y-6">
+                <TicketCard
+                  user={{
+                    nome: user!.nome,
+                    sobrenome: user!.sobrenome,
+                    cpf: user!.cpf,
+                    inscricao: user!.inscricao,
+                  }}
+                />
+              </div>
+            ) : (
+              <PendingTicket status={mockPagamento.status} />
+            )}
+
+            <div className="w-full">
+              {/* Seção de Atividades */}
+              <section className="mt-8">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold text-foreground">Minhas Atividades</h2>
+                  <span className="text-sm text-muted-foreground">{activities_vinc_participant.items.length} atividades inscritas</span>
+                </div>
+
+                <div className="flex flex-col gap-3">
+                  {filteredMyActivities.map((activity) => (
+                    <ActivityCard
+                      key={activity.documentid}
+                      activity={activity}
+                      OtherActivities={sameDayActivities}
+                      onRequestChange={handleSelectActivity}
+                      onActivityToExchange={handleActivityToExchange}
+                      activityToExchange={activityToExchange}
+                      isOpen={isOpen}
+                      setIsOpen={setIsOpen}
+                      mutation={mutation}
+                    />
+                  ))}
+                </div>
+              </section>
+
+              {/* Informação adicional */}
+              <p className="text-sm text-muted-foreground mt-6 text-center">Clique em {'"Trocar"'} para substituir uma atividade por outra disponível.</p>
             </div>
-          ) : (
-            <PendingTicket status={mockPagamento.status} />
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      ) : (
+        <EmptyState
+          className="col-span-4 lg:col-span-3"
+          title="Nenhum ingresso encontrado"
+          description="Você ainda não realizou a compra de um ingresso. Clique no botão abaixo para adquirir seu ingresso e participar do congresso."
+          action={{
+            label: "Comprar Lote",
+            onClick: () => navigate({ to: "/painel/evento" }),
+            variant: "default",
+          }}
+        />
+      )}
     </>
+  );
+}
+
+export interface Activity extends ActivitiesRelationParticipant {}
+
+interface ActivityCardProps {
+  activity: Activity;
+  onRequestChange?: (activity: Activity) => void;
+  onActivityToExchange?: (activity: ActivityFields) => void;
+  OtherActivities: ActivityFields[];
+  activityToExchange: ActivityFields | null;
+  isOpen: boolean;
+  setIsOpen: (value: boolean) => void;
+  mutation: UseMutationResult<FluigPostResponse, Error, void, unknown>;
+}
+
+export function ActivityCard({ activity, onRequestChange, onActivityToExchange, OtherActivities, activityToExchange, isOpen, setIsOpen, mutation }: ActivityCardProps) {
+  const formatedDateInit = format(activity.data_inicio, "dd/MM/yyyy");
+
+  function handleSelectActivity() {
+    onRequestChange?.(activity);
+  }
+
+  function handleActivityToExchange(activity: ActivityFields) {
+    onActivityToExchange?.(activity);
+  }
+
+  const isActivitySelected = activityToExchange?.documentid !== null;
+
+  function handleOpenModel() {
+    setIsOpen(!isOpen);
+  }
+
+  // ✅ Usar mutation.mutate() ao invés de handlePutActivity
+  async function handlePutActivity() {
+    mutation.mutate();
+  }
+
+  return (
+    <div className="bg-card border rounded-lg p-4 transition-all">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1">
+          <div className="flex items-center gap-2 mb-2">
+            <Badge className="bg-violet-800 text-white">{activity.eixo}</Badge>
+          </div>
+
+          <h3 className="font-semibold text-foreground mb-2">{activity.titulo}</h3>
+
+          <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <Clock className="w-4 h-4" />
+              <span>
+                {formatedDateInit} às {activity.hora_inicio}
+              </span>
+            </div>
+            <div className="flex items-center gap-1">
+              <MapPin className="w-4 h-4" />
+              <span>{activity.sala}</span>
+            </div>
+          </div>
+        </div>
+
+        <Dialog open={isOpen} onOpenChange={handleOpenModel}>
+          <DialogTrigger asChild>
+            <Button variant="outline" className="cursor-pointer bg-violet-600 hover:bg-violet-700 text-white hover:text-white transition-colors" onClick={handleSelectActivity}>
+              <ArrowRightLeft className="w-4 h-4" />
+              Substituir
+            </Button>
+          </DialogTrigger>
+
+          <DialogContent className="!max-w-5xl">
+            <DialogHeader>
+              <DialogTitle>Trocar Atividade</DialogTitle>
+            </DialogHeader>
+
+            <Separator orientation="horizontal" />
+
+            <div className="space-y-3.5">
+              {(mutation.error as Error) && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>Erro ao trocar atividade</AlertTitle>
+                  <AlertDescription>{(mutation.error as Error).message}</AlertDescription>
+                </Alert>
+              )}
+
+              {/* ✅ SUCESSO EM TEMPO REAL */}
+              {mutation.isSuccess && (
+                <Alert className="border-green-200 bg-green-50">
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <AlertTitle className="text-green-800">Sucesso!</AlertTitle>
+                  <AlertDescription className="text-green-700">Atividade trocada com sucesso!</AlertDescription>
+                </Alert>
+              )}
+
+              <p className="text-base text-zinc-800 font-medium" role="heading" aria-level={3}>
+                Atividade atual
+              </p>
+
+              <Card>
+                <CardHeader className="flex flex-col items-start justify-center gap-2.5 px-5">
+                  <CardTitle className="space-y-1.5">
+                    <Badge variant="default" className="text-sm bg-violet-900">
+                      {activity.eixo}
+                    </Badge>
+                    <div className="text-xl">{activity.titulo}</div>
+                  </CardTitle>
+
+                  <CardDescription className="space-x-5">
+                    <span>
+                      {format(activity.data_inicio, "dd/MM/yyyy")} às {activity.hora_fim}
+                    </span>
+                    <span>{activity.sala}</span>
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+
+              <Separator orientation="horizontal" />
+
+              <p className="text-base text-zinc-800 font-medium" role="heading" aria-level={3}>
+                Atividades disponíveis para troca:
+              </p>
+
+              <div className="overflow-y-scroll h-96 space-y-2">
+                {OtherActivities.map((otherActivity) => (
+                  <Label
+                    key={otherActivity.documentid}
+                    htmlFor={otherActivity.documentid}
+                    className="cursor-pointer"
+                    onClick={() => handleActivityToExchange(otherActivity)}
+                    aria-label={otherActivity.titulo}
+                  >
+                    <Card className="w-full hover:bg-accent transition-colors">
+                      <CardHeader className="flex justify-between gap-2.5 px-5">
+                        <div className="flex flex-col flex-1">
+                          <CardTitle className="space-y-1.5">
+                            <Badge variant="default" className="text-sm bg-violet-900">
+                              {otherActivity.eixo}
+                            </Badge>
+                            <div className="text-xl">{otherActivity.titulo}</div>
+                          </CardTitle>
+
+                          <CardDescription className="space-x-5">
+                            <span>
+                              {format(otherActivity.data_inicio, "dd/MM/yyyy")} às {otherActivity.hora_fim}
+                            </span>
+                            <span>{otherActivity.sala}</span>
+                          </CardDescription>
+                        </div>
+
+                        <Switch
+                          id={otherActivity.documentid}
+                          checked={activityToExchange?.documentid === otherActivity.documentid}
+                          onCheckedChange={() => handleActivityToExchange(otherActivity)}
+                          onClick={(e) => e.stopPropagation()}
+                          disabled={mutation.isPending}
+                        />
+                      </CardHeader>
+                    </Card>
+                  </Label>
+                ))}
+              </div>
+
+              <div className="flex justify-end mt-5 w-full gap-3">
+                <Button type="button" variant="outline" onClick={() => setIsOpen(false)} disabled={mutation.isPending} className="cursor-pointer">
+                  Cancelar
+                </Button>
+
+                <Button
+                  type="button"
+                  className="w-auto bg-violet-600 hover:bg-violet-700 text-white hover:text-white transition-colors cursor-pointer"
+                  disabled={!isActivitySelected || mutation.isPending}
+                  onClick={handlePutActivity}
+                >
+                  <span className="px-5">{mutation.isPending ? "Trocando..." : isActivitySelected ? "Trocar" : "Selecione uma atividade"}</span>
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </div>
   );
 }
