@@ -7,6 +7,7 @@ import { EmptyState } from "./empty-state";
 import type { PaymentResponse } from "@/types/payment-type";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
+import { useNavigate } from "@tanstack/react-router";
 
 export type PurchaseStatus = "approved" | "pending" | "in_process" | "authorized" | "reject" | "cancelled" | "refunded" | "charged_back";
 
@@ -126,8 +127,17 @@ interface PurchaseHistoryListProps {
 }
 
 export function PurchaseHistoryList({ purchases, className }: PurchaseHistoryListProps) {
+  const navigate = useNavigate();
   if (purchases.length === 0) {
-    return <EmptyState title="Nenhuma compra encontrada" description="Você ainda não realizou nenhuma compra." icon={Package} className="col-span-3 space-y-3.5 h-full" />;
+    return (
+      <EmptyState
+        title="Nenhuma compra encontrada"
+        description="Você ainda não realizou nenhuma compra."
+        icon={Ticket}
+        className="col-span-3 space-y-3.5 h-full"
+        action={{ label: "Comprar Lote", onClick: () => navigate({ to: "/painel/evento" }), variant: "default" }}
+      />
+    );
   }
 
   return (
