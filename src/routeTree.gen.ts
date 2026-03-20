@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SubTrabalhoRouteImport } from './routes/sub-trabalho'
 import { Route as RecuperarSenhaRouteImport } from './routes/recuperar-senha'
 import { Route as QuemSomosRouteImport } from './routes/quem-somos'
 import { Route as PalestrasRouteImport } from './routes/palestras'
@@ -26,11 +25,6 @@ import { Route as AuthenticatedPainelHistoricoRouteImport } from './routes/_auth
 import { Route as AuthenticatedPainelEventoRouteImport } from './routes/_authenticated/painel.evento'
 import { Route as AuthenticatedPainelDataRouteImport } from './routes/_authenticated/painel.data'
 
-const SubTrabalhoRoute = SubTrabalhoRouteImport.update({
-  id: '/sub-trabalho',
-  path: '/sub-trabalho',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const RecuperarSenhaRoute = RecuperarSenhaRouteImport.update({
   id: '/recuperar-senha',
   path: '/recuperar-senha',
@@ -119,7 +113,6 @@ export interface FileRoutesByFullPath {
   '/palestras': typeof PalestrasRoute
   '/quem-somos': typeof QuemSomosRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
-  '/sub-trabalho': typeof SubTrabalhoRoute
   '/painel': typeof AuthenticatedPainelRouteWithChildren
   '/painel/data': typeof AuthenticatedPainelDataRoute
   '/painel/evento': typeof AuthenticatedPainelEventoRoute
@@ -136,7 +129,6 @@ export interface FileRoutesByTo {
   '/palestras': typeof PalestrasRoute
   '/quem-somos': typeof QuemSomosRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
-  '/sub-trabalho': typeof SubTrabalhoRoute
   '/painel': typeof AuthenticatedPainelRouteWithChildren
   '/painel/data': typeof AuthenticatedPainelDataRoute
   '/painel/evento': typeof AuthenticatedPainelEventoRoute
@@ -155,7 +147,6 @@ export interface FileRoutesById {
   '/palestras': typeof PalestrasRoute
   '/quem-somos': typeof QuemSomosRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
-  '/sub-trabalho': typeof SubTrabalhoRoute
   '/_authenticated/painel': typeof AuthenticatedPainelRouteWithChildren
   '/_authenticated/painel/data': typeof AuthenticatedPainelDataRoute
   '/_authenticated/painel/evento': typeof AuthenticatedPainelEventoRoute
@@ -174,7 +165,6 @@ export interface FileRouteTypes {
     | '/palestras'
     | '/quem-somos'
     | '/recuperar-senha'
-    | '/sub-trabalho'
     | '/painel'
     | '/painel/data'
     | '/painel/evento'
@@ -191,7 +181,6 @@ export interface FileRouteTypes {
     | '/palestras'
     | '/quem-somos'
     | '/recuperar-senha'
-    | '/sub-trabalho'
     | '/painel'
     | '/painel/data'
     | '/painel/evento'
@@ -209,7 +198,6 @@ export interface FileRouteTypes {
     | '/palestras'
     | '/quem-somos'
     | '/recuperar-senha'
-    | '/sub-trabalho'
     | '/_authenticated/painel'
     | '/_authenticated/painel/data'
     | '/_authenticated/painel/evento'
@@ -228,18 +216,10 @@ export interface RootRouteChildren {
   PalestrasRoute: typeof PalestrasRoute
   QuemSomosRoute: typeof QuemSomosRoute
   RecuperarSenhaRoute: typeof RecuperarSenhaRoute
-  SubTrabalhoRoute: typeof SubTrabalhoRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sub-trabalho': {
-      id: '/sub-trabalho'
-      path: '/sub-trabalho'
-      fullPath: '/sub-trabalho'
-      preLoaderRoute: typeof SubTrabalhoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/recuperar-senha': {
       id: '/recuperar-senha'
       path: '/recuperar-senha'
@@ -388,7 +368,6 @@ const rootRouteChildren: RootRouteChildren = {
   PalestrasRoute: PalestrasRoute,
   QuemSomosRoute: QuemSomosRoute,
   RecuperarSenhaRoute: RecuperarSenhaRoute,
-  SubTrabalhoRoute: SubTrabalhoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
