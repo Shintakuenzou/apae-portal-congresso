@@ -22,6 +22,50 @@ export interface PalestranteFields {
   facebook: string;
 }
 
+export interface ParticipantsFields {
+  [key: string]: any;
+  id: number;
+  cardid: number;
+  documentid: number;
+  companyid: number;
+  nome: string;
+  sobrenome: string;
+  cpf: string;
+  email: string;
+  data_nascimento: string;
+  telefone_contato: string;
+  whatsapp: string;
+  cep: string;
+  municipio: string;
+  uf: string;
+  funcao: string;
+  area_atuacao: string;
+  escolaridade: string;
+  apae_filiada: string;
+  presidente_apae: string;
+  atividades: string[];
+  id_evento: string;
+  id_lote: string;
+  id_pasta: string;
+  possui_deficiencia: string;
+  id_tipo_deficiencia: string;
+  tipo_deficiencia: string;
+  necessita_apoio: string;
+  tipo_apoio: string;
+  outro_apoio: string;
+  tamanho_camiseta: string;
+  senha: string;
+  url_foto: string;
+  criado_em: string;
+  criado_por: string;
+  modificado_em: string;
+  modificado_por: string;
+  status: string;
+  tableid: string;
+  version: number;
+  coordenacao: string;
+}
+
 export interface EventoFields {
   bairro: string;
   categoria_evento: string;
