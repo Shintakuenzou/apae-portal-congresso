@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Ticket } from "lucide-react";
 
 interface PendingTicketProps {
-  status: "pendente" | string;
+  status: "pending" | string;
 }
 
 export function PendingTicket({ status }: PendingTicketProps) {
@@ -13,7 +13,7 @@ export function PendingTicket({ status }: PendingTicketProps) {
       </div>
       <h3 className="text-lg font-semibold">Ingresso Indisponível</h3>
       <p className="text-muted-foreground mt-2 max-w-sm mx-auto">
-        {status === "pendente" ? "Seu ingresso estará disponível assim que o pagamento for confirmado." : "É necessário realizar o pagamento para ter acesso ao ingresso."}
+        {status === "pending" ? "Seu ingresso estará disponível assim que o pagamento for confirmado." : "É necessário realizar o pagamento para ter acesso ao ingresso."}
       </p>
       <Button variant="outline" className="mt-4">
         Ver Status do Pagamento

@@ -111,6 +111,27 @@ export interface LoteFields {
   tipo_lote: string;
 }
 
+export interface AvailableVacanciesFields {
+  id_atividade: string;
+  quantidade: string;
+}
+
+export interface ClassFields {
+  id: number;
+  documentid: number;
+  cardid: number;
+  nome: string;
+  andar: string;
+  numero: string;
+  qtd_vagas: string;
+  status: "ATIVO" | "INATIVO" | string;
+  id_evento: string;
+  criado_em: string;
+  criado_por: string;
+  modificado_em: string;
+  modificado_por: string;
+}
+
 export interface ActivityFields {
   documentid: string;
   anonymization_date: string | null;

@@ -23,6 +23,8 @@ interface ImportMetaEnv {
   readonly VITE_DATASET_VINCULO_PARTICIPANTE_ATIVIDADE?: string;
   readonly VITE_FORM_VINCULO_PARTICIPANTE_ATIVIDADE?: string;
   readonly VITE_DATASET_BUSCA_ATIVIDADE_VINCULADAS_PARTICIPANTE?: string;
+  readonly VITE_DATASET_SALA?: string;
+  readonly VITE_DATASET_VAGAS_DISPONIVEL?: string;
 }
 interface ImportMeta {
   readonly env: ImportMetaEnv;

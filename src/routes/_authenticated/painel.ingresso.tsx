@@ -20,6 +20,8 @@ import { Label } from "@/components/ui/label";
 import { handleUpdateFormParticipant } from "@/services/form-service";
 import { queryClient } from "@/lib/queryClient";
 import { toast } from "sonner";
+import type { AvailableVacanciesFields } from "@/types/entities.types";
+import { LoadingScreen } from "@/components/loading";
 
 interface ActivitiesRelationParticipant {
   VERSAO_ATIVA: string;
@@ -41,9 +43,11 @@ interface ActivitiesRelationParticipant {
   titulo: string;
 }
 
-interface UpdateActivityResponse {
-  success: boolean;
-  cardId?: string;
+interface RouteLoaderData {
+  resopnseTicketUserInfo: { items: ActivitiesRelationParticipant[]; hasNext: boolean };
+  userId: string;
+  activities: { items: ActivityFields[]; hasNext: boolean };
+  availableVacancies: { items: AvailableVacanciesFields[]; hasNext: boolean };
 }
 
 export const Route = createFileRoute("/_authenticated/painel/ingresso")({
@@ -58,12 +62,17 @@ export const Route = createFileRoute("/_authenticated/painel/ingresso")({
       },
     ],
   }),
-  loader: async ({ context }) => {
+  loader: async ({ context }): Promise<RouteLoaderData | null> => {
     try {
       const userId = context.auth.user?.documentid;
 
       if (!userId) {
-        return;
+        return {
+          resopnseTicketUserInfo: { items: [], hasNext: false },
+          userId: "",
+          activities: { items: [], hasNext: false },
+          availableVacancies: { items: [], hasNext: false },
+        };
       }
 
       const resopnseTicketUserInfo = await fetchDataset<ActivitiesRelationParticipant>({
@@ -78,59 +87,70 @@ export const Route = createFileRoute("/_authenticated/painel/ingresso")({
         ],
       });
 
+      const availableVacancies = await fetchDataset<AvailableVacanciesFields>({
+        datasetId: import.meta.env.VITE_DATASET_VAGAS_DISPONIVEL as string,
+      });
+
       const activities = await fetchDataset<ActivityFields>({
         datasetId: import.meta.env.VITE_DATASET_ATIVIDADE as string,
       });
 
-      return { resopnseTicketUserInfo, userId, activities };
+      return { resopnseTicketUserInfo, userId, activities, availableVacancies };
     } catch (error) {
       console.error("Erro ao carregar dados:", error);
-      return;
+      return {
+        resopnseTicketUserInfo: { items: [], hasNext: false },
+        userId: "",
+        activities: { items: [], hasNext: false },
+        availableVacancies: { items: [], hasNext: false },
+      };
     }
   },
   component: RouteComponent,
 });
 
-const mockPagamento = {
-  status: "aprovado",
-};
-
 function RouteComponent() {
   const { user } = useAuth();
-  const loader = Route.useLoaderData();
+  const data = Route.useLoaderData();
 
-  if (!loader?.userId) {
-    return;
+  if (!data) {
+    return <LoadingScreen />;
   }
 
-  const { data: activities_vinc_participant } = useQuery({
+  const { resopnseTicketUserInfo, userId, activities, availableVacancies } = data;
+
+  const { data: activities_vinc_participant, refetch: refetchActivitiesVincParticipant } = useQuery({
     queryKey: ["activities_vinc_participant"],
     queryFn: async () =>
       await fetchDataset<ActivitiesRelationParticipant>({
         datasetId: import.meta.env.VITE_DATASET_BUSCA_ATIVIDADE_VINCULADAS_PARTICIPANTE as string,
       }),
-    initialData: loader?.resopnseTicketUserInfo,
+    initialData: resopnseTicketUserInfo,
   });
 
   const navigate = useNavigate();
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
-  const filteredMyActivities = activities_vinc_participant.items.filter((activitie) => activitie.id_participante == loader?.userId);
+  const filteredMyActivities = activities_vinc_participant.items.filter((activitie) => activitie.id_participante == userId);
   const [activityToExchange, setActivityToExchange] = useState<ActivityFields | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const sameDayActivities = useMemo(() => {
     if (!selectedActivity) return [];
 
-    return loader.activities.items.filter((otherActivities) => {
+    return activities.items.filter((otherActivities) => {
       if (selectedActivity.id_atividade == otherActivities.documentid) {
         return false;
       }
+
       const isSameDays = isSameDay(new Date(selectedActivity.data_inicio), new Date(otherActivities.data_inicio));
       return isSameDays && selectedActivity.status != "approved";
     });
   }, [selectedActivity]);
 
-  // ✅ MUTAÇÃO CENTRALIZADA
+  // const isAvailableVacancies = useMemo(() => {
+  //   return availableVacancies.items.filter((vacancy) => {});
+  // }, []);
+
   const mutation = useMutation<FluigPostResponse, Error>({
     mutationFn: async () => {
       if (!selectedActivity || !activityToExchange) {
@@ -150,19 +170,32 @@ function RouteComponent() {
       });
     },
     onSuccess: () => {
-      // ✅ Invalidar cache
-      queryClient.invalidateQueries({
-        queryKey: ["activities_vinc_participant"],
+      queryClient.setQueryData(["activities_vinc_participant"], (oldData: any) => {
+        if (!oldData) {
+          return oldData;
+        }
+
+        return {
+          ...oldData,
+          items: oldData.items.map((item: ActivitiesRelationParticipant) => {
+            if (item.documentid === selectedActivity?.documentid) {
+              return {
+                ...item,
+                id_atividade: activityToExchange?.documentid,
+              };
+            }
+            return item;
+          }),
+        };
       });
 
-      // ✅ Fechar dialog
       setIsOpen(false);
 
-      // ✅ Resetar seleções
       setSelectedActivity(null);
       setActivityToExchange(null);
 
-      // ✅ Toast de sucesso
+      refetchActivitiesVincParticipant();
+
       toast.success("Atividade substituida com sucesso!");
     },
     onError: (error: Error) => {
@@ -181,14 +214,14 @@ function RouteComponent() {
 
   return (
     <>
-      {sameDayActivities ? (
+      {true ? (
         <Card className="col-span-4 lg:col-span-3">
           <CardHeader>
             <CardTitle className="text-xl">Meu Ingresso</CardTitle>
           </CardHeader>
 
           <CardContent>
-            {mockPagamento.status === "aprovado" ? (
+            {true ? (
               <div className="space-y-6">
                 <TicketCard
                   user={{
@@ -200,7 +233,7 @@ function RouteComponent() {
                 />
               </div>
             ) : (
-              <PendingTicket status={mockPagamento.status} />
+              <PendingTicket status="" />
             )}
 
             <div className="w-full">
@@ -208,7 +241,7 @@ function RouteComponent() {
               <section className="mt-8">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-semibold text-foreground">Minhas Atividades</h2>
-                  <span className="text-sm text-muted-foreground">{activities_vinc_participant.items.length} atividades inscritas</span>
+                  <span className="text-sm text-muted-foreground">{filteredMyActivities.length} atividades inscritas</span>
                 </div>
 
                 <div className="flex flex-col gap-3">
@@ -223,6 +256,7 @@ function RouteComponent() {
                       isOpen={isOpen}
                       setIsOpen={setIsOpen}
                       mutation={mutation}
+                      selectedActivity={selectedActivity}
                     />
                   ))}
                 </div>
@@ -260,9 +294,20 @@ interface ActivityCardProps {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
   mutation: UseMutationResult<FluigPostResponse, Error, void, unknown>;
+  selectedActivity: Activity | null;
 }
 
-export function ActivityCard({ activity, onRequestChange, onActivityToExchange, OtherActivities, activityToExchange, isOpen, setIsOpen, mutation }: ActivityCardProps) {
+export function ActivityCard({
+  activity,
+  onRequestChange,
+  onActivityToExchange,
+  OtherActivities,
+  activityToExchange,
+  isOpen,
+  setIsOpen,
+  mutation,
+  selectedActivity,
+}: ActivityCardProps) {
   const formatedDateInit = format(activity.data_inicio, "dd/MM/yyyy");
 
   function handleSelectActivity() {
@@ -279,7 +324,6 @@ export function ActivityCard({ activity, onRequestChange, onActivityToExchange, 
     setIsOpen(!isOpen);
   }
 
-  // ✅ Usar mutation.mutate() ao invés de handlePutActivity
   async function handlePutActivity() {
     mutation.mutate();
   }
@@ -349,16 +393,16 @@ export function ActivityCard({ activity, onRequestChange, onActivityToExchange, 
                 <CardHeader className="flex flex-col items-start justify-center gap-2.5 px-5">
                   <CardTitle className="space-y-1.5">
                     <Badge variant="default" className="text-sm bg-violet-900">
-                      {activity.eixo}
+                      {selectedActivity?.eixo}
                     </Badge>
-                    <div className="text-xl">{activity.titulo}</div>
+                    <div className="text-xl">{selectedActivity?.titulo}</div>
                   </CardTitle>
 
                   <CardDescription className="space-x-5">
                     <span>
-                      {format(activity.data_inicio, "dd/MM/yyyy")} às {activity.hora_fim}
+                      {selectedActivity?.data_inicio ? format(selectedActivity.data_inicio, "dd/MM/yyyy") : ""} às {selectedActivity?.hora_inicio}
                     </span>
-                    <span>{activity.sala}</span>
+                    <span>{selectedActivity?.sala}</span>
                   </CardDescription>
                 </CardHeader>
               </Card>
