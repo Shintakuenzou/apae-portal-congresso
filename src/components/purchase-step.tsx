@@ -1,3 +1,7 @@
+/**
+ * @module components/purchase-step
+ * @description Página de sucesso pós-inscrição com tutorial de compra de ingresso.
+ */
 import { motion } from "framer-motion";
 import { LogIn, ArrowRight, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,7 +10,7 @@ import { Header } from "./header";
 import { Footer } from "./footer";
 import { DynamicIcon } from "lucide-react/dynamic";
 import { Link } from "@tanstack/react-router";
-import { steps } from "@/constants";
+import { STEPS } from "@/constants";
 
 export function PurchaseStep() {
   return (
@@ -33,7 +37,7 @@ export function PurchaseStep() {
               <div className="absolute left-6 top-0 bottom-0 w-px bg-border md:left-1/2 md:-translate-x-px" />
 
               <div className="space-y-8">
-                {steps.map((step, index) => (
+                {STEPS.map((step, index) => (
                   <motion.div
                     key={step.number}
                     initial={{ opacity: 0, y: 20 }}

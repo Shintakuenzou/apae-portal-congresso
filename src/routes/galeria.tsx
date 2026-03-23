@@ -5,16 +5,17 @@ import { Footer } from "@/components/footer";
 import { X, ChevronLeft, ChevronRight, Grid3X3, LayoutGrid, Calendar, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createFileRoute } from "@tanstack/react-router";
-import { photos } from "@/constants";
+import { PHOTOS } from "@/constants";
 
-const categories = [
+/** Categorias de filtro da galeria. */
+const CATEGORIES = [
   { id: "todos", label: "Todos" },
   { id: "congressos", label: "Congressos" },
   { id: "palestras", label: "Palestras" },
   { id: "workshops", label: "Workshops" },
   { id: "inclusao", label: "Inclusão" },
   { id: "bastidores", label: "Bastidores" },
-];
+] as const;
 
 export const Route = createFileRoute("/galeria")({
   head: () => ({
@@ -51,7 +52,7 @@ function Galery() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
-  const filteredPhotos = activeCategory === "todos" ? photos : photos.filter((photo) => photo.category === activeCategory);
+  const filteredPhotos = activeCategory === "todos" ? PHOTOS : PHOTOS.filter((photo) => photo.category === activeCategory);
 
   const openLightbox = useCallback((index: number) => {
     setCurrentPhotoIndex(index);
@@ -105,7 +106,7 @@ function Galery() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-end gap-4">
             {/* Categorias */}
             <div className="hidden ">
-              {categories.map((category) => (
+              {CATEGORIES.map((category) => (
                 <button
                   key={category.id}
                   onClick={() => setActiveCategory(category.id)}
@@ -155,10 +156,10 @@ function Galery() {
                   onClick={() => openLightbox(index)}
                   className={cn("group relative break-inside-avoid cursor-pointer overflow-hidden rounded-xl", photo.featured ? "row-span-2" : "")}
                 >
-                  <div className={cn("relative w-full", photo.featured ? "aspect-[4/5]" : "aspect-[4/3]")}>
+                  <div className={cn("relative w-full", photo.featured ? "aspect-4/5" : "aspect-4/3")}>
                     <img src={photo.src || "/placeholder.svg"} alt={photo.title} className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105" />
                     {/* Overlay com informações */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute inset-0 bg-linear-to-t from-foreground/80 via-foreground/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <div className="absolute bottom-0 left-0 right-0 p-5">
                         <h3 className="text-background font-medium text-lg leading-tight">{photo.title}</h3>
                         <div className="mt-2 flex items-center gap-4 text-sm text-background/70">
@@ -184,7 +185,7 @@ function Galery() {
                 <div key={photo.id} onClick={() => openLightbox(index)} className="group relative aspect-square cursor-pointer overflow-hidden rounded-xl">
                   <img src={photo.src || "/placeholder.svg"} alt={photo.title} className="object-cover transition-transform duration-500 group-hover:scale-105" />
                   {/* Overlay com informações */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute inset-0 bg-linear-to-t from-foreground/80 via-foreground/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <div className="absolute bottom-0 left-0 right-0 p-4">
                       <h3 className="text-background font-medium text-sm leading-tight">{photo.title}</h3>
                       <p className="mt-1 text-xs text-background/70">

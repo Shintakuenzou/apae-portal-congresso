@@ -1,16 +1,47 @@
-// Função auxiliar para converter "HH:mm" em minutos
-function toMinutes(hora: string): number {
-  const [h, m] = hora.split(":").map(Number);
-  return h * 60 + m;
+/**
+ * @module utils/validation-helper
+ * @description Utilitário para validar se todas as faixas de horário
+ * de um dia de evento estão cobertas por atividades selecionadas.
+ */
+import { toMinutes } from "./time-utils";
+
+/**
+ * Resultado da validação de horários.
+ */
+export interface ValidacaoHorariosResult {
+  /** `true` se todos os horários estão cobertos. */
+  valido: boolean;
+  /** Mensagem descritiva do resultado. */
+  mensagem: string;
 }
 
-// Função para validar se todos os horários do dia estão preenchidos
+/**
+ * Valida se as atividades selecionadas cobrem todo o período do dia do evento.
+ *
+ * Verifica:
+ * 1. Se há pelo menos uma atividade selecionada.
+ * 2. Se a primeira atividade começa no horário de início do evento.
+ * 3. Se a última atividade termina no horário de fim do evento.
+ * 4. Se não há lacunas entre atividades consecutivas.
+ *
+ * @param atividadesSelecionadas - Array de atividades com `hora_inicio` e `hora_fim`.
+ * @param horaInicioEvento - Horário de início do evento ("HH:mm"), padrão "08:00".
+ * @param horaFimEvento - Horário de fim do evento ("HH:mm"), padrão "18:00".
+ * @returns Objeto com `valido` (boolean) e `mensagem` (string).
+ *
+ * @example
+ * ```ts
+ * const resultado = validarHorariosPreenchidos(atividades, "08:00", "18:00");
+ * if (!resultado.valido) {
+ *   console.warn(resultado.mensagem);
+ * }
+ * ```
+ */
 export function validarHorariosPreenchidos(
   atividadesSelecionadas: any[],
   horaInicioEvento: string = "08:00",
   horaFimEvento: string = "18:00",
-): { valido: boolean; mensagem: string } {
-  // Se não há atividades, está vazio
+): ValidacaoHorariosResult {
   if (!atividadesSelecionadas || atividadesSelecionadas.length === 0) {
     return {
       valido: false,
@@ -18,7 +49,6 @@ export function validarHorariosPreenchidos(
     };
   }
 
-  // Ordena atividades por hora de início
   const atividadesOrdenadas = [...atividadesSelecionadas].sort((a, b) => {
     return toMinutes(a.hora_inicio) - toMinutes(b.hora_inicio);
   });
@@ -28,7 +58,6 @@ export function validarHorariosPreenchidos(
   const inicioFirstAtv = toMinutes(atividadesOrdenadas[0].hora_inicio);
   const fimLastAtv = toMinutes(atividadesOrdenadas[atividadesOrdenadas.length - 1].hora_fim);
 
-  // Verifica se a primeira atividade começa no horário do evento
   if (inicioFirstAtv > inicioEvento) {
     return {
       valido: false,
@@ -36,7 +65,6 @@ export function validarHorariosPreenchidos(
     };
   }
 
-  // Verifica se a última atividade termina no horário do evento
   if (fimLastAtv < fimEvento) {
     return {
       valido: false,
@@ -44,7 +72,6 @@ export function validarHorariosPreenchidos(
     };
   }
 
-  // Verifica lacunas entre atividades consecutivas
   for (let i = 0; i < atividadesOrdenadas.length - 1; i++) {
     const fimAtividadeAtual = toMinutes(atividadesOrdenadas[i].hora_fim);
     const inicioProximaAtividade = toMinutes(atividadesOrdenadas[i + 1].hora_inicio);

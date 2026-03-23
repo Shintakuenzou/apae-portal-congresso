@@ -1,5 +1,9 @@
-// Barrel export — mantém retrocompatibilidade com imports de "@/constants"
-export { tamanhosCamisa, estados, escolaridades } from "./form-options";
-export { DISABILITY_OPTIONS, opcao_apoio } from "./disability-options";
-export { photos } from "./gallery-data";
-export { steps } from "./steps";
+/**
+ * @module constants
+ * @description Barrel export de todas as constantes do sistema.
+ */
+export { TAMANHOS_CAMISA, ESTADOS, ESCOLARIDADES } from "./form-options";
+export { DISABILITY_OPTIONS, OPCAO_APOIO } from "./disability-options";
+export { PHOTOS } from "./gallery-data";
+export { STEPS } from "./steps";
+export { NAV_ITEMS } from "./navigation";

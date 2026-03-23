@@ -14,7 +14,7 @@ import { Mail, MapPinned, User, Lock, Briefcase, Heart, Loader2, Ticket } from "
 import { handlePostFormParticipant, type ActivityFields } from "@/services/form-service";
 import { formatCPF } from "@/utils/format-cpf";
 import { formatPhone } from "@/utils/format-phone";
-import { escolaridades, estados, tamanhosCamisa } from "@/constants";
+import { ESCOLARIDADES, ESTADOS, TAMANHOS_CAMISA } from "@/constants";
 import { fetchDataset } from "@/services/fetch-dataset";
 import type { AxiosError } from "axios";
 import axios from "axios";
@@ -382,11 +382,11 @@ function InscricaoPage() {
                         control={control}
                         render={({ field }) => (
                           <Select onValueChange={field.onChange} value={field.value}>
-                            <SelectTrigger id="escolaridade" className="!h-11 w-full">
+                            <SelectTrigger id="escolaridade" className="h-11! w-full">
                               <SelectValue placeholder="Selecione sua escolaridade" />
                             </SelectTrigger>
                             <SelectContent>
-                              {escolaridades.map((esc) => (
+                              {ESCOLARIDADES.map((esc) => (
                                 <SelectItem key={esc.value} value={esc.value}>
                                   {esc.label}
                                 </SelectItem>
@@ -405,11 +405,11 @@ function InscricaoPage() {
                         control={control}
                         render={({ field }) => (
                           <Select onValueChange={field.onChange} value={field.value}>
-                            <SelectTrigger id="tamanho_camisa" className="!h-11 w-full">
+                            <SelectTrigger id="tamanho_camisa" className="h-11! w-full">
                               <SelectValue placeholder="Selecione seu tamanho de camisa" />
                             </SelectTrigger>
                             <SelectContent>
-                              {tamanhosCamisa.map((esc) => (
+                              {TAMANHOS_CAMISA.map((esc) => (
                                 <SelectItem key={esc} value={esc}>
                                   {esc}
                                 </SelectItem>
@@ -530,11 +530,11 @@ function InscricaoPage() {
                         control={control}
                         render={({ field }) => (
                           <Select onValueChange={field.onChange} value={field.value}>
-                            <SelectTrigger id="uf" className="!h-11 w-full">
+                            <SelectTrigger id="uf" className="h-11! w-full">
                               <SelectValue placeholder="UF" />
                             </SelectTrigger>
                             <SelectContent>
-                              {estados.map((uf) => (
+                              {ESTADOS.map((uf) => (
                                 <SelectItem key={uf} value={uf}>
                                   {uf}
                                 </SelectItem>
@@ -592,7 +592,7 @@ function InscricaoPage() {
                         control={control}
                         render={({ field }) => (
                           <Select onValueChange={field.onChange} value={field.value}>
-                            <SelectTrigger id="presidente_apae" className="!h-11 w-full">
+                            <SelectTrigger id="presidente_apae" className="h-11! w-full">
                               <SelectValue placeholder="Selecione" />
                             </SelectTrigger>
                             <SelectContent>
@@ -649,7 +649,7 @@ function InscricaoPage() {
                         control={control}
                         render={({ field }) => (
                           <Select onValueChange={field.onChange} value={field.value}>
-                            <SelectTrigger id="possui_deficiencia" className="!h-11 w-full">
+                            <SelectTrigger id="possui_deficiencia" className="h-11! w-full">
                               <SelectValue placeholder="Selecione" />
                             </SelectTrigger>
                             <SelectContent>
@@ -669,7 +669,7 @@ function InscricaoPage() {
                         control={control}
                         render={({ field }) => (
                           <Select onValueChange={field.onChange} value={field.value}>
-                            <SelectTrigger id="necessita_apoio" className="!h-11 w-full">
+                            <SelectTrigger id="necessita_apoio" className="h-11! w-full">
                               <SelectValue placeholder="Selecione" />
                             </SelectTrigger>
                             <SelectContent>
@@ -723,7 +723,7 @@ function InscricaoPage() {
                                 <SelectValue placeholder="Selecione" />
                               </SelectTrigger>
                               <SelectContent>
-                                {opcao_apoio.map((option) => {
+                                {OPCAO_APOIO.map((option) => {
                                   return (
                                     <SelectItem key={option.value} value={option.value}>
                                       {option.label}

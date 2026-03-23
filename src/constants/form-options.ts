@@ -1,6 +1,13 @@
-export const tamanhosCamisa = ["PP", "P", "M", "G", "GG", "XG", "XGG"];
+/**
+ * @module constants/form-options
+ * @description Opções de formulário reutilizáveis em selects e combos do sistema.
+ */
 
-export const estados = [
+/** Tamanhos disponíveis de camiseta para o congresso. */
+export const TAMANHOS_CAMISA = ["PP", "P", "M", "G", "GG", "XG", "XGG"] as const;
+
+/** Siglas dos estados brasileiros, em ordem alfabética. */
+export const ESTADOS = [
   "AC",
   "AL",
   "AP",
@@ -28,9 +35,10 @@ export const estados = [
   "SP",
   "SE",
   "TO",
-];
+] as const;
 
-export const escolaridades = [
+/** Níveis de escolaridade suportados pelo formulário de inscrição. */
+export const ESCOLARIDADES = [
   { value: "fundamental-incompleto", label: "Fundamental Incompleto" },
   { value: "fundamental-completo", label: "Fundamental Completo" },
   { value: "medio-incompleto", label: "Médio Incompleto" },
@@ -40,4 +48,4 @@ export const escolaridades = [
   { value: "pos-graduacao", label: "Pós-graduação" },
   { value: "mestrado", label: "Mestrado" },
   { value: "doutorado", label: "Doutorado" },
-];
+] as const;

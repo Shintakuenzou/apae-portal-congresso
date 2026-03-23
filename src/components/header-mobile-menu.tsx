@@ -1,6 +1,10 @@
+/**
+ * @module components/header-mobile-menu
+ * @description Menu de navegação mobile — exibido apenas em telas < md.
+ */
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { navItems } from "@/constants/navigation";
+import { NAV_ITEMS } from "@/constants/navigation";
 
 interface HeaderMobileMenuProps {
   isOpen: boolean;
@@ -13,7 +17,7 @@ export function HeaderMobileMenu({ isOpen, onClose }: HeaderMobileMenuProps) {
   return (
     <div className="md:hidden bg-violet-950 border-t border-violet-600/10 shadow-xl">
       <div className="px-4 py-6 space-y-2">
-        {navItems.map((item) => {
+        {NAV_ITEMS.map((item) => {
           return (
             <Link
               key={item.to}

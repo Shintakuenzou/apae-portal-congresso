@@ -1,9 +1,16 @@
+/**
+ * @module components/painel/data/form-sections
+ * @description Seções do formulário de dados cadastrais do participante.
+ * Cada seção é um componente reutilizável que pode ser exibido
+ * em modo de leitura ou edição.
+ */
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { escolaridades, estados, tamanhosCamisa } from "@/constants";
+import { ESCOLARIDADES, ESTADOS, TAMANHOS_CAMISA } from "@/constants";
 import { formatPhone } from "@/utils/format-phone";
 
+/** Props comuns a todas as seções de formulário. */
 interface SectionProps {
   formData: any;
   isEditing: boolean;
@@ -11,11 +18,18 @@ interface SectionProps {
   getEscolaridadeLabel?: (value: string) => string;
 }
 
+/**
+ * Input desabilitado para exibição de dados em modo leitura.
+ * @internal
+ */
 function ReadInput({ value }: { value: string }) {
   return <Input value={value} disabled className="bg-muted/50" />;
 }
 
-// ─── 1. DADOS PESSOAIS ────────────────────────────────────────────
+/**
+ * Seção de Dados Pessoais — CPF, nome, sobrenome, data de nascimento,
+ * escolaridade e tamanho de camiseta.
+ */
 export function PersonalDataSection({ formData, isEditing, handleInputChange }: SectionProps) {
   return (
     <div>
@@ -53,11 +67,11 @@ export function PersonalDataSection({ formData, isEditing, handleInputChange }: 
           <Label className="text-muted-foreground">Escolaridade</Label>
           {isEditing ? (
             <Select value={formData?.escolaridade || ""} onValueChange={(v) => handleInputChange("escolaridade", v)}>
-              <SelectTrigger className="!h-11 w-full" id="escolaridade">
+              <SelectTrigger className="h-11! w-full" id="escolaridade">
                 <SelectValue placeholder="Selecione..." />
               </SelectTrigger>
               <SelectContent>
-                {escolaridades.map((opt) => (
+                {ESCOLARIDADES.map((opt) => (
                   <SelectItem key={opt.value} value={opt.value}>
                     {opt.label}
                   </SelectItem>
@@ -73,11 +87,11 @@ export function PersonalDataSection({ formData, isEditing, handleInputChange }: 
           <Label className="text-muted-foreground">Tamanho Camiseta</Label>
           {isEditing ? (
             <Select value={formData?.tamanho_camiseta || ""} onValueChange={(v) => handleInputChange("tamanho_camiseta", v)}>
-              <SelectTrigger id="tamanho_camiseta" className="!h-11 w-full">
+              <SelectTrigger id="tamanho_camiseta" className="h-11! w-full">
                 <SelectValue placeholder="Selecione seu tamanho de camisa" />
               </SelectTrigger>
               <SelectContent>
-                {tamanhosCamisa.map((esc) => (
+                {TAMANHOS_CAMISA.map((esc) => (
                   <SelectItem key={esc} value={esc}>
                     {esc}
                   </SelectItem>
@@ -93,7 +107,9 @@ export function PersonalDataSection({ formData, isEditing, handleInputChange }: 
   );
 }
 
-// ─── 2. DADOS DA APAE ─────────────────────────────────────────────
+/**
+ * Seção de Dados da APAE — APAE filiada, presidente, função e área de atuação.
+ */
 export function ApaeDataSection({ formData, isEditing, handleInputChange }: SectionProps) {
   return (
     <div>
@@ -135,7 +151,9 @@ export function ApaeDataSection({ formData, isEditing, handleInputChange }: Sect
   );
 }
 
-// ─── 3. CONTATO ───────────────────────────────────────────────────
+/**
+ * Seção de Contato — e-mail, telefone e WhatsApp.
+ */
 export function ContactDataSection({ formData, isEditing, handleInputChange }: SectionProps) {
   return (
     <div>
@@ -172,7 +190,9 @@ export function ContactDataSection({ formData, isEditing, handleInputChange }: S
   );
 }
 
-// ─── 4. ENDEREÇO ──────────────────────────────────────────────────
+/**
+ * Seção de Endereço — CEP, UF e município.
+ */
 export function AddressDataSection({ formData, isEditing, handleInputChange }: SectionProps) {
   return (
     <div>
@@ -191,7 +211,7 @@ export function AddressDataSection({ formData, isEditing, handleInputChange }: S
                 <SelectValue placeholder="Selecione um estado" />
               </SelectTrigger>
               <SelectContent>
-                {estados.map((estado) => (
+                {ESTADOS.map((estado) => (
                   <SelectItem key={estado} value={estado}>
                     {estado}
                   </SelectItem>
@@ -216,7 +236,9 @@ export function AddressDataSection({ formData, isEditing, handleInputChange }: S
   );
 }
 
-// ─── 5. DEFICIÊNCIA / APOIO ───────────────────────────────────────
+/**
+ * Seção de Deficiência/Apoio — indica se possui deficiência e necessita apoio.
+ */
 export function AccessibilitySection({ formData, isEditing, handleInputChange }: SectionProps) {
   return (
     <div>
@@ -226,7 +248,7 @@ export function AccessibilitySection({ formData, isEditing, handleInputChange }:
           <Label className="text-muted-foreground">Possui Deficiência</Label>
           {isEditing ? (
             <Select value={formData?.possui_deficiencia || ""} onValueChange={(v) => handleInputChange("possui_deficiencia", v)}>
-              <SelectTrigger className="!h-11 w-full">
+              <SelectTrigger className="h-11! w-full">
                 <SelectValue placeholder="Selecione..." />
               </SelectTrigger>
               <SelectContent>
@@ -243,7 +265,7 @@ export function AccessibilitySection({ formData, isEditing, handleInputChange }:
           <Label className="text-muted-foreground">Necessita Apoio</Label>
           {isEditing ? (
             <Select value={formData?.necessita_apoio || ""} onValueChange={(v) => handleInputChange("necessita_apoio", v)}>
-              <SelectTrigger className="!h-11 w-full">
+              <SelectTrigger className="h-11! w-full">
                 <SelectValue placeholder="Selecione..." />
               </SelectTrigger>
               <SelectContent>

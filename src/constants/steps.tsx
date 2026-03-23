@@ -1,13 +1,19 @@
+/**
+ * @module constants/steps
+ * @description Passos do fluxo de compra de ingresso exibidos na tela de sucesso de inscrição.
+ */
 import type { IconName } from "lucide-react/dynamic";
 
-interface Steps {
+/** Estrutura de um passo do fluxo de compra. */
+interface StepItem {
   number: number;
   title: string;
   description: string;
   icon: IconName;
 }
 
-export const steps: Steps[] = [
+/** Passos do tutorial de como comprar o ingresso após a inscrição. */
+export const STEPS: StepItem[] = [
   {
     number: 1,
     title: "Realize o Login",

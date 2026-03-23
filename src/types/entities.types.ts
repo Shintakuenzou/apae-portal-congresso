@@ -1,5 +1,12 @@
-import type { VinculoFields } from "@/hooks/useVinculo";
+/**
+ * @module types/entities.types
+ * @description Interfaces de entidades de negócio do sistema de congresso.
+ * Mapeia os campos dos formulários e datasets do Fluig.
+ */
 
+/**
+ * Campos de um palestrante cadastrado no Fluig.
+ */
 export interface PalestranteFields {
   anonymization_date: string | null;
   anonymization_user_id: string | null;
@@ -22,6 +29,9 @@ export interface PalestranteFields {
   facebook: string;
 }
 
+/**
+ * Campos de um participante inscrito no congresso.
+ */
 export interface ParticipantsFields {
   [key: string]: any;
   id: number;
@@ -66,6 +76,9 @@ export interface ParticipantsFields {
   coordenacao: string;
 }
 
+/**
+ * Campos de um evento/congresso cadastrado no Fluig.
+ */
 export interface EventoFields {
   bairro: string;
   categoria_evento: string;
@@ -91,6 +104,9 @@ export interface EventoFields {
   documentid: string;
 }
 
+/**
+ * Campos de um lote de ingressos.
+ */
 export interface LoteFields {
   documentid: any;
   anonymization_date: string;
@@ -111,11 +127,17 @@ export interface LoteFields {
   tipo_lote: string;
 }
 
+/**
+ * Vagas disponíveis por atividade (resultado de dataset).
+ */
 export interface AvailableVacanciesFields {
   id_atividade: string;
   quantidade: string;
 }
 
+/**
+ * Campos de uma sala/classe do evento.
+ */
 export interface ClassFields {
   id: number;
   documentid: number;
@@ -132,6 +154,9 @@ export interface ClassFields {
   modificado_por: string;
 }
 
+/**
+ * Campos de uma atividade (palestra, workshop, etc.) do congresso.
+ */
 export interface ActivityFields {
   documentid: string;
   anonymization_date: string | null;
@@ -142,6 +167,7 @@ export interface ActivityFields {
   descricao: string;
   id_lote: string;
   id_tipo_atividade: string;
+  id_sala: string;
   lote: string;
   modificado_em: string;
   modificado_por: string;
@@ -156,4 +182,30 @@ export interface ActivityFields {
   data_fim: string;
   data_inicio: string;
   eixo: string;
+}
+
+/**
+ * Campos do vínculo entre palestrante e atividade.
+ * Anteriormente declarado em `hooks/useVinculo.tsx`, agora centralizado.
+ */
+export interface VinculoFields {
+  atividade: string;
+  cardid: string;
+  companyid: string;
+  criado_em: string;
+  criado_por: string;
+  documentid: string;
+  id: string;
+  id_atividade: string;
+  id_evento: string;
+  id_palestrante: string;
+  modificado_em: string;
+  modificado_por: string;
+  palestrante: string;
+  tableid: string;
+}
+
+export interface VagasFields {
+  id_atividade: string;
+  quantidade: string;
 }

@@ -1,12 +1,21 @@
+/**
+ * @module components/switch-choice-event-card
+ * @description Card com toggle (Switch) para seleção/deseleção de atividades
+ * do congresso. Inclui validação de conflito de horário.
+ */
 import { Field, FieldContent, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Switch } from "@/components/ui/switch";
-import type { VinculoFields } from "@/hooks/useVinculo";
+import type { VinculoFields } from "@/types";
 import { format, isSameDay, type EachDayOfIntervalResult } from "date-fns";
 import { Clock, User } from "lucide-react";
 import { Badge } from "./ui/badge";
 import type { User as UserType } from "@/types/user";
 import { toast } from "sonner";
+import { hasTimeConflict } from "@/utils/time-utils";
+import { parseAtividades } from "@/utils/parse-atividades";
+import clsx from "clsx";
 
+/** Props do componente SwitchChoiceCard. */
 interface SwitchChoiceCardProps {
   palestrantes: VinculoFields[];
   documentId: string;
@@ -21,23 +30,15 @@ interface SwitchChoiceCardProps {
   updateUser: (user: UserType) => void;
   todasAtividades: any[];
   selectedDate: Date | null;
+  esgotado: boolean;
 }
 
-// Converte "HH:mm" para minutos para comparar horários
-function toMinutes(hora: string): number {
-  const [h, m] = hora.split(":").map(Number);
-  return h * 60 + m;
-}
-
-// Verifica se dois intervalos de tempo se sobrepõem
-function hasTimeConflict(inicio1: string, fim1: string, inicio2: string, fim2: string): boolean {
-  const start1 = toMinutes(inicio1);
-  const end1 = toMinutes(fim1);
-  const start2 = toMinutes(inicio2);
-  const end2 = toMinutes(fim2);
-  return start1 < end2 && end1 > start2;
-}
-
+/**
+ * Card de atividade com toggle (Switch) para seleção.
+ *
+ * Ao ativar, verifica conflitos de horário com atividades já selecionadas.
+ * Ao desativar, avisa se restará apenas uma atividade no dia.
+ */
 export function SwitchChoiceCard({
   titulo,
   descricao,
@@ -51,23 +52,10 @@ export function SwitchChoiceCard({
   updateUser,
   todasAtividades,
   selectedDate,
+  esgotado,
 }: SwitchChoiceCardProps) {
   const raw = user?.atividades as any;
-
-  const parsedAtividades: string[] = (() => {
-    try {
-      if (!raw) return [];
-      if (Array.isArray(raw)) return raw.map(String);
-      if (typeof raw === "string") {
-        const trimmed = raw.trim();
-        if (trimmed.startsWith("[")) return JSON.parse(trimmed).map(String);
-        return trimmed.split(",").filter(Boolean).map(String);
-      }
-      return [];
-    } catch (e) {
-      return [];
-    }
-  })();
+  const parsedAtividades = parseAtividades(raw);
 
   const isSelected = parsedAtividades.some((id) => id == documentId);
 
@@ -111,7 +99,7 @@ export function SwitchChoiceCard({
     <FieldGroup className="w-full">
       <FieldLabel htmlFor={documentId}>
         <Field orientation="horizontal">
-          <FieldContent className="cursor-pointer">
+          <FieldContent className={clsx("cursor-pointer", esgotado && "opacity-50 cursor-not-allowed")}>
             <div className="flex flex-col lg:flex-row">
               <div className="lg:w-48 bg-muted p-6 flex flex-col justify-center items-center">
                 <div className="flex flex-col items-center gap-2 text-violet-600 font-semibold mb-1">
@@ -135,12 +123,14 @@ export function SwitchChoiceCard({
                         <span>{palestrante.palestrante}</span>
                       </div>
                     ))}
+
+                    {esgotado && <Badge className="bg-red-500 text-white uppercase">Esgotado</Badge>}
                   </div>
                 </div>
               </div>
             </div>
           </FieldContent>
-          <Switch id={documentId} checked={isSelected} onCheckedChange={handleCheckedChange} />
+          <Switch id={documentId} checked={isSelected} onCheckedChange={handleCheckedChange} disabled={esgotado} />
         </Field>
       </FieldLabel>
     </FieldGroup>

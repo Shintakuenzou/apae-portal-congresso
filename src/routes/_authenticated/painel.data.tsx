@@ -1,7 +1,12 @@
+/**
+ * @module routes/_authenticated/painel.data
+ * @description Página de dados cadastrais do participante no painel.
+ * Permite visualização e edição dos dados pessoais.
+ */
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { escolaridades } from "@/constants";
+import { ESCOLARIDADES } from "@/constants";
 import { useAuth } from "@/context/auth-context";
 import { handleUpdateFormParticipant } from "@/services/form-service";
 import { createFileRoute } from "@tanstack/react-router";
@@ -70,7 +75,7 @@ function RouteComponent() {
   };
 
   const getEscolaridadeLabel = (value: string) => {
-    return escolaridades.find((opt) => opt.value === value)?.label || value;
+    return ESCOLARIDADES.find((opt) => opt.value === value)?.label || value;
   };
 
   return (

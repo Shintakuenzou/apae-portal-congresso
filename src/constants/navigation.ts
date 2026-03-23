@@ -1,6 +1,11 @@
+/**
+ * @module constants/navigation
+ * @description Itens de navegação principal do site, usados no header e menu mobile.
+ */
 import { linkOptions } from "@tanstack/react-router";
 
-export const navItems = linkOptions([
+/** Links de navegação principal do site. */
+export const NAV_ITEMS = linkOptions([
   {
     to: "/quem-somos",
     label: "Quem Somos",

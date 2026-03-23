@@ -1,4 +1,22 @@
-export const photos = [
+/**
+ * @module constants/gallery-data
+ * @description Dados estáticos das fotos para a galeria de congressos anteriores.
+ */
+
+/** Interface para cada item da galeria de fotos. */
+export interface PhotoItem {
+  id: number;
+  src: string;
+  title: string;
+  category: string;
+  year: string;
+  location: string;
+  featured: boolean;
+  description: string;
+}
+
+/** Lista de fotos dos congressos anteriores exibidas na galeria. */
+export const PHOTOS: PhotoItem[] = [
   {
     id: 1,
     src: "/congresso/galery01.jpg",

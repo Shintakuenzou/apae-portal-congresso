@@ -2,7 +2,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useAuth } from "@/context/auth-context";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { TicketCard } from "@/components/painel/ticket-card";
-import { PendingTicket } from "@/components/painel/pending-ticket";
 import { fetchDataset } from "@/services/fetch-dataset";
 import { useMutation, useQuery, type UseMutationResult } from "@tanstack/react-query";
 import { EmptyState } from "@/components/empty-state";
@@ -12,7 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { format, isSameDay } from "date-fns";
+import { format, isEqual, isSameDay } from "date-fns";
 import type { ActivityFields, FluigPostResponse } from "@/types";
 import { useMemo, useState } from "react";
 import { Switch } from "@/components/ui/switch";
@@ -117,7 +116,7 @@ function RouteComponent() {
     return <LoadingScreen />;
   }
 
-  const { resopnseTicketUserInfo, userId, activities } = data;
+  const { resopnseTicketUserInfo, userId, activities, availableVacancies } = data;
 
   const { data: activities_vinc_participant, refetch: refetchActivitiesVincParticipant } = useQuery({
     queryKey: ["activities_vinc_participant"],
@@ -143,9 +142,30 @@ function RouteComponent() {
       }
 
       const isSameDays = isSameDay(new Date(selectedActivity.data_inicio), new Date(otherActivities.data_inicio));
-      return isSameDays && selectedActivity.status != "approved";
+      const isSameHours = isEqual(new Date(selectedActivity.hora_inicio), new Date(otherActivities.hora_inicio));
+      return isSameDays && isSameHours && selectedActivity.status != "approved";
     });
   }, [selectedActivity]);
+
+  const status = useMemo(() => {
+    const approved = filteredMyActivities.every((activitie) => activitie.status == "approved");
+    const pending = filteredMyActivities.every((activitie) => activitie.status == "pending");
+    const cancelled = filteredMyActivities.every((activitie) => activitie.status == "cancelled");
+
+    if (approved) {
+      return "aprovado";
+    }
+
+    if (pending) {
+      return "pendente";
+    }
+
+    if (cancelled) {
+      return "cancelado";
+    }
+
+    return "";
+  }, [filteredMyActivities]);
 
   // const isAvailableVacancies = useMemo(() => {
   //   return availableVacancies.items.filter((vacancy) => {});
@@ -214,27 +234,23 @@ function RouteComponent() {
 
   return (
     <>
-      {true ? (
+      {status == "aprovado" ? (
         <Card className="col-span-4 lg:col-span-3">
           <CardHeader>
             <CardTitle className="text-xl">Meu Ingresso</CardTitle>
           </CardHeader>
 
           <CardContent>
-            {true ? (
-              <div className="space-y-6">
-                <TicketCard
-                  user={{
-                    nome: user!.nome,
-                    sobrenome: user!.sobrenome,
-                    cpf: user!.cpf,
-                    inscricao: user!.inscricao,
-                  }}
-                />
-              </div>
-            ) : (
-              <PendingTicket status="" />
-            )}
+            <div className="space-y-6">
+              <TicketCard
+                user={{
+                  nome: user!.nome,
+                  sobrenome: user!.sobrenome,
+                  cpf: user!.cpf,
+                  inscricao: user!.inscricao,
+                }}
+              />
+            </div>
 
             <div className="w-full">
               {/* Seção de Atividades */}
@@ -269,12 +285,19 @@ function RouteComponent() {
         </Card>
       ) : (
         <EmptyState
+          variant="card"
           className="col-span-4 lg:col-span-3"
-          title="Nenhum ingresso encontrado"
-          description="Você ainda não realizou a compra de um ingresso. Clique no botão abaixo para adquirir seu ingresso e participar do congresso."
+          title={status == "cancelado" ? "Seu ingresso foi cancelado" : status == "pendente" ? "Seu ingresso está pendente" : "Nenhum ingresso encontrado"}
+          description={
+            status == "cancelado"
+              ? "Seu ingresso foi cancelado"
+              : status == "pendente"
+                ? "Seu ingresso está pendente"
+                : "Você ainda não realizou a compra de um ingresso. Clique no botão abaixo para adquirir seu ingresso e participar do congresso."
+          }
           action={{
-            label: "Comprar Lote",
-            onClick: () => navigate({ to: "/painel/evento" }),
+            label: status == "cancelado" ? "Comprar Ingresso" : status == "pendente" ? "Ver Histórico de Compras" : "Comprar Ingresso",
+            onClick: () => navigate({ to: status == "pendente" ? "/painel/historico" : "/painel/evento" }),
             variant: "default",
           }}
         />

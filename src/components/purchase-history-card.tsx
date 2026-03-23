@@ -1,3 +1,8 @@
+/**
+ * @module components/purchase-history-card
+ * @description Componentes para exibição do histórico de compras do participante.
+ * Inclui `PurchaseHistoryCard` (card individual) e `PurchaseHistoryList` (lista).
+ */
 import { Calendar, Ticket } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,29 +13,15 @@ import type { PaymentResponse } from "@/types/payment-type";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 import { useNavigate } from "@tanstack/react-router";
+import type { Purchase, PurchaseStatus } from "@/types/purchase.types";
+import { parseAtividades } from "@/utils/parse-atividades";
+import { formatDateBR } from "@/utils/format-date";
 
-export type PurchaseStatus = "approved" | "pending" | "in_process" | "authorized" | "reject" | "cancelled" | "refunded" | "charged_back";
+// Re-export para retrocompatibilidade de imports existentes
+export type { Purchase, PurchaseStatus };
 
-export interface Purchase {
-  atividades: string;
-  nome_evento: string;
-  id_evento: string;
-  id_lote: string;
-  data_compra: string;
-  data_pagamento: string;
-  status: PurchaseStatus;
-  metodo_pagamento: string;
-  json_pagamento: string;
-  id_participante: string;
-}
-
-interface PurchaseHistoryCardProps {
-  purchase: Purchase;
-  onViewDetails?: (purchase: Purchase) => void;
-  className?: string;
-}
-
-const statusConfig: Record<PurchaseStatus, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
+/** Mapeamento de status de pagamento → label e variante visual do Badge. */
+const STATUS_CONFIG: Record<PurchaseStatus, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
   approved: { label: "Aprovado", variant: "default" },
   pending: { label: "Pendente", variant: "secondary" },
   in_process: { label: "Em Processamento", variant: "outline" },
@@ -41,23 +32,17 @@ const statusConfig: Record<PurchaseStatus, { label: string; variant: "default" |
   charged_back: { label: "Estornado", variant: "destructive" },
 };
 
-function formatDate(dateString: string): string {
-  return new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  }).format(new Date(dateString));
+/** Props do card individual de histórico de compra. */
+interface PurchaseHistoryCardProps {
+  purchase: Purchase;
+  onViewDetails?: (purchase: Purchase) => void;
+  className?: string;
 }
 
-function parseAtividades(raw: string): string[] {
-  try {
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : (parsed?.atividades ?? []);
-  } catch {
-    return [];
-  }
-}
-
+/**
+ * Card individual exibindo resumo de uma compra/pedido.
+ * Mostra evento, data, status, atividades vinculadas e link de pagamento pendente.
+ */
 export function PurchaseHistoryCard({ purchase, className }: PurchaseHistoryCardProps) {
   const { atividades: atividadesData } = useAtividade();
   const atividades = parseAtividades(purchase.atividades);
@@ -79,12 +64,12 @@ export function PurchaseHistoryCard({ purchase, className }: PurchaseHistoryCard
               <CardTitle className="text-base">{purchase.nome_evento}</CardTitle>
               <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
                 <Calendar className="h-3.5 w-3.5" />
-                <span suppressHydrationWarning>{formatDate(purchase.data_compra)}</span>
+                <span suppressHydrationWarning>{formatDateBR(purchase.data_compra)}</span>
               </div>
             </div>
           </div>
 
-          <Badge variant={statusConfig[purchase.status]?.variant ?? "secondary"}>{statusConfig[purchase.status]?.label ?? purchase.status}</Badge>
+          <Badge variant={STATUS_CONFIG[purchase.status]?.variant ?? "secondary"}>{STATUS_CONFIG[purchase.status]?.label ?? purchase.status}</Badge>
         </div>
       </CardHeader>
 
@@ -106,7 +91,7 @@ export function PurchaseHistoryCard({ purchase, className }: PurchaseHistoryCard
 
           <Separator orientation="horizontal" />
 
-          {statusConfig[purchase.status]?.label == "Pendente" && (
+          {STATUS_CONFIG[purchase.status]?.label == "Pendente" && (
             <div className="flex justify-end">
               <Button type="button" asChild className="cursor-pointer bg-violet-600 hover:bg-violet-700">
                 <a href={paymentDataJson.point_of_interaction?.transaction_data?.ticket_url as string} target="_blank">
@@ -121,11 +106,16 @@ export function PurchaseHistoryCard({ purchase, className }: PurchaseHistoryCard
   );
 }
 
+/** Props da lista de histórico de compras. */
 interface PurchaseHistoryListProps {
   purchases: Purchase[];
   className?: string;
 }
 
+/**
+ * Lista de cards de histórico de compras.
+ * Exibe um `EmptyState` caso não haja compras.
+ */
 export function PurchaseHistoryList({ purchases, className }: PurchaseHistoryListProps) {
   const navigate = useNavigate();
   if (purchases.length === 0) {
@@ -136,6 +126,7 @@ export function PurchaseHistoryList({ purchases, className }: PurchaseHistoryLis
         icon={Ticket}
         className="col-span-3 space-y-3.5 h-full"
         action={{ label: "Comprar Lote", onClick: () => navigate({ to: "/painel/evento" }), variant: "default" }}
+        variant="card"
       />
     );
   }

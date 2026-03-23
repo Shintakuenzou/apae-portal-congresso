@@ -1,23 +1,22 @@
+/**
+ * @module hooks/useVinculo
+ * @description Hook para buscar vínculos entre palestrantes e atividades do congresso.
+ *
+ * @example
+ * ```tsx
+ * const { vinculo } = useVinculo();
+ * console.log(vinculo?.items); // VinculoFields[]
+ * ```
+ */
 import { fetchDataset } from "@/services/fetch-dataset";
+import type { VinculoFields } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
-export interface VinculoFields {
-  atividade: string;
-  cardid: string;
-  companyid: string;
-  criado_em: string;
-  criado_por: string;
-  documentid: string;
-  id: string;
-  id_atividade: string;
-  id_evento: string;
-  id_palestrante: string;
-  modificado_em: string;
-  modificado_por: string;
-  palestrante: string;
-  tableid: string;
-}
-
+/**
+ * Busca os vínculos entre palestrantes e atividades via dataset.
+ *
+ * @returns Objeto contendo `vinculo` com a lista de vínculos.
+ */
 export function useVinculo() {
   const { data: vinculo } = useQuery({
     queryKey: ["vincPalestraAtividadeCN"],

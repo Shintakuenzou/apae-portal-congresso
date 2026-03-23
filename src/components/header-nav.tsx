@@ -1,10 +1,14 @@
+/**
+ * @module components/header-nav
+ * @description Navegação principal do header — exibida apenas em telas >= md.
+ */
 import { Link } from "@tanstack/react-router";
-import { navItems } from "@/constants/navigation";
+import { NAV_ITEMS } from "@/constants/navigation";
 
 export function HeaderNav() {
   return (
     <nav className="hidden md:flex items-center gap-1">
-      {navItems.map((item) => {
+      {NAV_ITEMS.map((item) => {
         return (
           <Link
             key={item.to}

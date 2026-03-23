@@ -10,8 +10,7 @@ import { eachDayOfInterval, format, isSameDay, isWithinInterval, parseISO } from
 import { ptBR } from "date-fns/locale";
 import { LoadingScreen } from "@/components/loading";
 import { fetchDataset } from "@/services/fetch-dataset";
-import type { ActivityFields, EventoFields } from "@/types";
-import type { VinculoFields } from "@/hooks/useVinculo";
+import type { ActivityFields, EventoFields, VinculoFields } from "@/types";
 
 export const Route = createFileRoute("/palestras")({
   head: () => ({
@@ -199,7 +198,7 @@ function PalestrasPage() {
                   <Card key={index} className="border-border hover:border-violet-600/50 hover:shadow-lg transition-all duration-300 overflow-hidden">
                     <CardContent className="p-0">
                       <div className="flex flex-col lg:flex-row">
-                        <div className="lg:w-48 flex-shrink-0 bg-muted p-6 flex flex-col justify-center">
+                        <div className="lg:w-48 shrink-0 bg-muted p-6 flex flex-col justify-center">
                           <div className="flex items-center gap-2 text-violet-600 font-semibold mb-1">
                             <Clock className="h-4 w-4" />
                             <span>{format(`${selectedDate || atividade.data_inicio}`, "dd/MM/yyyy")}</span>
