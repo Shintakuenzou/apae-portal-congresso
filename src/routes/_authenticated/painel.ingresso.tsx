@@ -116,7 +116,7 @@ function RouteComponent() {
     return <LoadingScreen />;
   }
 
-  const { resopnseTicketUserInfo, userId, activities, availableVacancies } = data;
+  const { resopnseTicketUserInfo, userId, activities } = data;
 
   const { data: activities_vinc_participant, refetch: refetchActivitiesVincParticipant } = useQuery({
     queryKey: ["activities_vinc_participant"],
