@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { fetchDataset } from "@/services/fetch-dataset";
 import type { PalestranteFields } from "@/types";
 import { createFileRoute } from "@tanstack/react-router";
-import { Filter, Instagram, Link, Linkedin } from "lucide-react";
+import { Filter, Instagram, Linkedin } from "lucide-react";
 import { useMemo, useState } from "react";
 
 export const Route = createFileRoute("/comissao-cientifica")({
