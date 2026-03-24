@@ -9,7 +9,7 @@ import { GallerySection } from "@/components/galery";
 import { SponsorsSection } from "@/components/sponsor-section";
 import { type ActivityFields, type EventoFields } from "@/services/form-service";
 import { fetchDataset } from "@/services/fetch-dataset";
-import type { CommitteeFields, PalestranteFields, ParticipantsFields } from "@/types/entities.types";
+import type { CommitteeFields, LoteFields, PalestranteFields, ParticipantsFields } from "@/types/entities.types";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -43,14 +43,28 @@ export const Route = createFileRoute("/")({
     const responseParticipants = await fetchDataset<ParticipantsFields>({ datasetId: import.meta.env.VITE_DATASET_PARTICIPANTE as string });
     const responsePalestrantes = await fetchDataset<PalestranteFields>({ datasetId: import.meta.env.VITE_DATASET_PALESTRANTE as string });
     const responseComissaoCientifica = await fetchDataset<CommitteeFields>({ datasetId: import.meta.env.VITE_DATASET_COMISSAO_CIENTIFICA as string });
-    return { responseEvent, responseActivities, responseParticipants, responsePalestrantes, responseComissaoCientifica };
+
+    const activeEvent = responseEvent.items.filter((event) => event.ativo === "ATIVO")[0];
+
+    const responseLote = await fetchDataset<LoteFields>({
+      datasetId: import.meta.env.VITE_DATASET_LOTE as string,
+      constraints: [
+        {
+          fieldName: "id_evento",
+          initialValue: activeEvent.documentid,
+          finalValue: activeEvent.documentid,
+          constraintType: "MUST",
+        },
+      ],
+    });
+    return { responseEvent, responseActivities, responseParticipants, responsePalestrantes, responseComissaoCientifica, responseLote };
   },
   component: App,
 });
 
 function App() {
-  const { responseEvent, responseActivities, responseParticipants, responsePalestrantes, responseComissaoCientifica } = Route.useLoaderData();
-  console.log(responseEvent);
+  const { responseEvent, responseActivities, responseParticipants, responsePalestrantes, responseComissaoCientifica, responseLote } = Route.useLoaderData();
+  console.log(responseLote);
 
   return (
     <main className="min-h-screen">
@@ -66,7 +80,7 @@ function App() {
         badgeCategory="Comitê Científico"
       />
       <GallerySection />
-      <CTASection />
+      <CTASection lote={responseLote.items} />
       <Footer />
     </main>
   );

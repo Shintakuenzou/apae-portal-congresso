@@ -52,7 +52,6 @@ export const Route = createFileRoute("/comissao-cientifica")({
 
 function ComissaoCientifica() {
   const { COMISSAO_CIENTIFICA } = Route.useLoaderData();
-  console.log(COMISSAO_CIENTIFICA);
 
   const [selectedCategory, setSelectedCategory] = useState("Todos");
 

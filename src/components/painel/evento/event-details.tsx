@@ -43,8 +43,6 @@ export function EventDetails({
   updateUser,
   validacaoHorarios,
 }: EventDetailsProps) {
-  console.log("atividadesFiltradas: ", atividadesFiltradas);
-
   return (
     <div className="space-y-6">
       <Button variant="ghost" className="cursor-pointer" onClick={onBack}>

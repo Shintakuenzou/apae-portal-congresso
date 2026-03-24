@@ -26,7 +26,6 @@ function RouteComponent() {
   const [formData, setFormData] = useState(user);
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  console.log(formData);
 
   const handleSave = async () => {
     if (!formData?.documentid) {
@@ -44,15 +43,11 @@ function RouteComponent() {
             : (value as string),
       }));
 
-      console.log(formatedPutFormData);
-
       const updateResponse = await handleUpdateFormParticipant({
         documentId: import.meta.env.VITE_FORM_PARTICIPANTE as string,
         cardId: formData.documentid, // ✅ campo correto
         values: formatedPutFormData,
       });
-
-      console.log(updateResponse);
 
       if (updateResponse?.values?.length > 0) {
         setIsEditing(false);

@@ -11,16 +11,20 @@ export function HeaderActions() {
         <Button
           asChild
           size="lg"
-          className="bg-linear-to-r from-[#f5a623] to-[#f08c00] text-white text-sm font-semibold px-5 py-2 rounded-full shadow-lg shadow-gold/40 hover:shadow-xl transition-shadow"
+          className="bg-linear-to-r from-[#f5a623] to-[#f08c00] text-white text-sm font-semibold px-5 py-2 shadow-lg shadow-[#f08c00]/10 hover:shadow-xl transition-shadow"
         >
           <Link to="/painel/data">
             <span>Meu Perfil</span>
           </Link>
         </Button>
       ) : (
-        <Button asChild size="lg" className="bg-violet-600 hover:bg-violet-600/90 text-white font-semibold shadow-md hover:shadow-lg transition-all flex items-center">
+        <Button
+          asChild
+          size="lg"
+          className="bg-linear-to-r from-[#f5a623] to-[#f08c00] text-white text-sm font-semibold px-5 py-2 shadow-lg shadow-[#f08c00]/10 hover:shadow-xl transition-shadow"
+        >
           <Link to="/login">
-            <span>Minha área</span>
+            <span>Acessar Perfil</span>
           </Link>
         </Button>
       )}

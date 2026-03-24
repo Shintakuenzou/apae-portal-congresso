@@ -168,7 +168,6 @@ function InscricaoPage() {
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
-    console.log("data submit", data);
 
     const hshPs = await sha256(data.senha);
 

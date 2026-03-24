@@ -1,10 +1,21 @@
 import { Button } from "@/components/ui/button";
+import type { LoteFields } from "@/types";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle } from "lucide-react";
+import { useMemo } from "react";
 
 const benefits = ["Acesso completo a todas as palestras", "Material exclusivo do evento", "Certificado de participação", "Networking com profissionais"];
 
-export function CTASection() {
+interface CTASectionProps {
+  lote: LoteFields[];
+}
+
+export function CTASection({ lote }: CTASectionProps) {
+  const activeLot = useMemo(() => {
+    return lote.filter((lot) => lot.status === "ATIVO" && lot.tipo_lote == "PORTAL");
+  }, [lote]);
+  console.log(activeLot);
+
   return (
     <section className="relative bg-linear-to-br from-[#2a1050] via-[#3d1c6e] to-[#12003a] py-20 overflow-hidden">
       <div className="absolute top-0 left-0 w-96 h-96 rounded-full bg-[#c4a8f0]/10 blur-3xl pointer-events-none -translate-x-1/2 -translate-y-1/2"></div>
@@ -44,8 +55,7 @@ export function CTASection() {
             <div className="text-center">
               <div className="text-sm text-amber-400 mb-2">Investimento</div>
               <div className="flex items-center justify-center gap-3 mb-2">
-                <span className="text-white/50 line-through text-2xl">R$ 500</span>
-                <span className="text-5xl font-bold text-white">R$ 350</span>
+                <span className="text-5xl font-bold text-white">{activeLot[0].preco}</span>
               </div>
               <div className="inline-flex items-center gap-2 bg-violet-400/20 text-amber-400 px-4 py-1.5 rounded-full text-sm font-medium">Economia de 30%</div>
 

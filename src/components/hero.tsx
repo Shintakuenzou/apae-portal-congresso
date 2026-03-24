@@ -41,8 +41,6 @@ export function Hero({ event, activeEvent, participants }: HeroProps) {
     location = `${event.items[idx].cidade}-${event.items[idx].estado}`;
     description = event.items[idx].descricao;
   }
-  console.log(event);
-
   return (
     <section className="relative bg-linear-to-br from-[#fdf8f2] via-white to-[#ede5fa] pt-16 pb-12 text-center overflow-hidden">
       <div className="absolute -top-16 -right-20 w-80 h-80 rounded-full bg-[#c4a8f0]/30 blur-3xl pointer-events-none"></div>

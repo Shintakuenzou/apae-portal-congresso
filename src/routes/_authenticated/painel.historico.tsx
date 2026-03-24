@@ -43,7 +43,5 @@ function RouteComponent() {
     refetchOnWindowFocus: true,
   });
 
-  console.log("historicoCompras", historicoCompras);
-
   return <PurchaseHistoryList purchases={historicoCompras ?? []} />;
 }

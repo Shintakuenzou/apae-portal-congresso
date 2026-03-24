@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Building2, Mail, X, Award } from "lucide-react";
-import { Link } from "@tanstack/react-router";
+import { Link, type LinkOptions } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Badge } from "./ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
@@ -28,7 +28,7 @@ export function SpeakersCommitteeSection({ title, description, badgeCategory, sp
     return committeMembers;
   }, [badgeCategory, spearkers, committeMembers]);
 
-  console.log(showData);
+  const redirectLink: LinkOptions = badgeCategory === "Comitê Científico" ? { to: "/comissao-cientifica" } : { to: "/palestrantes" };
 
   return (
     <section className={clsx("relative py-16 overflow-hidden", badgeCategory === "Comitê Científico" ? "bg-[#fef6ec]" : "bg-[#f5f0ff]")}>
@@ -40,7 +40,7 @@ export function SpeakersCommitteeSection({ title, description, badgeCategory, sp
             <p className="text-zinc-900 font-medium max-w-xl">{description}</p>
           </div>
           <Button variant="outline" className="self-start md:self-auto group bg-transparent hover:bg-transparent" asChild>
-            <Link to="/palestrantes">
+            <Link to={redirectLink.to}>
               Ver Todos
               <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Link>

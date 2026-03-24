@@ -106,6 +106,7 @@ export interface EventoFields {
   tipo_evento: string;
   titulo: string;
   datas: string[];
+  ativo: string;
   documentid: string;
 }
 
