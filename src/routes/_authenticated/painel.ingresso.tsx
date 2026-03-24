@@ -242,7 +242,7 @@ function RouteComponent() {
 
   return (
     <>
-      {status == "pendente" ? (
+      {status == "pendente" || status == "aprovado" ? (
         <Card className="col-span-4 lg:col-span-3">
           <CardHeader>
             <CardTitle className="text-xl">Meu Ingresso</CardTitle>
