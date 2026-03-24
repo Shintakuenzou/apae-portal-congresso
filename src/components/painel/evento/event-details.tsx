@@ -141,7 +141,7 @@ export function EventDetails({
           {/* ✅ NOVO: Alerta de validação */}
           {!validacaoHorarios.valido && (
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 flex gap-3">
-              <AlertCircle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold text-amber-900">Horários incompletos</p>
                 <p className="text-sm text-amber-800">{validacaoHorarios.mensagem}</p>

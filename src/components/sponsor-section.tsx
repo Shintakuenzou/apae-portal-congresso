@@ -83,7 +83,7 @@ export function SponsorsSection() {
   return (
     <section className="relative  bg-linear-to-b from-[#3d1c6e] to-[#2a1050] border-b border-border overflow-hidden" aria-label="Patrocinadores Oficiais">
       {/* Faixa de destaque superior */}
-      <div className="h-1.5 w-full bg-gradient-to-r from-transparent via-violet-400 to-transparent" />
+      <div className="h-1.5 w-full bg-linear-to-r from-transparent via-violet-400 to-transparent" />
 
       {/* Fundo pontilhado sutil */}
       <div
@@ -118,13 +118,7 @@ export function SponsorsSection() {
         >
           <div className="flex py-2">
             {sponsorsData?.items?.map((sponsor, i) => (
-              <div
-                key={i}
-                className="embla__slide flex-shrink-0 px-2 lg:w-96 md:w-72 w-64"
-                role="group"
-                aria-roledescription="item"
-                aria-label={`${sponsor.name} — ${sponsor.tipo}`}
-              >
+              <div key={i} className="embla__slide shrink-0 px-2 lg:w-96 md:w-72 w-64" role="group" aria-roledescription="item" aria-label={`${sponsor.name} — ${sponsor.tipo}`}>
                 <div
                   role="button"
                   tabIndex={0}
@@ -158,7 +152,7 @@ export function SponsorsSection() {
       </div>
 
       {/* Faixa inferior */}
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-violet-950 to-transparent" />
+      <div className="h-px w-full bg-linear-to-r from-transparent via-violet-950 to-transparent" />
 
       {/* ── Radix Dialog Modal ──
         Benefícios vs implementação manual:

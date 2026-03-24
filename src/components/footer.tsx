@@ -34,7 +34,7 @@ export function Footer() {
           <FooterCard className="lg:col-span-1 justify-between">
             {/* Logo + nome */}
             <div className="flex items-center gap-3 justify-center">
-              <img src={LogoApae} className="w-12 h-12 object-cover rounded-full ring-2 ring-background/20 p-0.5 bg-background/10 flex-shrink-0" alt="Logo APAE" />
+              <img src={LogoApae} className="w-12 h-12 object-cover rounded-full ring-2 ring-background/20 p-0.5 bg-background/10 shrink-0" alt="Logo APAE" />
             </div>
 
             {/* Tagline */}

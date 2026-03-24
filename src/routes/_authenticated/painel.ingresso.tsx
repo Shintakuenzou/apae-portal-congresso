@@ -389,7 +389,7 @@ export function ActivityCard({
               </Button>
             </DialogTrigger>
 
-            <DialogContent className="!max-w-5xl">
+            <DialogContent className="max-w-5xl!">
               <DialogHeader>
                 <DialogTitle>Trocar Atividade</DialogTitle>
               </DialogHeader>

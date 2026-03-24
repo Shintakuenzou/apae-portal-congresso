@@ -11,7 +11,7 @@ export function HeaderActions() {
         <Button
           asChild
           size="lg"
-          className="bg-gradient-to-r from-[#f5a623] to-[#f08c00] text-white text-sm font-semibold px-5 py-2 rounded-full shadow-lg shadow-gold/40 hover:shadow-xl transition-shadow"
+          className="bg-linear-to-r from-[#f5a623] to-[#f08c00] text-white text-sm font-semibold px-5 py-2 rounded-full shadow-lg shadow-gold/40 hover:shadow-xl transition-shadow"
         >
           <Link to="/painel/data">
             <span>Meu Perfil</span>
