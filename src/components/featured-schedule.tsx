@@ -9,11 +9,11 @@ export function FeaturedSchedule() {
   const { formatedDataEvento } = useEvents();
 
   return (
-    <section className="py-24 bg-violet-950">
+    <section className="relative bg-linear-to-br from-[#5b2d9e] to-[#3d1c6e] py-16 overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12">
           <div>
-            <Badge className="bg-violet-100/10 text-white mb-4">
+            <Badge className="flex px-4 py-1.5 rounded-full text-sm font-medium bg-violet-950 text-white mb-4">
               <Star className="h-3 w-3 mr-1" />
               Destaque
             </Badge>

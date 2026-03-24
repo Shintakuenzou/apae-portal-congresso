@@ -38,34 +38,34 @@ export const Route = createFileRoute("/comissao-cientifica")({
   }),
   loader: async () => {
     try {
-      const palestrantes = await fetchDataset<PalestranteFields>({
-        datasetId: import.meta.env.VITE_DATASET_PALESTRANTE as string,
+      const COMISSAO_CIENTIFICA = await fetchDataset<PalestranteFields>({
+        datasetId: import.meta.env.VITE_DATASET_COMISSAO_CIENTIFICA as string,
       });
-      return { palestrantes };
+      return { COMISSAO_CIENTIFICA };
     } catch (error) {
       console.error("Erro ao carregar dados:", error);
-      return { palestrantes: null };
+      return { COMISSAO_CIENTIFICA: null };
     }
   },
-  component: SubTrabalho,
+  component: ComissaoCientifica,
 });
 
-function SubTrabalho() {
-  const { palestrantes } = Route.useLoaderData();
-  console.log(palestrantes);
+function ComissaoCientifica() {
+  const { COMISSAO_CIENTIFICA } = Route.useLoaderData();
+  console.log(COMISSAO_CIENTIFICA);
 
   const [selectedCategory, setSelectedCategory] = useState("Todos");
 
   const categoriaPalestrante = useMemo(() => {
-    if (!palestrantes?.items?.length) return [];
+    if (!COMISSAO_CIENTIFICA?.items?.length) return [];
 
-    return [...new Set(palestrantes.items.map((palestrante) => palestrante.eixo))];
-  }, [palestrantes]);
+    return [...new Set(COMISSAO_CIENTIFICA.items.map((palestrante) => palestrante.eixo))];
+  }, [COMISSAO_CIENTIFICA]);
 
-  const filtrarPalestrantes = useMemo(() => {
-    if (selectedCategory == "Todos") return palestrantes?.items;
+  const filtrarCOMISSAO_CIENTIFICA = useMemo(() => {
+    if (selectedCategory == "Todos") return COMISSAO_CIENTIFICA?.items;
 
-    return palestrantes?.items.filter((palestrante) => palestrante.eixo === selectedCategory);
+    return COMISSAO_CIENTIFICA?.items.filter((palestrante) => palestrante.eixo === selectedCategory);
   }, [selectedCategory]);
   return (
     <main className="min-h-screen bg-background">
@@ -82,18 +82,18 @@ function SubTrabalho() {
 
       <section className="py-16">
         {/* Carregando: exibe grid de skeletons no lugar dos cards */}
-        {palestrantes == null ? (
+        {COMISSAO_CIENTIFICA == null ? (
           <div className="mx-auto max-w-full px-10 sm:px-6 lg:px-8">
             <SkeletonSpeakersGrid />
           </div>
-        ) : palestrantes?.items?.length == 0 ? (
+        ) : COMISSAO_CIENTIFICA?.items?.length == 0 ? (
           <div className="px-5">
             <EmptyState
               type="no-users"
               variant="card"
               size="default"
               title="Nenhum palestrarnte definido ainda."
-              description="Ainda não há palestrantes definidos para este evento."
+              description="Ainda não há COMISSAO_CIENTIFICA definidos para este evento."
               className="bg-transparent border-none shadow-none"
             />
           </div>
@@ -121,7 +121,7 @@ function SubTrabalho() {
               ))}
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {filtrarPalestrantes?.map((palestrante, index) => (
+              {filtrarCOMISSAO_CIENTIFICA?.map((palestrante, index) => (
                 <Card key={index} className="group border-border hover:border-violet-600/50 hover:shadow-lg transition-all duration-300">
                   <CardContent className="p-6">
                     <div className="flex flex-col items-center text-center">
@@ -140,23 +140,23 @@ function SubTrabalho() {
                     </div>
 
                     <div className="flex items-center justify-center gap-3">
-                      <Link
-                        to={palestrante.linkedin}
+                      <a
+                        href={palestrante.linkedin}
                         className="w-8 h-8 rounded-full bg-muted flex items-center justify-center hover:bg-violet-600 hover:text-white transition-colors"
                         aria-label={`LinkedIn de ${palestrante.nome}`}
                         target="_blank"
                       >
                         <Linkedin className="h-4 w-4" />
-                      </Link>
+                      </a>
 
-                      <Link
-                        to={palestrante.instagram}
+                      <a
+                        href={palestrante.instagram}
                         className="w-8 h-8 rounded-full bg-muted flex items-center justify-center hover:bg-violet-600 hover:text-white transition-colors"
                         aria-label={`LinkedIn de ${palestrante.nome}`}
                         target="_blank"
                       >
                         <Instagram className="h-4 w-4" />
-                      </Link>
+                      </a>
                     </div>
                   </CardContent>
                 </Card>

@@ -6,12 +6,13 @@ import { fetchDataset } from "@/services/fetch-dataset";
 import { useMutation, useQuery, type UseMutationResult } from "@tanstack/react-query";
 import { EmptyState } from "@/components/empty-state";
 import { Separator } from "@/components/ui/separator";
-import { Clock, MapPin, ArrowRightLeft, AlertCircle, CheckCircle } from "lucide-react";
+import { Clock, MapPin, ArrowRightLeft, AlertCircle, CheckCircle, GlassWater } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { format, isEqual, isSameDay } from "date-fns";
+// ✅ Importar parseISO
+import { format, isSameDay, parseISO } from "date-fns";
 import type { ActivityFields, FluigPostResponse } from "@/types";
 import { useMemo, useState } from "react";
 import { Switch } from "@/components/ui/switch";
@@ -133,6 +134,7 @@ function RouteComponent() {
   const [activityToExchange, setActivityToExchange] = useState<ActivityFields | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
+  // ✅ CORRIGIDO: Comparar dia E hora corretamente
   const sameDayActivities = useMemo(() => {
     if (!selectedActivity) return [];
 
@@ -141,13 +143,24 @@ function RouteComponent() {
         return false;
       }
 
-      const isSameDays = isSameDay(new Date(selectedActivity.data_inicio), new Date(otherActivities.data_inicio));
-      const isSameHours = isEqual(new Date(selectedActivity.hora_inicio), new Date(otherActivities.hora_inicio));
-      return isSameDays && isSameHours && selectedActivity.status != "approved";
+      // ✅ Comparar dia com parseISO
+      const isSameDays = isSameDay(parseISO(selectedActivity.data_inicio), parseISO(otherActivities.data_inicio));
+
+      // ✅ Comparar hora como string (hora_inicio é "14:30", não data)
+      const isSameTime = selectedActivity.hora_inicio === otherActivities.hora_inicio;
+
+      // ✅ Status não aprovado
+      const notApproved = selectedActivity.status != "approved";
+
+      return isSameDays && isSameTime && notApproved;
     });
-  }, [selectedActivity]);
+  }, [selectedActivity, activities.items]);
 
   const status = useMemo(() => {
+    if (filteredMyActivities.length === 0) {
+      return "";
+    }
+
     const approved = filteredMyActivities.every((activitie) => activitie.status == "approved");
     const pending = filteredMyActivities.every((activitie) => activitie.status == "pending");
     const cancelled = filteredMyActivities.every((activitie) => activitie.status == "cancelled");
@@ -166,10 +179,6 @@ function RouteComponent() {
 
     return "";
   }, [filteredMyActivities]);
-
-  // const isAvailableVacancies = useMemo(() => {
-  //   return availableVacancies.items.filter((vacancy) => {});
-  // }, []);
 
   const mutation = useMutation<FluigPostResponse, Error>({
     mutationFn: async () => {
@@ -210,7 +219,6 @@ function RouteComponent() {
       });
 
       setIsOpen(false);
-
       setSelectedActivity(null);
       setActivityToExchange(null);
 
@@ -234,7 +242,7 @@ function RouteComponent() {
 
   return (
     <>
-      {status == "aprovado" ? (
+      {status == "pendente" ? (
         <Card className="col-span-4 lg:col-span-3">
           <CardHeader>
             <CardTitle className="text-xl">Meu Ingresso</CardTitle>
@@ -253,7 +261,6 @@ function RouteComponent() {
             </div>
 
             <div className="w-full">
-              {/* Seção de Atividades */}
               <section className="mt-8">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-semibold text-foreground">Minhas Atividades</h2>
@@ -278,8 +285,7 @@ function RouteComponent() {
                 </div>
               </section>
 
-              {/* Informação adicional */}
-              <p className="text-sm text-muted-foreground mt-6 text-center">Clique em {'"Trocar"'} para substituir uma atividade por outra disponível.</p>
+              {status == "pendente" && <p className="text-sm text-muted-foreground mt-6 text-center">Clique em "Trocar" para substituir uma atividade por outra disponível.</p>}
             </div>
           </CardContent>
         </Card>
@@ -287,17 +293,15 @@ function RouteComponent() {
         <EmptyState
           variant="card"
           className="col-span-4 lg:col-span-3"
-          title={status == "cancelado" ? "Seu ingresso foi cancelado" : status == "pendente" ? "Seu ingresso está pendente" : "Nenhum ingresso encontrado"}
+          title={status == "cancelado" ? "Seu ingresso foi cancelado" : "Nenhum ingresso encontrado"}
           description={
             status == "cancelado"
               ? "Seu ingresso foi cancelado"
-              : status == "pendente"
-                ? "Seu ingresso está pendente"
-                : "Você ainda não realizou a compra de um ingresso. Clique no botão abaixo para adquirir seu ingresso e participar do congresso."
+              : "Você ainda não realizou a compra de um ingresso. Clique no botão abaixo para adquirir seu ingresso e participar do congresso."
           }
           action={{
-            label: status == "cancelado" ? "Comprar Ingresso" : status == "pendente" ? "Ver Histórico de Compras" : "Comprar Ingresso",
-            onClick: () => navigate({ to: status == "pendente" ? "/painel/historico" : "/painel/evento" }),
+            label: "Comprar Ingresso",
+            onClick: () => navigate({ to: "/painel/evento" }),
             variant: "default",
           }}
         />
@@ -331,7 +335,8 @@ export function ActivityCard({
   mutation,
   selectedActivity,
 }: ActivityCardProps) {
-  const formatedDateInit = format(activity.data_inicio, "dd/MM/yyyy");
+  // ✅ CORRIGIDO: Usar parseISO ao invés de concatenação
+  const formatedDateInit = format(parseISO(activity.data_inicio), "dd/MM/yyyy");
 
   function handleSelectActivity() {
     onRequestChange?.(activity);
@@ -375,124 +380,133 @@ export function ActivityCard({
           </div>
         </div>
 
-        <Dialog open={isOpen} onOpenChange={handleOpenModel}>
-          <DialogTrigger asChild>
-            <Button variant="outline" className="cursor-pointer bg-violet-600 hover:bg-violet-700 text-white hover:text-white transition-colors" onClick={handleSelectActivity}>
-              <ArrowRightLeft className="w-4 h-4" />
-              Substituir
-            </Button>
-          </DialogTrigger>
+        {activity.status !== "approved" && (
+          <Dialog open={isOpen} onOpenChange={handleOpenModel}>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="cursor-pointer bg-violet-600 hover:bg-violet-700 text-white hover:text-white transition-colors" onClick={handleSelectActivity}>
+                <ArrowRightLeft className="w-4 h-4" />
+                Substituir
+              </Button>
+            </DialogTrigger>
 
-          <DialogContent className="!max-w-5xl">
-            <DialogHeader>
-              <DialogTitle>Trocar Atividade</DialogTitle>
-            </DialogHeader>
-
-            <Separator orientation="horizontal" />
-
-            <div className="space-y-3.5">
-              {(mutation.error as Error) && (
-                <Alert variant="destructive">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Erro ao trocar atividade</AlertTitle>
-                  <AlertDescription>{(mutation.error as Error).message}</AlertDescription>
-                </Alert>
-              )}
-
-              {/* ✅ SUCESSO EM TEMPO REAL */}
-              {mutation.isSuccess && (
-                <Alert className="border-green-200 bg-green-50">
-                  <CheckCircle className="h-4 w-4 text-green-600" />
-                  <AlertTitle className="text-green-800">Sucesso!</AlertTitle>
-                  <AlertDescription className="text-green-700">Atividade trocada com sucesso!</AlertDescription>
-                </Alert>
-              )}
-
-              <p className="text-base text-zinc-800 font-medium" role="heading" aria-level={3}>
-                Atividade atual
-              </p>
-
-              <Card>
-                <CardHeader className="flex flex-col items-start justify-center gap-2.5 px-5">
-                  <CardTitle className="space-y-1.5">
-                    <Badge variant="default" className="text-sm bg-violet-900">
-                      {selectedActivity?.eixo}
-                    </Badge>
-                    <div className="text-xl">{selectedActivity?.titulo}</div>
-                  </CardTitle>
-
-                  <CardDescription className="space-x-5">
-                    <span>
-                      {selectedActivity?.data_inicio ? format(selectedActivity.data_inicio, "dd/MM/yyyy") : ""} às {selectedActivity?.hora_inicio}
-                    </span>
-                    <span>{selectedActivity?.sala}</span>
-                  </CardDescription>
-                </CardHeader>
-              </Card>
+            <DialogContent className="!max-w-5xl">
+              <DialogHeader>
+                <DialogTitle>Trocar Atividade</DialogTitle>
+              </DialogHeader>
 
               <Separator orientation="horizontal" />
 
-              <p className="text-base text-zinc-800 font-medium" role="heading" aria-level={3}>
-                Atividades disponíveis para troca:
-              </p>
+              <div className="space-y-3.5">
+                {(mutation.error as Error) && (
+                  <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Erro ao trocar atividade</AlertTitle>
+                    <AlertDescription>{(mutation.error as Error).message}</AlertDescription>
+                  </Alert>
+                )}
 
-              <div className="overflow-y-scroll h-96 space-y-2">
-                {OtherActivities.map((otherActivity) => (
-                  <Label
-                    key={otherActivity.documentid}
-                    htmlFor={otherActivity.documentid}
-                    className="cursor-pointer"
-                    onClick={() => handleActivityToExchange(otherActivity)}
-                    aria-label={otherActivity.titulo}
-                  >
-                    <Card className="w-full hover:bg-accent transition-colors">
-                      <CardHeader className="flex justify-between gap-2.5 px-5">
-                        <div className="flex flex-col flex-1">
-                          <CardTitle className="space-y-1.5">
-                            <Badge variant="default" className="text-sm bg-violet-900">
-                              {otherActivity.eixo}
-                            </Badge>
-                            <div className="text-xl">{otherActivity.titulo}</div>
-                          </CardTitle>
+                {mutation.isSuccess && (
+                  <Alert className="border-green-200 bg-green-50">
+                    <CheckCircle className="h-4 w-4 text-green-600" />
+                    <AlertTitle className="text-green-800">Sucesso!</AlertTitle>
+                    <AlertDescription className="text-green-700">Atividade trocada com sucesso!</AlertDescription>
+                  </Alert>
+                )}
 
-                          <CardDescription className="space-x-5">
-                            <span>
-                              {format(otherActivity.data_inicio, "dd/MM/yyyy")} às {otherActivity.hora_fim}
-                            </span>
-                            <span>{otherActivity.sala}</span>
-                          </CardDescription>
-                        </div>
+                <p className="text-base text-zinc-800 font-medium" role="heading" aria-level={3}>
+                  Atividade atual
+                </p>
 
-                        <Switch
-                          id={otherActivity.documentid}
-                          checked={activityToExchange?.documentid === otherActivity.documentid}
-                          onCheckedChange={() => handleActivityToExchange(otherActivity)}
-                          onClick={(e) => e.stopPropagation()}
-                          disabled={mutation.isPending}
-                        />
-                      </CardHeader>
-                    </Card>
-                  </Label>
-                ))}
+                <Card>
+                  <CardHeader className="flex flex-col items-start justify-center gap-2.5 px-5">
+                    <CardTitle className="space-y-1.5">
+                      <Badge variant="default" className="text-sm bg-violet-900">
+                        {selectedActivity?.eixo}
+                      </Badge>
+                      <div className="text-xl">{selectedActivity?.titulo}</div>
+                    </CardTitle>
+
+                    <CardDescription className="space-x-5">
+                      <span>
+                        {selectedActivity?.data_inicio ? format(parseISO(selectedActivity.data_inicio), "dd/MM/yyyy") : ""} às {selectedActivity?.hora_inicio}
+                      </span>
+                      <span>{selectedActivity?.sala}</span>
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+
+                <Separator orientation="horizontal" />
+
+                <p className="text-base text-zinc-800 font-medium" role="heading" aria-level={3}>
+                  Atividades disponíveis para troca:
+                </p>
+
+                <div className="overflow-y-scroll h-96 space-y-2">
+                  {OtherActivities.length > 0 ? (
+                    OtherActivities.map((otherActivity) => (
+                      <Label
+                        key={otherActivity.documentid}
+                        htmlFor={otherActivity.documentid}
+                        className="cursor-pointer"
+                        onClick={() => handleActivityToExchange(otherActivity)}
+                        aria-label={otherActivity.titulo}
+                      >
+                        <Card className="w-full hover:bg-accent transition-colors">
+                          <CardHeader className="flex justify-between gap-2.5 px-5">
+                            <div className="flex flex-col flex-1">
+                              <CardTitle className="space-y-1.5">
+                                <Badge variant="default" className="text-sm bg-violet-900">
+                                  {otherActivity.eixo}
+                                </Badge>
+                                <div className="text-xl">{otherActivity.titulo}</div>
+                              </CardTitle>
+
+                              <CardDescription className="space-x-5">
+                                <span>
+                                  {format(parseISO(otherActivity.data_inicio), "dd/MM/yyyy")} às {otherActivity.hora_inicio}
+                                </span>
+                                <span>{otherActivity.sala}</span>
+                              </CardDescription>
+                            </div>
+
+                            <Switch
+                              id={otherActivity.documentid}
+                              checked={activityToExchange?.documentid === otherActivity.documentid}
+                              onCheckedChange={() => handleActivityToExchange(otherActivity)}
+                              onClick={(e) => e.stopPropagation()}
+                              disabled={mutation.isPending}
+                            />
+                          </CardHeader>
+                        </Card>
+                      </Label>
+                    ))
+                  ) : (
+                    <div className="flex items-center justify-center h-full">
+                      <EmptyState title="Nenhuma atividade disponível" description="Nenhuma atividade disponível para troca." className="h-full w-full" />
+                    </div>
+                  )}
+                </div>
+
+                {OtherActivities.length > 0 && (
+                  <div className="flex justify-end mt-5 w-full gap-3">
+                    <Button type="button" variant="outline" onClick={() => setIsOpen(false)} disabled={mutation.isPending} className="cursor-pointer">
+                      Cancelar
+                    </Button>
+
+                    <Button
+                      type="button"
+                      className="w-auto bg-violet-600 hover:bg-violet-700 text-white hover:text-white transition-colors cursor-pointer"
+                      disabled={!isActivitySelected || mutation.isPending}
+                      onClick={handlePutActivity}
+                    >
+                      <span className="px-5">{mutation.isPending ? "Trocando..." : isActivitySelected ? "Trocar" : "Selecione uma atividade"}</span>
+                    </Button>
+                  </div>
+                )}
               </div>
-
-              <div className="flex justify-end mt-5 w-full gap-3">
-                <Button type="button" variant="outline" onClick={() => setIsOpen(false)} disabled={mutation.isPending} className="cursor-pointer">
-                  Cancelar
-                </Button>
-
-                <Button
-                  type="button"
-                  className="w-auto bg-violet-600 hover:bg-violet-700 text-white hover:text-white transition-colors cursor-pointer"
-                  disabled={!isActivitySelected || mutation.isPending}
-                  onClick={handlePutActivity}
-                >
-                  <span className="px-5">{mutation.isPending ? "Trocando..." : isActivitySelected ? "Trocar" : "Selecione uma atividade"}</span>
-                </Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
     </div>
   );

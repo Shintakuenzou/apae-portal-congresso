@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { PanelLeft, User } from "lucide-react";
 import { useAuth } from "@/context/auth-context";
 
 export function HeaderActions() {
@@ -9,16 +8,18 @@ export function HeaderActions() {
   return (
     <div className="hidden md:flex items-center">
       {isAuthenticated ? (
-        <Button asChild size="lg" className="bg-violet-600 hover:bg-violet-600/90 text-white font-semibold shadow-md hover:shadow-lg transition-all flex items-center">
+        <Button
+          asChild
+          size="lg"
+          className="bg-gradient-to-r from-[#f5a623] to-[#f08c00] text-white text-sm font-semibold px-5 py-2 rounded-full shadow-lg shadow-gold/40 hover:shadow-xl transition-shadow"
+        >
           <Link to="/painel/data">
-            <PanelLeft className="size-4" />
-            <span>Meu painel</span>
+            <span>Meu Perfil</span>
           </Link>
         </Button>
       ) : (
         <Button asChild size="lg" className="bg-violet-600 hover:bg-violet-600/90 text-white font-semibold shadow-md hover:shadow-lg transition-all flex items-center">
           <Link to="/login">
-            <User className="size-4" />
             <span>Minha área</span>
           </Link>
         </Button>

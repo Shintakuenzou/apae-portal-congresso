@@ -13,6 +13,7 @@ export type {
   ParticipantsFields,
   AvailableVacanciesFields,
   ClassFields,
+  CommitteeFields,
   VagasFields,
 } from "./entities.types";
 

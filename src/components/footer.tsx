@@ -26,7 +26,7 @@ export function Footer() {
   const { formatedDataEvento } = useEvents();
 
   return (
-    <footer className="bg-violet-950 text-white">
+    <footer className="bg-[#12003a] pt-14 pb-7 text-white/55 text-xs">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14">
         {/* ── Grade principal ── */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">

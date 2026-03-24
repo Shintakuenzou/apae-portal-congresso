@@ -2,26 +2,42 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Building2, Mail, X, Award } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Badge } from "./ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Separator } from "./ui/separator";
 import { ScrollArea } from "./ui/scroll-area";
-import { usePalestrantes } from "@/hooks/usePalestrantes";
+import type { PalestranteFields } from "@/types";
+import clsx from "clsx";
 
-export function SpeakersSection() {
-  const { palestrantes } = usePalestrantes();
+interface SpeakersCommitteeSectionProps {
+  title: string;
+  description: string;
+  badgeCategory: string;
+  spearkers?: PalestranteFields[];
+  committeMembers?: PalestranteFields[];
+}
 
+export function SpeakersCommitteeSection({ title, description, badgeCategory, spearkers, committeMembers }: SpeakersCommitteeSectionProps) {
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
 
+  const showData = useMemo(() => {
+    if (badgeCategory == "Palestrantes") {
+      return spearkers;
+    }
+    return committeMembers;
+  }, [badgeCategory, spearkers, committeMembers]);
+
+  console.log(showData);
+
   return (
-    <section className="py-24 bg-muted">
+    <section className={clsx("relative py-16 overflow-hidden", badgeCategory === "Comitê Científico" ? "bg-[#fef6ec]" : "bg-[#f5f0ff]")}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
           <div>
-            <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium bg-violet-950 text-white mb-4">Palestrantes</span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4 text-balance">Conheça Nossos Palestrantes</h2>
-            <p className="text-zinc-900 font-medium max-w-xl">Profissionais renomados que compartilharão conhecimento e experiências sobre inclusão e deficiência.</p>
+            <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium bg-violet-950 text-white mb-4">{badgeCategory}</span>
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4 text-balance">{title}</h2>
+            <p className="text-zinc-900 font-medium max-w-xl">{description}</p>
           </div>
           <Button variant="outline" className="self-start md:self-auto group bg-transparent hover:bg-transparent" asChild>
             <Link to="/palestrantes">
@@ -32,7 +48,7 @@ export function SpeakersSection() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {palestrantes?.items?.map((speaker, index) => (
+          {showData?.map((data, index) => (
             <Card
               key={index}
               className="group border-border hover:border-violet-600/30 hover:shadow-lg transition-all duration-300 overflow-hidden hover:scale-105 cursor-pointer bg-zinc-100/10"
@@ -40,21 +56,17 @@ export function SpeakersSection() {
             >
               <div className="flex flex-col items-center p-6 text-center h-full space-y-2.5">
                 <div className="w-40 h-40 rounded-full overflow-hidden ring-4 ring-violet-600/10 shadow-md shrink-0">
-                  <img
-                    src={speaker.url_foto || "/placeholder.svg"}
-                    alt={speaker.nome}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
+                  <img src={data.url_foto || "/placeholder.svg"} alt={data.nome} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                 </div>
 
                 {/* Informações */}
                 <div className="space-y-1 flex-1">
-                  <h3 className="text-sm font-semibold text-foreground uppercase leading-tight">{speaker.nome}</h3>
-                  <p className="text-xs text-muted-foreground capitalize">{speaker.empresa_faculdade}</p>
+                  <h3 className="text-sm font-semibold text-foreground uppercase leading-tight">{data.nome}</h3>
+                  <p className="text-xs text-muted-foreground capitalize">{data.empresa_faculdade}</p>
                 </div>
 
                 <Badge variant="secondary" className="text-sm mt-auto bg-violet-950 text-white">
-                  Palestrante
+                  {badgeCategory}
                 </Badge>
               </div>
             </Card>
@@ -63,7 +75,7 @@ export function SpeakersSection() {
       </div>
 
       <Dialog open={selectedImage !== null} onOpenChange={() => setSelectedImage(null)}>
-        {selectedImage !== null && palestrantes && (
+        {selectedImage !== null && showData && (
           <DialogContent className="max-w-3xl! overflow-hidden p-0 gap-0 [&>button]:hidden">
             <Button
               variant="ghost"
@@ -79,8 +91,8 @@ export function SpeakersSection() {
                 {/* Avatar */}
                 <div className="relative w-32 h-32 shrink-0">
                   <img
-                    src={palestrantes.items[selectedImage as number].url_foto || "/placeholder.svg?height=400&width=400"}
-                    alt={palestrantes.items[selectedImage as number].nome}
+                    src={showData[selectedImage as number].url_foto || "/placeholder.svg"}
+                    alt={showData[selectedImage as number].nome}
                     className="w-full h-full object-cover rounded-2xl shadow-xl ring-4 ring-background"
                   />
                   <div className="absolute -bottom-2 -right-2 bg-violet-600 text-white rounded-full p-2 shadow-lg">
@@ -91,25 +103,25 @@ export function SpeakersSection() {
                 {/* Info */}
                 <div className="flex-1 text-center sm:text-left space-y-3">
                   <DialogHeader className="space-y-1">
-                    <DialogTitle className="text-2xl font-bold tracking-tight">{palestrantes.items[selectedImage as number].nome}</DialogTitle>
-                    <DialogDescription className="sr-only">Informações sobre {palestrantes.items[selectedImage as number].nome}</DialogDescription>
+                    <DialogTitle className="text-2xl font-bold tracking-tight">{showData[selectedImage as number].nome}</DialogTitle>
+                    <DialogDescription className="sr-only">Informações sobre {showData[selectedImage as number].nome}</DialogDescription>
                   </DialogHeader>
 
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-2 justify-center sm:justify-start text-muted-foreground">
                       <Building2 className="w-4 h-4 text-violet-600" />
-                      <span className="text-sm font-medium">{palestrantes.items[selectedImage as number].empresa_faculdade}</span>
+                      <span className="text-sm font-medium">{showData[selectedImage as number].empresa_faculdade}</span>
                     </div>
                     <div className="flex items-center gap-3 text-muted-foreground">
                       <Mail className="w-4 h-4 text-violet-600" />
-                      <a href={`mailto:${palestrantes.items[selectedImage as number].email}`} className="text-sm hover:text-violet-600 transition-colors">
-                        {palestrantes.items[selectedImage as number].email}
+                      <a href={`mailto:${showData[selectedImage as number].email}`} className="text-sm hover:text-violet-600 transition-colors">
+                        {showData[selectedImage as number].email}
                       </a>
                     </div>
                   </div>
 
                   <Badge variant="secondary" className="mt-2">
-                    Palestrante
+                    {badgeCategory}
                   </Badge>
                 </div>
               </div>
@@ -126,7 +138,7 @@ export function SpeakersSection() {
                 </div>
 
                 <ul className="overflow-y-scroll h-44 pr-2 mt-4 text-sm text-muted-foreground space-y-4">
-                  {palestrantes.items[selectedImage as number].descricao
+                  {showData[selectedImage as number].descricao
                     .replaceAll(",", " ")
                     .split(";")
                     .map((paragraph, idx) => (

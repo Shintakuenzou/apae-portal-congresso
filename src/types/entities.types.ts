@@ -30,6 +30,11 @@ export interface PalestranteFields {
 }
 
 /**
+ * Campos de um comitê científico cadastrado no Fluig.
+ */
+export interface CommitteeFields extends PalestranteFields {}
+
+/**
  * Campos de um participante inscrito no congresso.
  */
 export interface ParticipantsFields {

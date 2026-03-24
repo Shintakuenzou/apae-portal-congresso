@@ -81,7 +81,7 @@ export function SponsorsSection() {
   if (!id_lote) return null;
 
   return (
-    <section className="relative bg-violet-950 border-b border-border overflow-hidden" aria-label="Patrocinadores Oficiais">
+    <section className="relative  bg-linear-to-b from-[#3d1c6e] to-[#2a1050] border-b border-border overflow-hidden" aria-label="Patrocinadores Oficiais">
       {/* Faixa de destaque superior */}
       <div className="h-1.5 w-full bg-gradient-to-r from-transparent via-violet-400 to-transparent" />
 

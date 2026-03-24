@@ -39,10 +39,14 @@ export function Hero({ event, activeEvent, participants }: HeroProps) {
 
     date = formatThreeDayRangeSimple(event.items[idx].data_inicio, event.items[idx].data_fim);
     location = `${event.items[idx].cidade}-${event.items[idx].estado}`;
+    description = event.items[idx].descricao;
   }
+  console.log(event);
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center bg-muted overflow-hidden">
+    <section className="relative bg-linear-to-br from-[#fdf8f2] via-white to-[#ede5fa] pt-16 pb-12 text-center overflow-hidden">
+      <div className="absolute -top-16 -right-20 w-80 h-80 rounded-full bg-[#c4a8f0]/30 blur-3xl pointer-events-none"></div>
+      <div className="absolute -bottom-10 -left-16 w-64 h-64 rounded-full bg-[#f5a623]/10 blur-3xl pointer-events-none"></div>
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 flex flex-col items-center">
         {/* Logo centralizada no topo */}
         <div className="flex justify-center w-full">
@@ -50,7 +54,7 @@ export function Hero({ event, activeEvent, participants }: HeroProps) {
         </div>
 
         {/* Descrição */}
-        <p className="mt-6 text-base sm:text-lg text-violet-950/75 leading-relaxed text-center max-w-2xl lowercase">{description}</p>
+        <p className="mt-6 text-base sm:text-lg text-violet-950/85 leading-relaxed text-center max-w-2xl lowercase">{description}</p>
 
         {/* Data e local */}
         <div className="mt-8 flex flex-wrap justify-center items-center gap-4">
@@ -86,7 +90,7 @@ export function Hero({ event, activeEvent, participants }: HeroProps) {
         <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full">
           {info.map((stat, index) => (
             <Card key={index} className="cursor-auto hover:scale-105 transition-all w-full">
-              <CardHeader>
+              <CardHeader className="">
                 <DynamicIcon name={stat.icon} className="h-6 w-6 text-violet-600 mb-3" />
               </CardHeader>
               <CardContent>

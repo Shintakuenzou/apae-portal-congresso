@@ -130,7 +130,7 @@ export function SwitchChoiceCard({
               </div>
             </div>
           </FieldContent>
-          <Switch id={documentId} checked={isSelected} onCheckedChange={handleCheckedChange} disabled={esgotado} />
+          <Switch id={documentId} checked={esgotado ? false : isSelected} onCheckedChange={handleCheckedChange} disabled={esgotado} />
         </Field>
       </FieldLabel>
     </FieldGroup>

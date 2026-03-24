@@ -29,7 +29,6 @@ export const Route = createFileRoute("/_authenticated/painel/historico")({
 
 function RouteComponent() {
   const { user } = useAuth();
-  console.log(user);
 
   const { data: historicoCompras } = useQuery<Purchase[]>({
     queryKey: ["purchase"],
@@ -43,6 +42,8 @@ function RouteComponent() {
     refetchInterval: 1000 * 60 * 5,
     refetchOnWindowFocus: true,
   });
+
+  console.log("historicoCompras", historicoCompras);
 
   return <PurchaseHistoryList purchases={historicoCompras ?? []} />;
 }

@@ -5,7 +5,7 @@
  */
 import { useMemo, useState } from "react";
 import { eachDayOfInterval, isWithinInterval, parseISO } from "date-fns";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { handlePostFormParticipant, handleUpdateFormParticipant, type ActivityFields, type EventoFields, type LoteFields } from "@/services/form-service";
 import type { ClassFields, VagasFields, VinculoFields } from "@/types";
 import { fetchDataset } from "@/services/fetch-dataset";
@@ -104,8 +104,7 @@ function RouteComponent() {
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const [eventoSelecionado, setEventoSelecionado] = useState<LoteFields | null>(null);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-
-  console.log("orders: ", orders);
+  const navigate = useNavigate();
 
   const { data: atividades } = useQuery({
     queryKey: ["atividades"],
@@ -298,6 +297,7 @@ function RouteComponent() {
           // ✅ Passa array limpo para o toggle
           await handleToggleAtividade(atividadesAtuais);
           toast.success("Compra processada com sucesso!");
+          navigate({ to: "/painel/historico" });
           window.open(item.init_point);
         } else {
           toast.error("Erro no pagamento, tente novamente ou entre em contato com o suporte");

@@ -6,7 +6,10 @@ const benefits = ["Acesso completo a todas as palestras", "Material exclusivo do
 
 export function CTASection() {
   return (
-    <section className="py-24 bg-violet-950">
+    <section className="relative bg-linear-to-br from-[#2a1050] via-[#3d1c6e] to-[#12003a] py-20 overflow-hidden">
+      <div className="absolute top-0 left-0 w-96 h-96 rounded-full bg-[#c4a8f0]/10 blur-3xl pointer-events-none -translate-x-1/2 -translate-y-1/2"></div>
+      <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-[#fdf8f2]/5 blur-3xl pointer-events-none"></div>
+
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
@@ -27,12 +30,11 @@ export function CTASection() {
             <div className="flex flex-col sm:flex-row items-start gap-4">
               <Button
                 asChild
-                size="lg"
-                className="bg-amber-400 hover:bg-amber-400/90 text-base text-violet-950 font-semibold h-14 px-8 shadow-lg hover:shadow-xl transition-all group"
+                className="flex items-center gap-2 bg-linear-to-r from-[#f5a623] to-[#f08c00] w-[250px] text-white font-extrabold text-base justify-center p-7 rounded-full shadow-xl shadow-[#f5a623]/20 hover:-translate-y-0.5 transition-transform"
               >
                 <Link to="/login">
                   Inscreva-se agora
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
             </div>
