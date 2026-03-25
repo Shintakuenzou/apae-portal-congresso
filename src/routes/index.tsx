@@ -64,8 +64,6 @@ export const Route = createFileRoute("/")({
 
 function App() {
   const { responseEvent, responseActivities, responseParticipants, responsePalestrantes, responseComissaoCientifica, responseLote } = Route.useLoaderData();
-  console.log(responseLote);
-
   return (
     <main className="min-h-screen">
       <Header />
