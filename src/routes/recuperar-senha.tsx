@@ -125,7 +125,7 @@ function RedefinirSenhaPage() {
         </header>
 
         <main className="flex-1 flex items-center justify-center p-6 lg:p-12">
-          {true ? (
+          {isSuccess ? (
             <div className="w-full max-w-md space-y-8 flex flex-col items-center justify-center text-center animate-in fade-in zoom-in duration-300">
               <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-emerald-100 text-emerald-600 mb-2">
                 <CheckCircle className="h-12 w-12" />
