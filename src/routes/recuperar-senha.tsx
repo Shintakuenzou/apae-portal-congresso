@@ -39,7 +39,6 @@ export const Route = createFileRoute("/recuperar-senha")({
   }),
   component: RedefinirSenhaPage,
 });
-console.log("teste");
 
 function RedefinirSenhaPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -67,8 +66,6 @@ function RedefinirSenhaPage() {
           },
         ],
       });
-
-      console.log("responseMail: ", responseMail);
 
       if (responseMail.items.length == 0) {
         toast.error("Os campos Email ou CPF não foram preenchidos.");
