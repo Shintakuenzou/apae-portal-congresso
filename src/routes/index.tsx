@@ -75,9 +75,9 @@ function App() {
       <FeaturedSchedule />
       <SpeakersCommitteeSection
         committeMembers={responseComissaoCientifica.items}
-        title="Comitê Científico"
-        description="Conheça nosso comitê científico"
-        badgeCategory="Comitê Científico"
+        title="Comissão Científica"
+        description="Conheça nossa comissão científica"
+        badgeCategory="Comissão Científica"
       />
       <GallerySection />
       <CTASection lote={responseLote.items} />

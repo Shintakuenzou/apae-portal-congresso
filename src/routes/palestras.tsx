@@ -134,8 +134,7 @@ function PalestrasPage() {
       <section className="pt-32 pb-16 bg-violet-950">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
-            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">Programacao Completa</h1>
-            <p className="text-xl text-white/80 leading-relaxed">Quatro dias de palestras, workshops e networking para transformar a inclusao no Brasil.</p>
+            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">Programação</h1>
           </div>
         </div>
       </section>

@@ -52,7 +52,7 @@ export function Hero({ event, activeEvent, participants }: HeroProps) {
         </div>
 
         {/* Descrição */}
-        <p className="mt-6 text-base sm:text-lg text-violet-950/85 leading-relaxed text-center max-w-2xl lowercase">{description}</p>
+        <p className="mt-6 text-base sm:text-lg text-violet-950/85 leading-relaxed text-center max-w-2xl">{description}</p>
 
         {/* Data e local */}
         <div className="mt-8 flex flex-wrap justify-center items-center gap-4">

@@ -108,6 +108,8 @@ export interface EventoFields {
   datas: string[];
   ativo: string;
   documentid: string;
+  telefone_contato: string;
+  email_contato: string;
 }
 
 /**

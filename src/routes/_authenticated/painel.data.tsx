@@ -13,6 +13,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Pencil, X, Save } from "lucide-react";
 import { useState } from "react";
 import { PersonalDataSection, ApaeDataSection, ContactDataSection, AddressDataSection, AccessibilitySection } from "@/components/painel/data/form-sections";
+import { sha256 } from "@/utils/hash-pass";
 
 export const Route = createFileRoute("/_authenticated/painel/data")({
   head: () => ({
@@ -34,18 +35,18 @@ function RouteComponent() {
     }
 
     setIsSaving(true);
+
     try {
-      const formatedPutFormData = Object.entries(formData).map(([key, value]) => ({
-        fieldId: key,
-        value:
-          key === "atividades" && Array.isArray(value)
-            ? value.join(",") // ✅ só para atividades: array → string
-            : (value as string),
-      }));
+      const formatedPutFormData = await Promise.all(
+        Object.entries(formData).map(async ([key, value]) => ({
+          fieldId: key,
+          value: key === "atividades" && Array.isArray(value) ? value.join(",") : key === "senha" ? await sha256(value as string) : (value as string),
+        })),
+      );
 
       const updateResponse = await handleUpdateFormParticipant({
         documentId: import.meta.env.VITE_FORM_PARTICIPANTE as string,
-        cardId: formData.documentid, // ✅ campo correto
+        cardId: formData.documentid,
         values: formatedPutFormData,
       });
 

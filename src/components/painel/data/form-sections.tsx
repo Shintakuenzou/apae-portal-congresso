@@ -102,6 +102,15 @@ export function PersonalDataSection({ formData, isEditing, handleInputChange }: 
             <ReadInput value={formData?.tamanho_camiseta || ""} />
           )}
         </div>
+
+        <div className="space-y-5">
+          <Label className="text-muted-foreground">Senha</Label>
+          {isEditing ? (
+            <Input type="password" value={formData?.senha || ""} onChange={(e) => handleInputChange("senha", e.target.value)} placeholder="********" />
+          ) : (
+            <ReadInput value={"********"} />
+          )}
+        </div>
       </div>
     </div>
   );

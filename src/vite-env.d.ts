@@ -27,6 +27,7 @@ interface ImportMetaEnv {
   readonly VITE_DATASET_VAGAS_DISPONIVEL?: string;
   readonly VITE_DATASET_COMISSAO_CIENTIFICA?: string;
   readonly VITE_DATASET_PALESTRANTE?: string;
+  readonly VITE_DATASET_RECUPERA_SENHA_PORTAL?: string;
 }
 interface ImportMeta {
   readonly env: ImportMetaEnv;

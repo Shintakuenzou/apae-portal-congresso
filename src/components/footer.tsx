@@ -4,6 +4,7 @@ import LogoApae from "/public/logo-transparente.png";
 import { Link } from "@tanstack/react-router";
 import { useEvents } from "@/hooks/useEvents";
 import { formatThreeDayRangeSimple } from "@/utils/formatThreeDayRange";
+import type { EventoFields } from "@/types";
 
 const socialLinks = [
   { icon: "facebook", href: "https://www.facebook.com/apaebrasil/", label: "Facebook" },
@@ -74,10 +75,10 @@ export function Footer() {
                   <span className="text-xs text-muted uppercase tracking-wide font-medium">E-mail</span>
                 </div>
                 <a
-                  href="mailto:fenapaes@apaebrasil.org.br"
+                  href={`mailto:${formatedDataEvento && formatedDataEvento[0].fields.email_contato}`}
                   className="text-sm hover:text-amber-400 transition-colors underline underline-offset-2 decoration-white/20 hover:decoration-amber-400 pl-6"
                 >
-                  fenapaes@apaebrasil.org.br
+                  {formatedDataEvento && formatedDataEvento[0].fields.email_contato}
                 </a>
               </li>
 
@@ -87,8 +88,8 @@ export function Footer() {
                   <Phone className="h-4 w-4 text-amber-400" />
                   <span className="text-xs text-muted uppercase tracking-wide font-medium">Telefone</span>
                 </div>
-                <a href="tel:+556132249922" className="text-sm hover:text-amber-400 transition-colors pl-6">
-                  (61) 3224-9922
+                <a href={`tel:${formatedDataEvento && formatedDataEvento[0].fields.telefone_contato}`} className="text-sm hover:text-amber-400 transition-colors pl-6">
+                  {formatedDataEvento && formatedDataEvento[0].fields.telefone_contato}
                 </a>
               </li>
             </ul>

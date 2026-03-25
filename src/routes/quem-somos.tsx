@@ -272,7 +272,7 @@ function QuemSomosPage() {
       </section>
 
       {/* Reconhecimento */}
-      <section className="py-16 bg-muted/30">
+      {/* <section className="py-16 bg-muted/30">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">Reconhecimento da Revista Seleções</h2>
@@ -296,10 +296,10 @@ function QuemSomosPage() {
             </p>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Timeline Section */}
-      <section className="py-16 bg-background">
+      <section className="py-16 bg-muted/30">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">Nossa Trajetória</h2>
@@ -347,7 +347,11 @@ function QuemSomosPage() {
             O Congresso Nacional APAE Brasil 2026 constitui o principal evento do movimento apaeano, congregando profissionais, familiares, pesquisadores e pessoas com deficiência
             de todo o país.
           </p>
-          <Button asChild size="lg" className="bg-amber-400 hover:bg-amber-400/90 text-violet-950 font-semibold hover:text-violet-950 border-none">
+          <Button
+            asChild
+            size="lg"
+            className="bg-linear-to-r from-[#f5a623] to-[#f08c00] text-white text-sm font-semibold px-5 py-2 shadow-lg shadow-[#f08c00]/10 hover:shadow-xl transition-shadow"
+          >
             <Link to={isAuthenticated ? "/painel" : "/login"}>Inscreva-se Agora</Link>
           </Button>
         </div>

@@ -28,10 +28,10 @@ export function SpeakersCommitteeSection({ title, description, badgeCategory, sp
     return committeMembers;
   }, [badgeCategory, spearkers, committeMembers]);
 
-  const redirectLink: LinkOptions = badgeCategory === "Comitê Científico" ? { to: "/comissao-cientifica" } : { to: "/palestrantes" };
+  const redirectLink: LinkOptions = badgeCategory === "Comissão Científica" ? { to: "/comissao-cientifica" } : { to: "/palestrantes" };
 
   return (
-    <section className={clsx("relative py-16 overflow-hidden", badgeCategory === "Comitê Científico" ? "bg-[#fef6ec]" : "bg-[#f5f0ff]")}>
+    <section className={clsx("relative py-16 overflow-hidden", badgeCategory === "Comissão Científica" ? "bg-[#fef6ec]" : "bg-[#f5f0ff]")}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
           <div>

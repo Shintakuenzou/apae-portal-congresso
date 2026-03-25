@@ -14,7 +14,6 @@ export function CTASection({ lote }: CTASectionProps) {
   const activeLot = useMemo(() => {
     return lote.filter((lot) => lot.status === "ATIVO" && lot.tipo_lote == "PORTAL");
   }, [lote]);
-  console.log(activeLot);
 
   return (
     <section className="relative bg-linear-to-br from-[#2a1050] via-[#3d1c6e] to-[#12003a] py-20 overflow-hidden">
@@ -57,7 +56,6 @@ export function CTASection({ lote }: CTASectionProps) {
               <div className="flex items-center justify-center gap-3 mb-2">
                 <span className="text-5xl font-bold text-white">{activeLot[0].preco}</span>
               </div>
-              <div className="inline-flex items-center gap-2 bg-violet-400/20 text-amber-400 px-4 py-1.5 rounded-full text-sm font-medium">Economia de 30%</div>
 
               <div className="mt-8 pt-8 border-t border-white/20">
                 <div className="grid grid-cols-3 gap-4 text-center">
