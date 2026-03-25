@@ -4,7 +4,6 @@ import LogoApae from "/public/logo-transparente.png";
 import { Link } from "@tanstack/react-router";
 import { useEvents } from "@/hooks/useEvents";
 import { formatThreeDayRangeSimple } from "@/utils/formatThreeDayRange";
-import type { EventoFields } from "@/types";
 
 const socialLinks = [
   { icon: "facebook", href: "https://www.facebook.com/apaebrasil/", label: "Facebook" },
