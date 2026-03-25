@@ -78,7 +78,7 @@ export function Hero({ event, activeEvent, participants }: HeroProps) {
             className="bg-violet-600 hover:bg-violet-600/90 text-white text-base sm:text-lg px-8 h-12 sm:h-14 font-semibold shadow-lg hover:shadow-xl transition-all group rounded-2xl"
           >
             <Link to={isAuthenticated ? "/painel" : "/login"}>
-              Garanta sua vaga
+              Garanta sua vaga :: 
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </Button>
