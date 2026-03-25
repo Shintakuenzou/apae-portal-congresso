@@ -39,6 +39,7 @@ export const Route = createFileRoute("/recuperar-senha")({
   }),
   component: RedefinirSenhaPage,
 });
+console.log("teste");
 
 function RedefinirSenhaPage() {
   const [isLoading, setIsLoading] = useState(false);
